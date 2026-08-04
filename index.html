@@ -1769,6 +1769,214 @@ document.querySelectorAll('.player').forEach(function(p){
   });
 });
 
+/* ---------- Overlays ---------- */
+var toc=document.getElementById('toc'), tocBody=document.getElementById('tocbody');
+var sheet=document.getElementById('sheet'), input=document.getElementById('sinput');
+var out=document.getElementById('sres');
+var scrollY=0;
+
+function lock(){
+  scrollY=window.pageYOffset||document.documentElement.scrollTop||0;
+  document.body.classList.add('locked');
+  document.body.style.top=(-scrollY)+'px';
+}
+function unlock(){
+  document.body.classList.remove('locked');
+  document.body.style.top='';
+  window.scrollTo(0,scrollY);
+}
+function anyOpen(){return toc.classList.contains('open')||sheet.classList.contains('open');}
+
+/* Inhaltsverzeichnis */
+tocBody.innerHTML=GROUPS.map(function(g){
+  var items=g.secs.map(function(s){
+    var t=s.querySelector('h2'), d=s.querySelector('.lede');
+    var v=s.querySelectorAll('.vid').length;
+    var dt=d?tidy(d.textContent):'';
+    return '<button class="tocitem" type="button" data-go="'+s.id+'">'+
+      '<span class="ti"><b>'+esc(t?tidy(t.textContent):s.id)+'</b>'+
+      (dt?'<span class="td">'+esc(dt.slice(0,95))+(dt.length>95?' …':'')+'</span>':'')+'</span>'+
+      (v?'<span class="tv">'+v+' Video'+(v>1?'s':'')+'</span>':'')+
+      '<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>';
+  }).join('');
+  return '<p class="tocgrp">'+svg(g.icon)+esc(g.label)+'</p>'+items;
+}).join('');
+
+tocBody.addEventListener('click',function(ev){
+  var b=ev.target.closest?ev.target.closest('.tocitem'):null;
+  if(!b) return;
+  var id=b.getAttribute('data-go');
+  toc.classList.remove('open');unlock();
+  setTimeout(function(){
+    var el=document.getElementById(id);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  },60);
+});
+
+/* ---------- Suche ---------- */
+function norm(s){
+  s=(s||'').toLowerCase()
+   .replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss');
+  if(s.normalize) s=s.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  return s.replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
+}
+function blockText(el){
+  var q=function(s){var n=el.querySelector(s);return n?tidy(n.textContent):'';};
+  if(el.classList.contains('r')){
+    var l=q('.lab'),v=q('.val');return l&&v?(l+': '+v):(l||v||tidy(el.textContent));
+  }
+  if(el.classList.contains('cred')){
+    var k=q('.k'),val=q('.v');return k&&val?(k+': '+val):tidy(el.textContent);
+  }
+  if(el.classList.contains('key')){
+    var tx=el.querySelector('.tx');if(!tx) return tidy(el.textContent);
+    var b=tx.querySelector('b'),s=tx.querySelector('span');
+    return (b?tidy(b.textContent):'')+(s?': '+tidy(s.textContent):'');
+  }
+  if(el.classList.contains('chip')){
+    var mk=q('s'),rest=tidy(el.textContent);
+    return mk?(mk+': '+rest.slice(mk.length).trim()):rest;
+  }
+  if(el.classList.contains('vid')){
+    var t=q('h4'),parts=[];
+    Array.prototype.forEach.call(el.querySelectorAll('p'),function(p){
+      if(p.classList.contains('vmeta')||p.classList.contains('vfall')) return;
+      parts.push(tidy(p.textContent));
+    });
+    return (t?t+' — ':'')+parts.join(' ');
+  }
+  if(el.classList.contains('cal')){
+    var tt=q('.t'),body=tidy(el.textContent);
+    return tt?(tt+': '+body.slice(tt.length).trim()):body;
+  }
+  return tidy(el.textContent);
+}
+
+var index=[];
+var SEL='.lede, .rows .r, .cal, .key, ol.steps li, ul.ticks li, .cred, .vid, h3, figcaption, .chip';
+document.querySelectorAll('section[id]').forEach(function(sec){
+  var h2=sec.querySelector('h2');
+  var title=h2?tidy(h2.textContent):sec.id;
+  var keys=norm(sec.getAttribute('data-keys')||'');
+  var lede=sec.querySelector('.lede');
+  index.push({el:sec,sec:title,chapter:true,
+    text:'Kapitel öffnen'+(lede?' — '+tidy(lede.textContent).slice(0,90)+' …':''),
+    hay:' '+norm(title)+' '+keys+' '});
+  var found=Array.prototype.slice.call(sec.querySelectorAll(SEL));
+  found.forEach(function(el){
+    for(var i=0;i<found.length;i++) if(found[i]!==el&&found[i].contains(el)) return;
+    var text=blockText(el);
+    if(text.length<3) return;
+    index.push({el:el,sec:title,text:text,hay:' '+norm(title+' '+text)+' '});
+  });
+});
+
+var M1='\u0001',M2='\u0002';
+function snippet(text,tokens){
+  var n=norm(text),pos=-1;
+  for(var i=0;i<tokens.length;i++){var p=n.indexOf(tokens[i]);if(p>=0&&(pos<0||p<pos))pos=p;}
+  var cut=text,lead=false;
+  if(pos>70){
+    var ap=Math.max(0,pos-45),sp=text.indexOf(' ',ap);
+    cut=text.slice(sp<0?ap:sp+1);lead=true;
+  }
+  if(cut.length>180) cut=cut.slice(0,180).replace(/\s+\S*$/,'')+' …';
+  tokens.forEach(function(t){
+    if(t.length<2) return;
+    var re=new RegExp(t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi');
+    cut=cut.replace(re,function(m){return M1+m+M2;});
+  });
+  return (lead?'… ':'')+esc(cut).split(M1).join('<mark>').split(M2).join('</mark>');
+}
+
+var HINTS=['Passwort','PIN','Sicherung','Beutel','Abwasser','Gasflasche','Markise','Einwintern','Ankommen'];
+function hint(){
+  return '<div class="shint"><b>Häufig gesucht</b>'+
+    HINTS.map(function(w){return '<span>'+esc(w)+'</span>';}).join('')+'</div>';
+}
+
+var lastQ=null;
+function run(){
+  var q=input.value;
+  if(q===lastQ) return;
+  lastQ=q;
+  var nq=norm(q);
+  if(nq.length<2){out.innerHTML=hint();return;}
+  var tokens=nq.split(' ').filter(function(t){return t.length>0;});
+  var multi=tokens.filter(function(t){return t.length>1;});
+  if(multi.length) tokens=multi;
+  var hits=[];
+  for(var i=0;i<index.length&&hits.length<40;i++){
+    var e=index[i],ok=true;
+    for(var t=0;t<tokens.length;t++){
+      var tk=tokens[t];
+      var needle=/^[0-9]+$/.test(tk)?(' '+tk+' '):tk;
+      if(e.hay.indexOf(needle)<0){ok=false;break;}
+    }
+    if(ok) hits.push(i);
+  }
+  if(!hits.length){
+    out.innerHTML='<p class="sempty">Keine Treffer für <b>'+esc(tidy(q))+'</b>. Versuche ein einzelnes Wort.</p>'+hint();
+    return;
+  }
+  out.innerHTML='<p class="scount">'+hits.length+' Treffer</p>'+hits.map(function(i){
+    var e=index[i];
+    return '<button class="shit" type="button" data-i="'+i+'">'+
+      '<span class="sec">'+esc(e.sec)+'</span>'+
+      '<span class="txt">'+snippet(e.text,tokens)+'</span></button>';
+  }).join('');
+}
+
+out.addEventListener('click',function(ev){
+  var b=ev.target.closest?ev.target.closest('.shit'):null;
+  if(b){
+    var e=index[parseInt(b.getAttribute('data-i'),10)];
+    if(!e) return;
+    sheet.classList.remove('open');input.blur();input.value='';lastQ=null;unlock();
+    setTimeout(function(){
+      e.el.scrollIntoView({behavior:'smooth',block:e.chapter?'start':'center'});
+      if(!e.chapter){
+        e.el.classList.remove('flash');void e.el.offsetWidth;e.el.classList.add('flash');
+        setTimeout(function(){e.el.classList.remove('flash');},2200);
+      }
+    },70);
+    return;
+  }
+  var s=ev.target.closest?ev.target.closest('.shint span'):null;
+  if(s){input.value=s.textContent;run();input.focus();}
+});
+
+function openSearch(){
+  if(toc.classList.contains('open')) toc.classList.remove('open'); else lock();
+  sheet.classList.add('open');
+  input.value='';lastQ=null;out.innerHTML=hint();out.scrollTop=0;
+  setTimeout(function(){input.focus();},30);
+}
+function closeSearch(){sheet.classList.remove('open');input.blur();input.value='';lastQ=null;unlock();}
+function openToc(){
+  if(sheet.classList.contains('open')){sheet.classList.remove('open');input.blur();} else lock();
+  toc.classList.add('open');tocBody.scrollTop=0;
+}
+function closeToc(){toc.classList.remove('open');unlock();}
+
+document.getElementById('sbtn').addEventListener('click',openSearch);
+document.getElementById('sclose').addEventListener('click',closeSearch);
+document.getElementById('tocbtn').addEventListener('click',openToc);
+document.getElementById('tocclose').addEventListener('click',closeToc);
+document.getElementById('topbtn').addEventListener('click',function(){
+  if(anyOpen()){closeToc();closeSearch();}
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+input.addEventListener('input',function(){window.requestAnimationFrame(run);});
+input.addEventListener('keydown',function(e){
+  if(e.key==='Escape') closeSearch();
+  if(e.key==='Enter'){e.preventDefault();input.blur();}
+});
+document.addEventListener('keydown',function(e){
+  if((e.metaKey||e.ctrlKey)&&(e.key==='k'||e.key==='K')){e.preventDefault();openSearch();}
+  if(e.key==='Escape'&&toc.classList.contains('open')) closeToc();
+});
+
 /* ---------- Oberflaeche umschalten ----------
    Zwei Gestaltungen im selben Dokument: das Bordbuch und die SORBA-Variante.
    Die Wahl bleibt im Geraetespeicher, damit sie den Neustart ueberlebt. */
