@@ -3,13 +3,16 @@
    vollstaendig lesbar bleibt. Die Videos liegen bei alugha und YouTube
    und brauchen weiterhin Internet — sie werden bewusst nicht gecacht. */
 
-var CACHE = 'bordbuch-v1';
+var CACHE = 'bordbuch-v2';
 var DATEIEN = [
   'index.html',
   'manifest.webmanifest',
   'icon-180.png',
   'icon-192.png',
-  'icon-512.png'
+  'icon-512.png',
+  /* Herstelleranleitungen: liegen mit im Speicher, damit sie auch
+     auf dem Platz ohne Empfang verfuegbar sind. */
+  'anleitungen/E-P-Hydraulics-Levelsystem-Bedienungsanleitung.pdf'
 ];
 
 self.addEventListener('install', function(e){
