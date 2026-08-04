@@ -46,10 +46,12 @@ img{max-width:100%;height:auto}
   padding:6px 13px;margin:0 0 16px}
 .hero h1{font-size:clamp(32px,8.4vw,44px);font-weight:800;line-height:1.08;letter-spacing:-.035em;margin:0 0 6px}
 .hero .sub{font-size:16px;color:var(--grey);margin:0 0 20px;font-weight:500}
-.stats{display:flex;flex-wrap:wrap;gap:8px}
-.stat{display:flex;align-items:baseline;gap:6px;border:1px solid var(--line);border-radius:99px;
-  padding:7px 14px;font-size:14.5px;font-weight:600}
-.stat span{color:var(--grey);font-weight:500}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(min-width:620px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{display:flex;flex-direction:column;gap:1px;border:1px solid var(--line2);
+  border-radius:var(--rs);padding:9px 13px;font-size:16px;font-weight:700;letter-spacing:-.02em;
+  background:var(--soft)}
+.stat span{color:var(--grey);font-weight:500;font-size:12.5px;letter-spacing:0}
 
 /* Suchleiste im Kopf — Anmutung wie die Suchzeile der Airbnb-App */
 .sbar{display:flex;align-items:center;gap:13px;width:100%;margin:20px 0 4px;padding:11px 18px;
@@ -74,8 +76,31 @@ img{max-width:100%;height:auto}
   border-bottom:2px solid transparent;font-family:inherit;min-width:70px}
 .cat svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.7;
   stroke-linecap:round;stroke-linejoin:round}
+/* Hauptsymbole flaechig und dezent farbig, mit weichem Schatten fuer Tiefe */
+.cat .ic-lin{display:none}
+.cat .ic-vol{display:block;width:25px;height:25px;fill:currentColor;stroke:none;
+  filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.22));opacity:.62;
+  transition:opacity .15s ease,transform .15s ease}
+.cat.on .ic-vol{opacity:1;transform:translateY(-1px) scale(1.04)}
+.cat .ic-vol .ak{fill:currentColor;opacity:.72}
+.cat .ic-vol .rt{fill:currentColor;opacity:.85}
+.cat[data-cat="start"]{color:#C1663F}
+.cat[data-cat="strom"]{color:#D2942A}
+.cat[data-cat="wasser"]{color:#3A7CA8}
+.cat[data-cat="klima"]{color:#C0533F}
+.cat[data-cat="kueche"]{color:#7A8B4A}
+.cat[data-cat="bad"]{color:#4E9A96}
+.cat[data-cat="medien"]{color:#6B6FA8}
+.cat[data-cat="gas"]{color:#C0453A}
+.cat[data-cat="wohnen"]{color:#A0713F}
+.cat[data-cat="aussen"]{color:#4F7A5B}
+.cat[data-cat="info"]{color:#7A6E8C}
+.cat span{color:var(--grey)}
+.cat.on span{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.cat .ic-vol{transition:none}.cat.on .ic-vol{transform:none}}
 .cat span{font-size:11.5px;font-weight:600;white-space:nowrap;letter-spacing:-.01em}
-.cat.on{color:var(--ink);border-bottom-color:var(--ink)}
+.cat.on{border-bottom-color:var(--ink)}
+.cat.on span{color:var(--ink);font-weight:700}
 
 /* ---------- Untere Leiste ---------- */
 .dock{position:fixed;left:0;right:0;bottom:0;z-index:45;background:rgba(255,255,255,.97);
@@ -330,9 +355,10 @@ body.ux-sorba .hero h1::before{content:"";position:absolute;left:7px;top:50%;
 body.ux-sorba .hero .sub{order:2;margin:0;padding:6px 9px 3px;font-size:11px;
   color:#4A4A4A;font-weight:400}
 body.ux-sorba .hero .stats{order:3;gap:0;padding:0 9px 7px}
-body.ux-sorba .stat{border-radius:0;border:1px solid #ABADB3;margin-right:-1px;
-  background:#FFFFFF;padding:1px 7px;font-size:11px;font-weight:400;gap:4px}
-body.ux-sorba .stat span{color:#4A4A4A}
+body.ux-sorba .stat{flex-direction:row;align-items:baseline;border-radius:0;
+  border:1px solid #ABADB3;margin:0 -1px -1px 0;background:#FFFFFF;padding:1px 7px;
+  font-size:11px;font-weight:400;gap:5px;letter-spacing:0}
+body.ux-sorba .stat span{color:#4A4A4A;font-size:11px}
 /* Karteireiter, sitzt auf dem Menueband auf */
 body.ux-sorba .hero .kicker{order:5;display:inline-flex;align-self:flex-start;
   margin:0 0 -1px 5px;padding:2px 13px;border-radius:0;background:#FAFAFA;
@@ -363,6 +389,9 @@ body.ux-sorba .cat{flex-direction:column;justify-content:flex-start;gap:4px;min-
   padding:7px 9px 6px;border:0;border-right:1px solid #D4D4D4;background:none;color:#5C7C9E}
 body.ux-sorba .cat:last-child{border-right:0}
 body.ux-sorba .cat svg{width:27px;height:27px}
+body.ux-sorba .cat .ic-vol{width:27px;height:27px;opacity:1;filter:none;transform:none;fill:#5C7C9E}
+body.ux-sorba .cat .ic-vol .ak{fill:#1F6FB5;opacity:1}
+body.ux-sorba .cat .ic-vol .rt{fill:#C0392B;opacity:1}
 body.ux-sorba .cat span{max-width:70px;font-size:10.5px;font-weight:400;line-height:1.2;
   letter-spacing:0;color:#151515;white-space:normal;text-align:center}
 body.ux-sorba .cat.on{background:linear-gradient(180deg,#FFF4D0,#FFE49E);
@@ -568,9 +597,11 @@ body.ux-sorba .uxbtn .lbl-alt{display:inline}
 
   <h3>Strom und Geräte</h3>
   <ol class="steps">
-    <li>Landstromkabel in der Halle lösen und einziehen.</li>
+    <li>Landstromkabel in der Halle abhängen und sauber deponieren.</li>
     <li>Klappe <b>unter</b> dem TV: Schalter für Victron und Campernet einschalten.</li>
     <li>Zentralpanel rechts oben: roten Hauptschalter drücken.</li>
+    <li>Lichthauptschalter einschalten.</li>
+    <li>Wasserpumpe einschalten.</li>
     <li>Ladestand am GX Touch prüfen. Nach der Halle sollte er hoch sein — dort lädt nur der Landstrom, die Solaranlage bringt unter dem Dach nichts.</li>
     <li>Clesana-Toilette einschalten und den Folienstand im Display prüfen. Reicht die Folie für die geplante Reise?</li>
   </ol>
@@ -624,19 +655,20 @@ body.ux-sorba .uxbtn .lbl-alt{display:inline}
 
   <h3 id="fahrbereit">Fahrbereit sichern</h3>
   <ol class="steps">
-    <li>Dachfenster schliessen — Kurbel bis zum Anschlag drehen — und Insektenschutz zu. Den <a class="link" href="#maxxfan">MaxxFan</a> ganz schliessen.</li>
+    <li>Dachfenster schliessen — Kurbel bis zum Anschlag drehen — und Insektenschutz zu. Den <a class="link" href="#maxxfan">MaxxFan</a> ausschalten, der Deckel schliesst dabei von selbst.</li>
     <li>Duschtür mit dem Tenax-Verschluss sichern, Holzrost flach auf den Boden legen.</li>
     <li>Spülenabdeckung in die Aussparung unter dem Becken, Küchenauszüge mit dem silbernen Hebel verriegeln.</li>
     <li>Hängeschränke zu, Polster und Kissen verstaut.</li>
     <li>Clesana-Schublade leeren.</li>
-    <li>Klimaanlage aus, Klappe zu den Bedienelementen schliessen.</li>
+    <li>Klappe zu den Bedienelementen schliessen.</li>
     <li>Wechselrichter aus, wenn unterwegs kein 230 V gebraucht wird.</li>
     <li>Hubbett verriegelt, Sitze gedreht und gesichert, Kopfstützen gesteckt.</li>
   </ol>
 
   <div class="cal warn">
     <span class="t"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 2.4 17.5A2 2 0 0 0 4.1 20.5h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>Die zwei häufigsten Fehler</span>
-    <p>Markise vergessen und Dachfenster nur halb geschlossen. Beides fällt erst bei Fahrtwind auf und wird dann teuer.</p>
+    <p>Ein Dachfenster oder ein Seitenfenster nur angelehnt statt verriegelt. Das fällt erst bei Fahrtwind auf und wird dann teuer.</p>
+    <p>Deshalb vor dem Losfahren einmal durch das Fahrzeug gehen und <b>jedes Fenster und jede Luke anfassen</b>, nicht nur anschauen.</p>
   </div>
 </section>
 
@@ -647,7 +679,7 @@ body.ux-sorba .uxbtn .lbl-alt{display:inline}
   <ol class="steps">
     <li><b>Landstrom in der Halle anschliessen.</b> In der Halle bringt die Solaranlage nichts — der Landstrom ist die einzige Ladung.</li>
     <li>Abwasser vollständig leeren. Steht es im Tank, riecht es nach wenigen Tagen durch die Abläufe herein.</li>
-    <li>Kühlschrank leeren, abtauen, trocken wischen und die Türen leicht angelehnt lassen.</li>
+    <li>Kühlschrank leeren, abtauen, trocken wischen. Die Türen mit dem <b>eingebauten Haken</b> einen Spalt offen halten, sonst riecht es beim nächsten Mal.</li>
     <li>Clesana-Schublade leeren.</li>
     <li>Flaschenventile im Gaskasten schliessen.</li>
     <li>Geschirrspüler leeren, Filter reinigen, Tür offen lassen.</li>
@@ -1104,7 +1136,7 @@ body.ux-sorba .uxbtn .lbl-alt{display:inline}
 
   <h3>Die Tasten</h3>
   <div class="rows">
-    <div class="r"><span class="lab">Ein und Aus</span><span class="val">startet und stoppt das Gebläse. Beendet auch den Auto-Betrieb</span></div>
+    <div class="r"><span class="lab">Ein und Aus</span><span class="val">startet und stoppt das Gebläse. <b>Der Deckel schliesst dabei mit</b> — vor der Fahrt genügt also Ausschalten. Beendet auch den Auto-Betrieb</span></div>
     <div class="r"><span class="lab">Deckel</span><span class="val">öffnet und schliesst die Abdeckung</span></div>
     <div class="r"><span class="lab">Abluft / Zuluft</span><span class="val">kehrt die Richtung um. Das Gebläse bremst, hält zwei Sekunden an und läuft dann rückwärts</span></div>
     <div class="r"><span class="lab">Auto</span><span class="val">übergibt an den Thermostaten</span></div>
@@ -1736,7 +1768,7 @@ body.ux-sorba .uxbtn .lbl-alt{display:inline}
 
   <h3>Küche und Gas</h3>
   <ol class="steps">
-    <li>Kühlschrank leeren, abtauen, trocken wischen und die Türen leicht angelehnt lassen.</li>
+    <li>Kühlschrank leeren, abtauen, trocken wischen. Türen mit dem eingebauten Haken einen Spalt offen halten.</li>
     <li>Geschirrspüler leeren, Filter reinigen, Tür offen lassen.</li>
     <li>Flaschenventile im Gaskasten schliessen.</li>
   </ol>
@@ -1873,7 +1905,7 @@ var GROUPS=[];
 /* ---------- Kategorieleiste ---------- */
 var cats=document.getElementById('cats');
 cats.innerHTML=GROUPS.map(function(g,i){
-  return '<button class="cat'+(i===0?' on':'')+'" type="button" data-g="'+i+'">'+
+  return '<button class="cat'+(i===0?' on':'')+'" type="button" data-g="'+i+'" data-cat="'+esc(g.id||'')+'">'+
          svg(g.icon)+'<span>'+esc(g.label)+'</span></button>';
 }).join('');
 var catBtns=Array.prototype.slice.call(cats.querySelectorAll('.cat'));
