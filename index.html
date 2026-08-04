@@ -277,6 +277,210 @@ a.link{color:var(--ink);font-weight:700;text-decoration:none;border-bottom:2px s
 footer{padding:30px var(--gut) calc(34px + var(--dock));color:var(--grey);font-size:14px;
   line-height:1.6;border-top:1px solid var(--line2);margin-top:36px}
 footer b{color:var(--ink)}
+
+/* ============================================================
+   Variante SORBA — Oberflaeche wie die Bueroanwendung.
+   Dicht, eckig, grau, mit blauen Titelleisten und 3D-Rahmen.
+   Wird ueber body.ux-sorba geschaltet, Umschalter unten rechts.
+   ============================================================ */
+body.ux-sorba{
+  --f:Tahoma,"Segoe UI",Geneva,Verdana,sans-serif;
+  --r:0px;--rs:0px;
+  --ink:#000;--ink2:#111;--grey:#454545;--grey2:#6E6E6E;
+  --line:#9A9A9A;--line2:#C8C8C8;--paper:#fff;--soft:#EDEBE4;
+  --rausch:#134E90;--rausch-dk:#0C3A6D;
+  --warn:#FCF4DA;--warn-line:#CDB264;--tip:#E4EDF8;--tip-line:#9AB4D4;--tip-ink:#134E90;
+  --mark:#FFE9A8;--sh:none;--shx:none;
+  --cat:34px;--dock:calc(36px + env(safe-area-inset-bottom));--gut:10px;
+  font-size:12.5px;line-height:1.42;letter-spacing:0;background:#D6D2C8;
+  -webkit-font-smoothing:auto;
+}
+body.ux-sorba .wrap{max-width:940px;background:#EDEBE4;
+  border-left:1px solid #FBFAF7;border-right:1px solid #8A8A8A}
+
+/* Titelleiste, Menuezeile, Statusfelder */
+body.ux-sorba .hero{display:flex;flex-direction:column;padding:0;background:#EDEBE4;
+  border-bottom:1px solid #8A8A8A}
+body.ux-sorba .hero h1{order:1;display:flex;align-items:center;gap:7px;margin:0;
+  font-size:12.5px;font-weight:700;line-height:1.5;letter-spacing:0;color:#fff;
+  padding:calc(4px + env(safe-area-inset-top)) 9px 4px;
+  background:linear-gradient(180deg,#3D86C6 0%,#1A5FA8 48%,#134E90 100%)}
+body.ux-sorba .hero h1::before{content:"";flex:0 0 12px;width:12px;height:12px;
+  background:linear-gradient(135deg,#FBFAF7,#BFBCB2);border:1px solid #0C3A6D}
+body.ux-sorba .hero .kicker{order:2;display:block;margin:0;padding:2px 9px;border-radius:0;
+  background:#EDEBE4;border-bottom:1px solid #C8C8C8;color:#000;font-size:11.5px;font-weight:400;
+  letter-spacing:0}
+body.ux-sorba .hero .sub{order:3;margin:0;padding:5px 9px 4px;font-size:11.5px;
+  color:#454545;font-weight:400}
+body.ux-sorba .hero .stats{order:4;gap:0;padding:0 9px 7px}
+body.ux-sorba .stat{border-radius:0;border:1px solid #9A9A9A;margin-right:-1px;
+  background:#fff;padding:1px 7px;font-size:11.5px;font-weight:400;gap:4px}
+body.ux-sorba .stat span{color:#454545}
+
+/* Karteireiter */
+body.ux-sorba .cats{background:#EDEBE4;border-bottom:1px solid #8A8A8A;
+  -webkit-backdrop-filter:none;backdrop-filter:none;padding:3px 5px 0;gap:1px}
+body.ux-sorba .cat{flex-direction:row;gap:5px;min-width:0;padding:3px 9px 2px;color:#000;
+  border:1px solid #9A9A9A;border-bottom:0;background:linear-gradient(180deg,#FBFAF7,#DFDCD3)}
+body.ux-sorba .cat svg{width:13px;height:13px;stroke-width:1.6}
+body.ux-sorba .cat span{font-size:11.5px;font-weight:400;letter-spacing:0}
+body.ux-sorba .cat.on{background:#fff;font-weight:700;padding-bottom:3px;margin-bottom:-1px}
+body.ux-sorba .cat.on span{font-weight:700}
+
+/* Gruppenrahmen je Abschnitt */
+body.ux-sorba .pad{padding:8px max(8px,env(safe-area-inset-left)) var(--dock)
+  max(8px,env(safe-area-inset-right))}
+body.ux-sorba section{padding:0 9px 9px;margin:0 0 9px;background:#fff;
+  border:1px solid #9A9A9A;scroll-margin-top:calc(var(--cat) + 4px)}
+body.ux-sorba .part{margin:12px 0 6px;padding:2px 8px;gap:6px;border:1px solid #9A9A9A;
+  font-size:11px;letter-spacing:.02em;color:#134E90;
+  background:linear-gradient(180deg,#F3F1EA,#DFDCD3)}
+body.ux-sorba .part:first-child{margin-top:0}
+body.ux-sorba .part svg{width:13px;height:13px}
+body.ux-sorba h2{margin:0 -9px 9px;padding:3px 9px;font-size:12px;font-weight:700;
+  line-height:1.5;letter-spacing:0;color:#fff;
+  background:linear-gradient(180deg,#3D86C6,#134E90)}
+body.ux-sorba .lede{font-size:12px;line-height:1.45;margin:0 0 9px;color:#111}
+body.ux-sorba h3{font-size:12px;font-weight:700;margin:12px 0 5px;letter-spacing:0;
+  padding-bottom:2px;border-bottom:1px solid #C8C8C8}
+body.ux-sorba h4{font-size:12px;font-weight:700;margin:0 0 3px;letter-spacing:0}
+body.ux-sorba p{margin:0 0 8px;font-size:12.5px}
+body.ux-sorba .tag{border-radius:0;border:1px solid #9A9A9A;background:#EDEBE4;
+  padding:1px 7px;font-size:11px;margin-bottom:8px;color:#000}
+
+/* Datenraster */
+body.ux-sorba .rows{border:1px solid #9A9A9A;border-bottom:0;margin:0 0 9px}
+body.ux-sorba .rows .r{display:flex;gap:0;align-items:stretch;padding:0;
+  border-bottom:1px solid #C8C8C8}
+body.ux-sorba .rows .r:nth-child(even){background:#F2F3F9}
+body.ux-sorba .rows .r .lab{flex:0 0 36%;margin:0;padding:2px 7px;font-size:11.5px;
+  font-weight:400;color:#000;background:#E7E5DE;border-right:1px solid #C8C8C8}
+body.ux-sorba .rows .r .val{flex:1;padding:2px 7px;font-size:12px;line-height:1.4;color:#111}
+body.ux-sorba .cal .rows{border-color:#9A9A9A}
+body.ux-sorba .cal .rows .r{border-bottom-color:#C8C8C8}
+
+/* Nummerierte Ablaeufe */
+body.ux-sorba ol.steps{margin:0 0 9px}
+body.ux-sorba ol.steps li{padding:0 0 6px 24px;font-size:12.5px;line-height:1.45}
+body.ux-sorba ol.steps li::before{width:16px;height:16px;border-radius:0;top:2px;
+  background:#1A5FA8;font-size:10.5px;font-weight:700}
+body.ux-sorba ul.ticks{margin:0 0 9px}
+body.ux-sorba ul.ticks li{padding-left:16px;margin-bottom:4px;font-size:12.5px;line-height:1.45}
+body.ux-sorba ul.ticks li::before{left:4px;top:7px;width:5px;height:5px;border-radius:0;
+  background:#134E90}
+
+/* Meldungsfelder */
+body.ux-sorba .cal{border-radius:0;border:1px solid #9A9A9A;background:#F7F6F1;
+  padding:7px 9px 8px;margin:0 0 9px}
+body.ux-sorba .cal .t{margin:-7px -9px 7px;padding:2px 8px;font-size:11.5px;
+  background:#E3E0D7;border-bottom:1px solid #C8C8C8;letter-spacing:0}
+body.ux-sorba .cal.warn{background:#FCF9EE}
+body.ux-sorba .cal.warn .t{background:#F4E6C4;border-bottom-color:#CDB264}
+body.ux-sorba .cal.tip{background:#F2F6FB}
+body.ux-sorba .cal.tip .t{background:#D9E5F3;border-bottom-color:#9AB4D4}
+body.ux-sorba .cal p{font-size:12.5px;margin-bottom:7px}
+
+/* Merkmalsknoepfe */
+body.ux-sorba .chips{gap:0;margin:0 0 9px}
+body.ux-sorba .chip{border-radius:0;border:1px solid #9A9A9A;background:#EDEBE4;
+  margin:0 -1px -1px 0;padding:2px 8px;font-size:11.5px;gap:5px}
+
+/* Tastenliste */
+body.ux-sorba .keys{margin:0 0 9px}
+body.ux-sorba .key{gap:8px;padding:4px 0;border-bottom:1px solid #C8C8C8}
+body.ux-sorba .key .n{flex:0 0 17px;height:17px;border-radius:0;border:1px solid #9A9A9A;
+  background:#EDEBE4;font-size:10.5px;margin-top:1px}
+body.ux-sorba .key .tx b{font-size:12.5px}
+body.ux-sorba .key .tx span{font-size:11.5px}
+
+/* Eingabefelder */
+body.ux-sorba .creds{margin:0 0 9px;border:1px solid #9A9A9A;border-bottom:0}
+body.ux-sorba .cred{border:0;border-bottom:1px solid #C8C8C8;border-radius:0;background:#fff;
+  padding:0;margin:0;gap:0;box-shadow:none}
+body.ux-sorba .cred:active{background:#E7EEF8}
+body.ux-sorba .cred .ci{display:flex;align-items:stretch;flex:1;min-width:0}
+body.ux-sorba .cred .k{flex:0 0 36%;padding:2px 7px;font-size:11.5px;font-weight:400;
+  color:#000;background:#E7E5DE;border-right:1px solid #C8C8C8}
+body.ux-sorba .cred .v{flex:1;padding:2px 7px;font-size:12px;font-weight:400;letter-spacing:0}
+body.ux-sorba .cred .cp{align-self:stretch;display:flex;align-items:center;padding:0 8px;
+  font-size:11px;font-weight:400;color:#000;border-left:1px solid #9A9A9A;
+  background:linear-gradient(180deg,#FBFAF7,#DFDCD3)}
+
+/* Abbildungen und Videos */
+body.ux-sorba figure{margin:0 0 9px}
+body.ux-sorba figure img{border-radius:0;border:1px solid #9A9A9A}
+body.ux-sorba figcaption{font-size:11.5px;margin-top:4px}
+body.ux-sorba .g2{gap:9px}
+body.ux-sorba .vid{padding:9px 0;border-top:1px solid #C8C8C8}
+body.ux-sorba .player{border-radius:0;border:1px solid #9A9A9A}
+body.ux-sorba .vmeta{font-size:11px;font-weight:700;color:#134E90;margin:7px 0 2px}
+body.ux-sorba .vfall a{border-radius:0;border:1px solid #9A9A9A;padding:2px 9px;
+  font-size:11.5px;font-weight:400;letter-spacing:0;gap:6px;
+  background:linear-gradient(180deg,#FBFAF7,#DFDCD3)}
+body.ux-sorba .vfall a svg{width:12px;height:12px;flex:0 0 12px}
+body.ux-sorba .vfall small{font-size:11px;margin-top:4px}
+body.ux-sorba .vlocal{border-radius:0;border:1px solid #9A9A9A;background:#FCF9EE;
+  padding:5px 8px;font-size:11.5px;margin-bottom:9px}
+body.ux-sorba .pbtn .pdur,body.ux-sorba .pbtn .pext{border-radius:0;font-size:11px}
+
+/* Sonstiges im Fliesstext */
+body.ux-sorba kbd{border-radius:0;border:1px solid #9A9A9A;background:#EDEBE4;
+  font-size:11.5px;padding:0 5px}
+body.ux-sorba a.link{border-bottom-width:1px;border-bottom-color:#134E90;color:#134E90}
+body.ux-sorba .store{border-radius:0;border:1px solid #9A9A9A;background:#EDEBE4;color:#000;
+  padding:5px 11px;min-width:0;gap:8px}
+body.ux-sorba .store svg{width:19px;height:19px;flex:0 0 19px}
+body.ux-sorba .store span{font-size:12px;font-weight:700;letter-spacing:0}
+body.ux-sorba .store span small{font-size:10px;opacity:.75}
+body.ux-sorba .stores{gap:6px;margin-bottom:9px}
+
+/* Werkzeugleiste unten */
+body.ux-sorba .dock{background:#EDEBE4;border-top:1px solid #8A8A8A;
+  -webkit-backdrop-filter:none;backdrop-filter:none;padding-left:4px;padding-right:4px}
+body.ux-sorba .dock button{flex:0 1 auto;flex-direction:row;gap:6px;height:35px;padding:0 11px;
+  color:#000;border:1px solid transparent}
+body.ux-sorba .dock button:active{color:#000;border-color:#9A9A9A;background:#DFDCD3}
+body.ux-sorba .dock button svg{width:14px;height:14px;stroke-width:1.7}
+body.ux-sorba .dock button span{font-size:11.5px;font-weight:400}
+
+/* Dialoge fuer Inhalt und Suche */
+body.ux-sorba .ovl{background:#EDEBE4}
+body.ux-sorba .ovlbar{gap:7px;border-bottom:1px solid #8A8A8A;background:#EDEBE4;
+  padding:calc(4px + env(safe-area-inset-top)) 6px 5px}
+body.ux-sorba .ovltitle{font-size:12px;font-weight:700;letter-spacing:0}
+body.ux-sorba .xbtn{width:20px;height:20px;border-radius:0;border:1px solid #9A9A9A;
+  background:linear-gradient(180deg,#FBFAF7,#DFDCD3)}
+body.ux-sorba .xbtn svg{width:11px;height:11px}
+body.ux-sorba .sfield{border-radius:0;border:1px solid #7F9DB9;background:#fff;height:24px;
+  padding:0 6px;gap:6px}
+body.ux-sorba #sinput{font-size:12.5px;font-weight:400}
+body.ux-sorba .ovlbody{background:#fff}
+body.ux-sorba .scount,body.ux-sorba .tocgrp{padding:5px 8px 3px;font-size:11px;
+  letter-spacing:0;background:#E7E5DE;border-bottom:1px solid #C8C8C8;margin:0;color:#134E90}
+body.ux-sorba .tocgrp svg{width:13px;height:13px}
+body.ux-sorba .tocitem,body.ux-sorba .shit{padding:3px 8px;border-bottom:1px solid #C8C8C8}
+body.ux-sorba .tocitem:nth-child(even),body.ux-sorba .shit:nth-child(even){background:#F2F3F9}
+body.ux-sorba .tocitem:active,body.ux-sorba .shit:active{background:#C5CBE8}
+body.ux-sorba .tocitem b{font-size:12px;letter-spacing:0}
+body.ux-sorba .tocitem .td{font-size:11px;margin-top:0}
+body.ux-sorba .tocitem .tv{border-radius:0;border:1px solid #9A9A9A;background:#EDEBE4;
+  color:#000;font-size:10.5px;padding:0 5px;font-weight:400}
+body.ux-sorba .tocitem .chev{width:12px;height:12px}
+body.ux-sorba .shit .sec{font-size:10.5px;color:#134E90}
+body.ux-sorba .shit .txt{font-size:12px;line-height:1.4}
+body.ux-sorba .shint span{border-radius:0;border:1px solid #9A9A9A;background:#EDEBE4;
+  padding:2px 8px;font-size:11.5px;margin:0 4px 4px 0}
+body.ux-sorba .sempty{font-size:12.5px;padding:9px 8px}
+
+/* Fusszeile als Statusleiste */
+body.ux-sorba footer{margin-top:0;padding:6px 9px calc(10px + var(--dock));font-size:11px;
+  line-height:1.45;background:#EDEBE4;border-top:1px solid #8A8A8A}
+
+/* Umschalter zwischen den Oberflaechen */
+.uxbtn .lbl{display:inline}
+.uxbtn .lbl-alt{display:none}
+body.ux-sorba .uxbtn .lbl{display:none}
+body.ux-sorba .uxbtn .lbl-alt{display:inline}
 </style>
 </head>
 <body>
@@ -1296,6 +1500,10 @@ footer b{color:var(--ink)}
     <svg viewBox="0 0 24 24"><path d="M12 20V5M6 11l6-6 6 6"/></svg>
     <span>Nach oben</span>
   </button>
+  <button id="uxbtn" class="uxbtn" type="button" aria-label="Oberfläche wechseln">
+    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M8 4v5"/></svg>
+    <span><span class="lbl">SORBA</span><span class="lbl-alt">Bordbuch</span></span>
+  </button>
 </nav>
 
 <div class="ovl" id="toc" role="dialog" aria-modal="true" aria-label="Inhalt">
@@ -1671,6 +1879,32 @@ document.addEventListener('keydown',function(e){
   if((e.metaKey||e.ctrlKey)&&(e.key==='k'||e.key==='K')){e.preventDefault();openSearch();}
   if(e.key==='Escape'&&toc.classList.contains('open')) closeToc();
 });
+
+/* ---------- Oberflaeche umschalten ----------
+   Zwei Gestaltungen im selben Dokument: das Bordbuch und die SORBA-Variante.
+   Die Wahl bleibt im Geraetespeicher, damit sie den Neustart ueberlebt. */
+(function(){
+  var KEY='bordbuch-ux', btn=document.getElementById('uxbtn');
+  var themeMeta=document.querySelector('meta[name=theme-color]');
+
+  function setzen(ux){
+    var sorba = ux==='sorba';
+    document.body.classList.toggle('ux-sorba', sorba);
+    if(themeMeta) themeMeta.setAttribute('content', sorba ? '#EDEBE4' : '#ffffff');
+    if(btn) btn.setAttribute('aria-pressed', sorba ? 'true' : 'false');
+  }
+
+  var gespeichert;
+  try{ gespeichert = localStorage.getItem(KEY); }catch(e){}
+  setzen(gespeichert || 'bordbuch');
+
+  if(btn) btn.addEventListener('click', function(){
+    var neu = document.body.classList.contains('ux-sorba') ? 'bordbuch' : 'sorba';
+    setzen(neu);
+    try{ localStorage.setItem(KEY, neu); }catch(e){}
+    window.scrollTo(0, 0);
+  });
+})();
 
 /* ---------- Externe Links immer nach aussen ----------
    Liegt das Bordbuch als Symbol auf dem Homescreen, laeuft es ohne
