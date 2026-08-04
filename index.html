@@ -294,6 +294,11 @@ figcaption{font-size:14px;line-height:1.45;color:var(--grey);margin-top:9px}
 kbd{font-family:inherit;font-size:15px;font-weight:700;background:var(--soft);
   border:1px solid var(--line2);border-radius:6px;padding:2px 7px;white-space:nowrap}
 a.link{color:var(--ink);font-weight:700;text-decoration:none;border-bottom:2px solid var(--rausch)}
+/* Querverweise: lesbar im Fliesstext, erkennbar ohne zu schreien */
+a.xref{color:inherit;font-weight:600;text-decoration:underline;
+  text-decoration-color:var(--grey2);text-decoration-thickness:1px;text-underline-offset:3px}
+a.xref:active{color:var(--rausch-text);text-decoration-color:var(--rausch-text)}
+body.ux-sorba a.xref{font-weight:400;color:#155A96;text-decoration-color:#9AB4D4}
 /* Store-Verweise zurückhaltend: umrandet statt schwarz ausgefüllt,
    damit sie neben dem Fliesstext nicht dominieren. */
 .stores{display:flex;flex-wrap:wrap;gap:9px;margin:4px 0 22px}
@@ -1581,7 +1586,7 @@ body.ux-sorba .uxbtn .lbl-alt{display:inline}
   </div>
 
   <div class="vids">
-      <article class="vid">
+      <article class="vid" id="markise">
         <div class="player" data-embed="https://alugha.com/embed/web-player?v=16651020-f03f-11eb-9a5a-b7b059913b89">
           <button class="pbtn" type="button" aria-label="Video abspielen: Markise mit der Handkurbel">
             <span class="pcirc"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg></span><span class="pdur">0:47</span>
@@ -2225,6 +2230,75 @@ document.addEventListener('keydown',function(e){
   if((e.metaKey||e.ctrlKey)&&(e.key==='k'||e.key==='K')){e.preventDefault();openSearch();}
   if(e.key==='Escape'&&toc.classList.contains('open')) closeToc();
 });
+
+/* ---------- Querverweise im Fliesstext ----------
+   Wird ein Geraet erwaehnt, das anderswo ein eigenes Kapitel hat, wird die
+   Stelle zum Sprungziel. Damit daraus keine Linkwueste wird, gelten drei
+   Regeln: hoechstens ein Verweis je Absatz, jedes Ziel nur einmal je
+   Abschnitt, und niemals ein Verweis auf den Abschnitt, in dem man steht. */
+(function(){
+  var ZIELE=[
+    ['markise','Markise'],['markise','Markisen'],
+    ['stuetzen','Hubstützen'],['stuetzen','Levelsystem'],
+    ['maxxfan','MaxxFan'],
+    ['wc','Clesana'],
+    ['kuehlschrank','Kühlschrank'],
+    ['spueler','Geschirrspüler'],
+    ['heizung','Heizung'],['heizung','Alde'],
+    ['klima','Klimaanlage'],
+    ['wechselrichter','Wechselrichter'],
+    ['gx','GX Touch'],
+    ['internet','Campernet'],
+    ['zentralpanel','Zentralpanel'],
+    ['wasser','Frischwasser'],['wasser','Abwasser'],['wasser','Wasserpumpe'],['wasser','Boiler'],
+    ['gas','Gasflaschen'],['gas','Gaskasten'],
+    ['wohnen','Hubbett'],
+    ['batterie','Ladestand'],['batterie','Solaranlage'],
+    ['tv','Fernseher'],
+    ['stuetzen','nivelliert'],['stuetzen','nivellieren'],
+    ['auswintern','Standzeit'],
+    ['bedienelemente','Bedienelemente']
+  ].map(function(z){
+    return {ziel:z[0], wort:z[1],
+      muster:new RegExp('(^|[\\s(«„—-])('+z[1]+'[a-zäöüß]{0,12})')};
+  });
+
+  var UEBERSPRINGEN=/^(H2|H3|H4|A|BUTTON|CODE|KBD|SCRIPT|STYLE)$/;
+
+  document.querySelectorAll('section[id]').forEach(function(sec){
+    var eigen=sec.id;
+    var vergeben={};
+    var blocks=sec.querySelectorAll('p, li, .rows .r .val');
+    Array.prototype.forEach.call(blocks, function(block){
+      if(block.closest('.cred')||block.closest('.vfall')||block.closest('h2,h3,h4')) return;
+      if(block.querySelector('a')) return;              // Absatz hat schon einen Verweis
+      var gesetzt=false;
+      ZIELE.some(function(z){
+        if(gesetzt) return true;
+        if(z.ziel===eigen || vergeben[z.ziel]) return false;
+        var ziel=document.getElementById(z.ziel);
+        if(!ziel || sec.contains(ziel)) return false;   // kein Verweis in sich selbst
+        var lauf=document.createTreeWalker(block, NodeFilter.SHOW_TEXT, {
+          acceptNode:function(n){
+            var e=n.parentElement;
+            while(e && e!==block){ if(UEBERSPRINGEN.test(e.tagName)) return NodeFilter.FILTER_REJECT; e=e.parentElement; }
+            return z.muster.test(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+          }});
+        var knoten=lauf.nextNode();
+        if(!knoten) return false;
+        var t=z.muster.exec(knoten.nodeValue);
+        var start=t.index+t[1].length, ende=start+t[2].length;
+        var nach=knoten.splitText(start); nach.splitText(t[2].length);
+        var a=document.createElement('a');
+        a.className='xref'; a.href='#'+z.ziel; a.textContent=nach.nodeValue;
+        a.title='Zum Kapitel';
+        nach.parentNode.replaceChild(a, nach);
+        vergeben[z.ziel]=true; gesetzt=true;
+        return true;
+      });
+    });
+  });
+})();
 
 /* ---------- Hoehe der Kategorieleiste ----------
    Der Wert steuert, wo ein Sprungziel landet. Die Leiste aendert ihre
