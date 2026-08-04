@@ -280,213 +280,224 @@ footer b{color:var(--ink)}
 
 /* ============================================================
    Variante SORBA — Oberflaeche wie die Bueroanwendung.
-   Dicht, eckig, grau, mit blauen Titelleisten und 3D-Rahmen.
-   Wird ueber body.ux-sorba geschaltet, Umschalter unten rechts.
+   Farbwelt nach den Bildschirmfotos: neutrales Grau als Traeger,
+   Blau nur in der Titelleiste und bei Verweisen, Symbole grau-blau
+   mit sparsamen roten Akzenten. Bernstein markiert Ausgewaehltes,
+   Gruen die abzulesenden Werte, Gelb die Hinweise.
+   Geschaltet ueber body.ux-sorba, Umschalter in der Werkzeugleiste.
    ============================================================ */
 body.ux-sorba{
   --f:Tahoma,"Segoe UI",Geneva,Verdana,sans-serif;
   --r:0px;--rs:0px;
-  --ink:#000;--ink2:#111;--grey:#454545;--grey2:#6E6E6E;
-  --line:#9A9A9A;--line2:#C8C8C8;--paper:#fff;--soft:#EDEBE4;
-  --rausch:#134E90;--rausch-dk:#0C3A6D;
-  --warn:#FCF4DA;--warn-line:#CDB264;--tip:#E4EDF8;--tip-line:#9AB4D4;--tip-ink:#134E90;
-  --mark:#FFE9A8;--sh:none;--shx:none;
-  --cat:66px;--dock:calc(36px + env(safe-area-inset-bottom));--gut:10px;
-  font-size:12.5px;line-height:1.42;letter-spacing:0;background:#D6D2C8;
+  --ink:#000;--ink2:#141414;--grey:#4A4A4A;--grey2:#707070;
+  --line:#B0B0B0;--line2:#D7D7D7;--paper:#fff;--soft:#F0F0F0;
+  --rausch:#1F6FB5;--rausch-dk:#155A96;
+  --warn:#FFFFC8;--warn-line:#C7C288;--tip:#E8F0F8;--tip-line:#A9C1D9;--tip-ink:#155A96;
+  --mark:#FFF07A;--sh:none;--shx:none;
+  --cat:66px;--dock:calc(36px + env(safe-area-inset-bottom));--gut:9px;
+  font-size:12.5px;line-height:1.42;letter-spacing:0;background:#E2E2E2;
   -webkit-font-smoothing:auto;
 }
-body.ux-sorba .wrap{max-width:940px;background:#EDEBE4;
-  border-left:1px solid #FBFAF7;border-right:1px solid #8A8A8A}
+body.ux-sorba .wrap{max-width:940px;background:#F0F0F0;
+  border-left:1px solid #FFFFFF;border-right:1px solid #A6A6A6}
 
-/* Titelleiste, Menuezeile, Statusfelder */
-body.ux-sorba .hero{display:flex;flex-direction:column;padding:0;background:#EDEBE4;
-  border-bottom:1px solid #8A8A8A}
-body.ux-sorba .hero h1{order:1;display:flex;align-items:center;gap:7px;margin:0;
-  font-size:12.5px;font-weight:700;line-height:1.5;letter-spacing:0;color:#fff;
-  padding:calc(4px + env(safe-area-inset-top)) 9px 4px;
-  background:linear-gradient(180deg,#3D86C6 0%,#1A5FA8 48%,#134E90 100%)}
-body.ux-sorba .hero h1::before{content:"";flex:0 0 19px;width:19px;height:19px;border-radius:50%;
-  border:2px solid #E9F1FA;box-shadow:0 1px 2px rgba(0,0,0,.45);
-  background:radial-gradient(circle at 34% 28%,#6FB2E4 0%,#2775BE 46%,#0E4A88 100%)}
-body.ux-sorba .hero .kicker{order:2;display:block;margin:0;padding:2px 9px;border-radius:0;
-  background:#EDEBE4;border-bottom:1px solid #C8C8C8;color:#000;font-size:11.5px;font-weight:400;
-  letter-spacing:0}
-body.ux-sorba .hero .sub{order:3;margin:0;padding:5px 9px 4px;font-size:11.5px;
-  color:#454545;font-weight:400}
-body.ux-sorba .hero .stats{order:4;gap:0;padding:0 9px 7px}
-body.ux-sorba .stat{border-radius:0;border:1px solid #9A9A9A;margin-right:-1px;
-  background:#fff;padding:1px 7px;font-size:11.5px;font-weight:400;gap:4px}
-body.ux-sorba .stat span{color:#454545}
+/* Titelleiste: flach, mittig, mit runder Anwendungsschaltflaeche */
+body.ux-sorba .hero{display:flex;flex-direction:column;padding:0;background:#F0F0F0}
+body.ux-sorba .hero h1{order:1;position:relative;display:flex;align-items:center;
+  justify-content:center;margin:0;font-size:12px;font-weight:400;line-height:1.5;
+  letter-spacing:0;color:#FFFFFF;background:#1F6FB5;
+  padding:calc(4px + env(safe-area-inset-top)) 32px 4px}
+body.ux-sorba .hero h1::before{content:"";position:absolute;left:7px;top:50%;
+  width:17px;height:17px;margin-top:-8px;border-radius:50%;border:2px solid #EAF2FA;
+  background:radial-gradient(circle at 34% 28%,#7FBCEA 0%,#2E7FC4 46%,#12518F 100%)}
+body.ux-sorba .hero .sub{order:2;margin:0;padding:6px 9px 3px;font-size:11px;
+  color:#4A4A4A;font-weight:400}
+body.ux-sorba .hero .stats{order:3;gap:0;padding:0 9px 7px}
+body.ux-sorba .stat{border-radius:0;border:1px solid #ABADB3;margin-right:-1px;
+  background:#FFFFFF;padding:1px 7px;font-size:11px;font-weight:400;gap:4px}
+body.ux-sorba .stat span{color:#4A4A4A}
+/* Karteireiter, sitzt auf dem Menueband auf */
+body.ux-sorba .hero .kicker{order:4;display:inline-flex;align-self:flex-start;
+  margin:0 0 -1px 5px;padding:2px 13px;border-radius:0;background:#FAFAFA;
+  border:1px solid #A6A6A6;border-bottom-color:#FAFAFA;position:relative;z-index:1;
+  color:#000;font-size:11px;font-weight:400;letter-spacing:0}
 
 /* Symbolsatz: gezeichnet im Bordbuch, flaechig in SORBA */
 .ic-vol{display:none}
 body.ux-sorba .ic-lin{display:none}
-body.ux-sorba .ic-vol{display:block;fill:currentColor;stroke:none}
+body.ux-sorba .ic-vol{display:block;fill:#5C7C9E;stroke:none}
+body.ux-sorba .ic-vol .ak{fill:#1F6FB5}
+body.ux-sorba .ic-vol .rt{fill:#C0392B}
 
 /* Menueband mit flaechigen Symbolen und Beschriftung darunter */
-body.ux-sorba .cats{padding:0;gap:0;align-items:stretch;border-bottom:1px solid #8A8A8A;
+body.ux-sorba .cats{padding:0;gap:0;align-items:stretch;
+  border-top:1px solid #A6A6A6;border-bottom:1px solid #A6A6A6;
   -webkit-backdrop-filter:none;backdrop-filter:none;
-  background:linear-gradient(180deg,#FCFBF8 0%,#EFEDE6 54%,#DDDAD1 100%)}
+  background:linear-gradient(180deg,#FAFAFA 0%,#F0F0F0 54%,#E4E4E4 100%)}
 body.ux-sorba .cat{flex-direction:column;justify-content:flex-start;gap:4px;min-width:64px;
-  padding:7px 9px 6px;border:0;border-right:1px solid #D2CEC4;background:none;color:#1B6FB3}
+  padding:7px 9px 6px;border:0;border-right:1px solid #D4D4D4;background:none;color:#5C7C9E}
 body.ux-sorba .cat:last-child{border-right:0}
 body.ux-sorba .cat svg{width:27px;height:27px}
 body.ux-sorba .cat span{max-width:70px;font-size:10.5px;font-weight:400;line-height:1.2;
   letter-spacing:0;color:#151515;white-space:normal;text-align:center}
-body.ux-sorba .cat.on{background:linear-gradient(180deg,#FFF9E6,#FBE7B0);
-  box-shadow:inset 0 0 0 1px #D5BE71}
+body.ux-sorba .cat.on{background:linear-gradient(180deg,#FFF4D0,#FFE49E);
+  box-shadow:inset 0 0 0 1px #E0BE6A}
 body.ux-sorba .cat.on span{font-weight:700}
 
-/* Gruppenrahmen je Abschnitt */
+/* Gruppenrahmen je Abschnitt, Kopf grau statt blau */
 body.ux-sorba .pad{padding:8px max(8px,env(safe-area-inset-left)) var(--dock)
   max(8px,env(safe-area-inset-right))}
-body.ux-sorba section{padding:0 9px 9px;margin:0 0 9px;background:#fff;
-  border:1px solid #9A9A9A;scroll-margin-top:calc(var(--cat) + 4px)}
-body.ux-sorba .part{margin:12px 0 6px;padding:2px 8px;gap:6px;border:1px solid #9A9A9A;
-  font-size:11px;letter-spacing:.02em;color:#134E90;
-  background:linear-gradient(180deg,#F3F1EA,#DFDCD3)}
+body.ux-sorba .part{margin:11px 0 6px;padding:2px 8px;gap:6px;border:1px solid #B0B0B0;
+  font-size:11px;letter-spacing:.02em;color:#155A96;
+  background:linear-gradient(180deg,#FAFAFA,#E6E6E6)}
 body.ux-sorba .part:first-child{margin-top:0}
 body.ux-sorba .part svg{width:13px;height:13px}
+body.ux-sorba section{padding:0 9px 9px;margin:0 0 9px;background:#FFFFFF;
+  border:1px solid #B0B0B0;scroll-margin-top:calc(var(--cat) + 4px)}
 body.ux-sorba h2{margin:0 -9px 9px;padding:3px 9px;font-size:12px;font-weight:700;
-  line-height:1.5;letter-spacing:0;color:#fff;
-  background:linear-gradient(180deg,#3D86C6,#134E90)}
-body.ux-sorba .lede{font-size:12px;line-height:1.45;margin:0 0 9px;color:#111}
-body.ux-sorba h3{font-size:12px;font-weight:700;margin:12px 0 5px;letter-spacing:0;
-  padding-bottom:2px;border-bottom:1px solid #C8C8C8}
-body.ux-sorba h4{font-size:12px;font-weight:700;margin:0 0 3px;letter-spacing:0}
-body.ux-sorba p{margin:0 0 8px;font-size:12.5px}
-body.ux-sorba .tag{border-radius:0;border:1px solid #9A9A9A;background:#EDEBE4;
-  padding:1px 7px;font-size:11px;margin-bottom:8px;color:#000}
+  line-height:1.5;letter-spacing:0;color:#000;border-bottom:1px solid #B0B0B0;
+  background:linear-gradient(180deg,#FAFAFA,#E6E6E6)}
+body.ux-sorba .lede{font-size:11.5px;line-height:1.45;margin:0 0 9px;color:#141414}
+body.ux-sorba h3{font-size:11.5px;font-weight:700;margin:12px 0 5px;letter-spacing:0;
+  padding-bottom:2px;border-bottom:1px solid #D7D7D7}
+body.ux-sorba h4{font-size:11.5px;font-weight:700;margin:0 0 3px;letter-spacing:0}
+body.ux-sorba p{margin:0 0 8px;font-size:11.5px}
+body.ux-sorba .tag{border-radius:0;border:1px solid #ABADB3;background:#FFFFFF;
+  padding:1px 7px;font-size:10.5px;margin-bottom:8px;color:#000}
 
-/* Datenraster */
-body.ux-sorba .rows{border:1px solid #9A9A9A;border-bottom:0;margin:0 0 9px}
-body.ux-sorba .rows .r{display:flex;gap:0;align-items:stretch;padding:0;
-  border-bottom:1px solid #C8C8C8}
-body.ux-sorba .rows .r:nth-child(even){background:#F2F3F9}
-body.ux-sorba .rows .r .lab{flex:0 0 36%;margin:0;padding:2px 7px;font-size:11.5px;
-  font-weight:400;color:#000;background:#E7E5DE;border-right:1px solid #C8C8C8}
-body.ux-sorba .rows .r .val{flex:1;padding:2px 7px;font-size:12px;line-height:1.4;color:#111}
-body.ux-sorba .cal .rows{border-color:#9A9A9A}
-body.ux-sorba .cal .rows .r{border-bottom-color:#C8C8C8}
+/* Datenraster: weiss, duenne Linien, graue Beschriftungsspalte */
+body.ux-sorba .rows{border:1px solid #B0B0B0;border-bottom:0;margin:0 0 9px}
+body.ux-sorba .rows .r{display:flex;gap:0;align-items:stretch;padding:0;background:#FFFFFF;
+  border-bottom:1px solid #D7D7D7}
+body.ux-sorba .rows .r .lab{flex:0 0 36%;margin:0;padding:2px 7px;font-size:11px;
+  font-weight:400;color:#000;background:#F0F0F0;border-right:1px solid #D7D7D7}
+body.ux-sorba .rows .r .val{flex:1;padding:2px 7px;font-size:11.5px;line-height:1.4;color:#141414}
+body.ux-sorba .cal .rows{border-color:#B0B0B0}
+body.ux-sorba .cal .rows .r{border-bottom-color:#D7D7D7}
 
 /* Nummerierte Ablaeufe */
 body.ux-sorba ol.steps{margin:0 0 9px}
-body.ux-sorba ol.steps li{padding:0 0 6px 24px;font-size:12.5px;line-height:1.45}
+body.ux-sorba ol.steps li{padding:0 0 6px 24px;font-size:11.5px;line-height:1.45}
 body.ux-sorba ol.steps li::before{width:16px;height:16px;border-radius:0;top:2px;
-  background:#1A5FA8;font-size:10.5px;font-weight:700}
+  background:#1F6FB5;font-size:10.5px;font-weight:700}
 body.ux-sorba ul.ticks{margin:0 0 9px}
-body.ux-sorba ul.ticks li{padding-left:16px;margin-bottom:4px;font-size:12.5px;line-height:1.45}
+body.ux-sorba ul.ticks li{padding-left:16px;margin-bottom:4px;font-size:11.5px;line-height:1.45}
 body.ux-sorba ul.ticks li::before{left:4px;top:7px;width:5px;height:5px;border-radius:0;
-  background:#134E90}
+  background:#5C7C9E}
 
-/* Meldungsfelder */
-body.ux-sorba .cal{border-radius:0;border:1px solid #9A9A9A;background:#F7F6F1;
+/* Meldungsfelder: Gelb fuer Hinweise, Blau fuer Erklaerungen */
+body.ux-sorba .cal{border-radius:0;border:1px solid #B0B0B0;background:#FAFAFA;
   padding:7px 9px 8px;margin:0 0 9px}
-body.ux-sorba .cal .t{margin:-7px -9px 7px;padding:2px 8px;font-size:11.5px;
-  background:#E3E0D7;border-bottom:1px solid #C8C8C8;letter-spacing:0}
-body.ux-sorba .cal.warn{background:#FCF9EE}
-body.ux-sorba .cal.warn .t{background:#F4E6C4;border-bottom-color:#CDB264}
-body.ux-sorba .cal.tip{background:#F2F6FB}
-body.ux-sorba .cal.tip .t{background:#D9E5F3;border-bottom-color:#9AB4D4}
-body.ux-sorba .cal p{font-size:12.5px;margin-bottom:7px}
+body.ux-sorba .cal .t{margin:-7px -9px 7px;padding:2px 8px;font-size:11px;color:#000;
+  background:linear-gradient(180deg,#FAFAFA,#E6E6E6);border-bottom:1px solid #B0B0B0;
+  letter-spacing:0}
+body.ux-sorba .cal.warn{background:#FFFFF0;border-color:#C7C288}
+body.ux-sorba .cal.warn .t{background:#FFFFC8;border-bottom-color:#C7C288;color:#8A6A00}
+body.ux-sorba .cal.tip{background:#F6FAFD;border-color:#A9C1D9}
+body.ux-sorba .cal.tip .t{background:#E1ECF6;border-bottom-color:#A9C1D9;color:#155A96}
+body.ux-sorba .cal p{font-size:11.5px;margin-bottom:7px}
 
-/* Merkmalsknoepfe */
+/* Merkmalsfelder */
 body.ux-sorba .chips{gap:0;margin:0 0 9px}
-body.ux-sorba .chip{border-radius:0;border:1px solid #9A9A9A;background:#EDEBE4;
-  margin:0 -1px -1px 0;padding:2px 8px;font-size:11.5px;gap:5px}
+body.ux-sorba .chip{border-radius:0;border:1px solid #ABADB3;background:#FFFFFF;
+  margin:0 -1px -1px 0;padding:2px 8px;font-size:11px;gap:5px}
 
 /* Tastenliste */
 body.ux-sorba .keys{margin:0 0 9px}
-body.ux-sorba .key{gap:8px;padding:4px 0;border-bottom:1px solid #C8C8C8}
-body.ux-sorba .key .n{flex:0 0 17px;height:17px;border-radius:0;border:1px solid #9A9A9A;
-  background:#EDEBE4;font-size:10.5px;margin-top:1px}
-body.ux-sorba .key .tx b{font-size:12.5px}
-body.ux-sorba .key .tx span{font-size:11.5px}
+body.ux-sorba .key{gap:8px;padding:4px 0;border-bottom:1px solid #D7D7D7}
+body.ux-sorba .key .n{flex:0 0 17px;height:17px;border-radius:0;border:1px solid #ABADB3;
+  background:#F0F0F0;font-size:10.5px;margin-top:1px}
+body.ux-sorba .key .tx b{font-size:11.5px}
+body.ux-sorba .key .tx span{font-size:11px}
 
-/* Eingabefelder */
-body.ux-sorba .creds{margin:0 0 9px;border:1px solid #9A9A9A;border-bottom:0}
-body.ux-sorba .cred{border:0;border-bottom:1px solid #C8C8C8;border-radius:0;background:#fff;
-  padding:0;margin:0;gap:0;box-shadow:none}
-body.ux-sorba .cred:active{background:#E7EEF8}
+/* Eingabefelder, abzulesende Werte gruen hinterlegt */
+body.ux-sorba .creds{margin:0 0 9px;border:1px solid #B0B0B0;border-bottom:0}
+body.ux-sorba .cred{border:0;border-bottom:1px solid #D7D7D7;border-radius:0;
+  background:#FFFFFF;padding:0;margin:0;gap:0;box-shadow:none}
 body.ux-sorba .cred .ci{display:flex;align-items:stretch;flex:1;min-width:0}
-body.ux-sorba .cred .k{flex:0 0 36%;padding:2px 7px;font-size:11.5px;font-weight:400;
-  color:#000;background:#E7E5DE;border-right:1px solid #C8C8C8}
-body.ux-sorba .cred .v{flex:1;padding:2px 7px;font-size:12px;font-weight:400;letter-spacing:0}
+body.ux-sorba .cred .k{flex:0 0 36%;padding:2px 7px;font-size:11px;font-weight:400;
+  color:#000;background:#F0F0F0;border-right:1px solid #D7D7D7}
+body.ux-sorba .cred .v{flex:1;padding:2px 7px;font-size:11.5px;font-weight:400;
+  letter-spacing:0;background:#DCEDD5;color:#123D12}
+body.ux-sorba .cred:active .v{background:#C4E3B9}
 body.ux-sorba .cred .cp{align-self:stretch;display:flex;align-items:center;padding:0 8px;
-  font-size:11px;font-weight:400;color:#000;border-left:1px solid #9A9A9A;
-  background:linear-gradient(180deg,#FBFAF7,#DFDCD3)}
+  font-size:10.5px;font-weight:400;color:#000;border-left:1px solid #B0B0B0;
+  background:linear-gradient(180deg,#FAFAFA,#E4E4E4)}
 
 /* Abbildungen und Videos */
 body.ux-sorba figure{margin:0 0 9px}
-body.ux-sorba figure img{border-radius:0;border:1px solid #9A9A9A}
-body.ux-sorba figcaption{font-size:11.5px;margin-top:4px}
+body.ux-sorba figure img{border-radius:0;border:1px solid #ABADB3}
+body.ux-sorba figcaption{font-size:11px;margin-top:4px}
 body.ux-sorba .g2{gap:9px}
-body.ux-sorba .vid{padding:9px 0;border-top:1px solid #C8C8C8}
-body.ux-sorba .player{border-radius:0;border:1px solid #9A9A9A}
-body.ux-sorba .vmeta{font-size:11px;font-weight:700;color:#134E90;margin:7px 0 2px}
-body.ux-sorba .vfall a{border-radius:0;border:1px solid #9A9A9A;padding:2px 9px;
-  font-size:11.5px;font-weight:400;letter-spacing:0;gap:6px;
-  background:linear-gradient(180deg,#FBFAF7,#DFDCD3)}
+body.ux-sorba .vid{padding:9px 0;border-top:1px solid #D7D7D7}
+body.ux-sorba .player{border-radius:0;border:1px solid #ABADB3}
+body.ux-sorba .vmeta{font-size:10.5px;font-weight:700;color:#155A96;margin:7px 0 2px}
+body.ux-sorba .vfall a{border-radius:0;border:1px solid #ABADB3;padding:2px 9px;
+  font-size:11px;font-weight:400;letter-spacing:0;gap:6px;color:#000;
+  background:linear-gradient(180deg,#FAFAFA,#E4E4E4)}
+body.ux-sorba .vfall a:active{background:#FFE49E}
 body.ux-sorba .vfall a svg{width:12px;height:12px;flex:0 0 12px}
-body.ux-sorba .vfall small{font-size:11px;margin-top:4px}
-body.ux-sorba .vlocal{border-radius:0;border:1px solid #9A9A9A;background:#FCF9EE;
-  padding:5px 8px;font-size:11.5px;margin-bottom:9px}
-body.ux-sorba .pbtn .pdur,body.ux-sorba .pbtn .pext{border-radius:0;font-size:11px}
+body.ux-sorba .vfall small{font-size:10.5px;margin-top:4px}
+body.ux-sorba .vlocal{border-radius:0;border:1px solid #C7C288;background:#FFFFF0;
+  padding:5px 8px;font-size:11px;margin-bottom:9px}
+body.ux-sorba .pbtn .pdur,body.ux-sorba .pbtn .pext{border-radius:0;font-size:10.5px}
 
 /* Sonstiges im Fliesstext */
-body.ux-sorba kbd{border-radius:0;border:1px solid #9A9A9A;background:#EDEBE4;
-  font-size:11.5px;padding:0 5px}
-body.ux-sorba a.link{border-bottom-width:1px;border-bottom-color:#134E90;color:#134E90}
-body.ux-sorba .store{border-radius:0;border:1px solid #9A9A9A;background:#EDEBE4;color:#000;
-  padding:5px 11px;min-width:0;gap:8px}
+body.ux-sorba kbd{border-radius:0;border:1px solid #ABADB3;background:#F0F0F0;
+  font-size:11px;padding:0 5px}
+body.ux-sorba a.link{border-bottom-width:1px;border-bottom-color:#1F6FB5;color:#1F6FB5}
+body.ux-sorba .store{border-radius:0;border:1px solid #ABADB3;color:#000;
+  padding:5px 11px;min-width:0;gap:8px;background:linear-gradient(180deg,#FAFAFA,#E4E4E4)}
 body.ux-sorba .store svg{width:19px;height:19px;flex:0 0 19px}
-body.ux-sorba .store span{font-size:12px;font-weight:700;letter-spacing:0}
+body.ux-sorba .store span{font-size:11.5px;font-weight:700;letter-spacing:0}
 body.ux-sorba .store span small{font-size:10px;opacity:.75}
 body.ux-sorba .stores{gap:6px;margin-bottom:9px}
 
 /* Werkzeugleiste unten */
-body.ux-sorba .dock{background:#EDEBE4;border-top:1px solid #8A8A8A;
-  -webkit-backdrop-filter:none;backdrop-filter:none;padding-left:4px;padding-right:4px}
+body.ux-sorba .dock{border-top:1px solid #A6A6A6;padding-left:4px;padding-right:4px;
+  -webkit-backdrop-filter:none;backdrop-filter:none;
+  background:linear-gradient(180deg,#FAFAFA,#EDEDED)}
 body.ux-sorba .dock button{flex:0 1 auto;flex-direction:row;gap:6px;height:35px;padding:0 11px;
   color:#000;border:1px solid transparent}
-body.ux-sorba .dock button:active{color:#000;border-color:#9A9A9A;background:#DFDCD3}
+body.ux-sorba .dock button:active{color:#000;border-color:#E0BE6A;background:#FFE49E}
 body.ux-sorba .dock button svg{width:15px;height:15px;stroke-width:1.7}
-body.ux-sorba .dock button .ic-vol{fill:#1B6FB3}
-body.ux-sorba .dock button:active .ic-vol{fill:#0E4A88}
-body.ux-sorba .dock button span{font-size:11.5px;font-weight:400}
+body.ux-sorba .dock button span{font-size:11px;font-weight:400}
 
 /* Dialoge fuer Inhalt und Suche */
-body.ux-sorba .ovl{background:#EDEBE4}
-body.ux-sorba .ovlbar{gap:7px;border-bottom:1px solid #8A8A8A;background:#EDEBE4;
-  padding:calc(4px + env(safe-area-inset-top)) 6px 5px}
-body.ux-sorba .ovltitle{font-size:12px;font-weight:700;letter-spacing:0}
-body.ux-sorba .xbtn{width:20px;height:20px;border-radius:0;border:1px solid #9A9A9A;
-  background:linear-gradient(180deg,#FBFAF7,#DFDCD3)}
+body.ux-sorba .ovl{background:#F0F0F0}
+body.ux-sorba .ovlbar{gap:7px;border-bottom:1px solid #A6A6A6;padding:0 6px 0 0;
+  background:#1F6FB5;min-height:26px}
+body.ux-sorba .ovlbar .ovltitle{color:#FFFFFF;font-size:11.5px;font-weight:400;letter-spacing:0}
+body.ux-sorba .ovlbar .sfield{margin:3px 0}
+body.ux-sorba .xbtn{width:20px;height:20px;margin:3px 0 3px 4px;border-radius:0;
+  border:1px solid #A6A6A6;color:#000;background:linear-gradient(180deg,#FAFAFA,#E4E4E4)}
 body.ux-sorba .xbtn svg{width:11px;height:11px}
-body.ux-sorba .sfield{border-radius:0;border:1px solid #7F9DB9;background:#fff;height:24px;
-  padding:0 6px;gap:6px}
-body.ux-sorba #sinput{font-size:12.5px;font-weight:400}
-body.ux-sorba .ovlbody{background:#fff}
-body.ux-sorba .scount,body.ux-sorba .tocgrp{padding:5px 8px 3px;font-size:11px;
-  letter-spacing:0;background:#E7E5DE;border-bottom:1px solid #C8C8C8;margin:0;color:#134E90}
+body.ux-sorba .xbtn:active{background:#E8B4AE;border-color:#C0392B}
+body.ux-sorba .sfield{border-radius:0;border:1px solid #ABADB3;background:#FFFFFF;
+  height:22px;padding:0 6px;gap:6px}
+body.ux-sorba #sinput{font-size:11.5px;font-weight:400}
+body.ux-sorba .ovlbody{background:#FFFFFF}
+body.ux-sorba .scount,body.ux-sorba .tocgrp{padding:4px 8px 3px;font-size:10.5px;
+  letter-spacing:0;margin:0;color:#155A96;border-bottom:1px solid #D7D7D7;
+  background:linear-gradient(180deg,#FAFAFA,#E6E6E6)}
 body.ux-sorba .tocgrp svg{width:13px;height:13px}
-body.ux-sorba .tocitem,body.ux-sorba .shit{padding:3px 8px;border-bottom:1px solid #C8C8C8}
-body.ux-sorba .tocitem:nth-child(even),body.ux-sorba .shit:nth-child(even){background:#F2F3F9}
-body.ux-sorba .tocitem:active,body.ux-sorba .shit:active{background:#C5CBE8}
-body.ux-sorba .tocitem b{font-size:12px;letter-spacing:0}
-body.ux-sorba .tocitem .td{font-size:11px;margin-top:0}
-body.ux-sorba .tocitem .tv{border-radius:0;border:1px solid #9A9A9A;background:#EDEBE4;
-  color:#000;font-size:10.5px;padding:0 5px;font-weight:400}
-body.ux-sorba .tocitem .chev{width:12px;height:12px}
-body.ux-sorba .shit .sec{font-size:10.5px;color:#134E90}
-body.ux-sorba .shit .txt{font-size:12px;line-height:1.4}
-body.ux-sorba .shint span{border-radius:0;border:1px solid #9A9A9A;background:#EDEBE4;
-  padding:2px 8px;font-size:11.5px;margin:0 4px 4px 0}
-body.ux-sorba .sempty{font-size:12.5px;padding:9px 8px}
+body.ux-sorba .tocitem,body.ux-sorba .shit{padding:3px 8px;border-bottom:1px solid #D7D7D7}
+body.ux-sorba .tocitem:active,body.ux-sorba .shit:active{background:#FFE49E}
+body.ux-sorba .tocitem b{font-size:11.5px;letter-spacing:0}
+body.ux-sorba .tocitem .td{font-size:10.5px;margin-top:0;color:#4A4A4A}
+body.ux-sorba .tocitem .tv{border-radius:0;border:1px solid #ABADB3;background:#FFFFFF;
+  color:#000;font-size:10px;padding:0 5px;font-weight:400}
+body.ux-sorba .tocitem .chev{width:12px;height:12px;stroke:#707070}
+body.ux-sorba .shit .sec{font-size:10px;color:#155A96}
+body.ux-sorba .shit .txt{font-size:11.5px;line-height:1.4}
+body.ux-sorba .shint span{border-radius:0;border:1px solid #ABADB3;background:#FFFFFF;
+  padding:2px 8px;font-size:11px;margin:0 4px 4px 0}
+body.ux-sorba .sempty{font-size:11.5px;padding:9px 8px}
 
 /* Fusszeile als Statusleiste */
-body.ux-sorba footer{margin-top:0;padding:6px 9px calc(10px + var(--dock));font-size:11px;
-  line-height:1.45;background:#EDEBE4;border-top:1px solid #8A8A8A}
+body.ux-sorba footer{margin-top:0;padding:5px 9px calc(10px + var(--dock));font-size:10.5px;
+  line-height:1.45;border-top:1px solid #A6A6A6;
+  background:linear-gradient(180deg,#FAFAFA,#EDEDED)}
 
 /* Umschalter zwischen den Oberflaechen */
 .uxbtn .lbl{display:inline}
@@ -1570,16 +1581,16 @@ var ICONS={
    ausgefuellt statt gezeichnet, so wie im Menueband der Anwendung. */
 var ICONS_VOLL={
  compass:'<path fill-rule="evenodd" d="M12 1.8a10.2 10.2 0 1 0 0 20.4 10.2 10.2 0 0 0 0-20.4zm4.8 5.4-2.5 6.3-6.3 2.5 2.5-6.3z"/>',
- bolt:'<path d="M13.6 1.9 4 13.9h6.3L9.5 22.1 20.1 9.5h-6.7z"/>',
- drop:'<path d="M12 2.1c-.5 0-6.9 7-6.9 11.3a6.9 6.9 0 0 0 13.8 0C18.9 9.1 12.5 2.1 12 2.1z"/>',
- thermo:'<path d="M12 1.8a2.9 2.9 0 0 0-2.9 2.9v9.6a4.7 4.7 0 1 0 5.8 0V4.7A2.9 2.9 0 0 0 12 1.8z"/>',
+ bolt:'<path class="ak" d="M13.6 1.9 4 13.9h6.3L9.5 22.1 20.1 9.5h-6.7z"/>',
+ drop:'<path class="ak" d="M12 2.1c-.5 0-6.9 7-6.9 11.3a6.9 6.9 0 0 0 13.8 0C18.9 9.1 12.5 2.1 12 2.1z"/>',
+ thermo:'<path d="M12 1.8a2.9 2.9 0 0 0-2.9 2.9v9.6a4.7 4.7 0 1 0 5.8 0V4.7A2.9 2.9 0 0 0 12 1.8z"/><circle class="rt" cx="12" cy="17.7" r="2.9"/><rect class="rt" x="10.9" y="8.4" width="2.2" height="8"/>',
  fork:'<path d="M6.1 2.2h1.4v5.4h1V2.2h1.4v5.4h1V2.2h1.4v6.2c0 1.1-.7 2-1.7 2.3v11.1H8.8V10.7c-1-.3-1.7-1.2-1.7-2.3V2.2zm11.6 0v19.6h-1.7v-8.1h-2.2V8.2c0-2.5.9-4.6 2.6-6z"/>',
- shower:'<path d="M3.6 21.8V8.4a4.9 4.9 0 0 1 9.1-2.5l.4.7h6.4v1.7h-7.4l-.9-1.5a3.2 3.2 0 0 0-5.9 1.6v13.4z"/><circle cx="15.4" cy="11.6" r="1.1"/><circle cx="19" cy="11.6" r="1.1"/><circle cx="15.4" cy="15.4" r="1.1"/><circle cx="19" cy="15.4" r="1.1"/><circle cx="15.4" cy="19.2" r="1.1"/><circle cx="19" cy="19.2" r="1.1"/>',
- wifi:'<circle cx="12" cy="18.6" r="1.9"/><path d="M12 12.2c1.8 0 3.5.7 4.8 1.8l1.7-1.8A9.7 9.7 0 0 0 12 9.7a9.7 9.7 0 0 0-6.5 2.5l1.7 1.8a7.1 7.1 0 0 1 4.8-1.8z"/><path d="M12 6c3.1 0 6 1.2 8.1 3.1l1.7-1.8A14.2 14.2 0 0 0 12 3.5 14.2 14.2 0 0 0 2.2 7.3l1.7 1.8A11.8 11.8 0 0 1 12 6z"/>',
- flame:'<path d="M12 22.3c4.4 0 7.2-3 7.2-6.6 0-4.9-4.4-7.2-4.4-11.5-2.2 1.1-3.3 2.8-3.3 4.9-1.1-1.1-1.7-2.2-1.7-3.8-2.8 2.2-5 5.5-5 10.4 0 3.6 2.8 6.6 7.2 6.6z"/>',
- bed:'<path d="M2.3 18.9V6.2h1.9v6.1h16.1v-1.1a3.5 3.5 0 0 0-3.5-3.5h-4.6V6h4.6a5.4 5.4 0 0 1 5.4 5.4v7.5h-1.9v-2.4H4.2v2.4z"/><circle cx="7.9" cy="9.6" r="2.3"/>',
- van:'<path d="M2.3 16.5V6.4h11.1l4.5 4.5h3.9v5.6h-1.7a2.7 2.7 0 0 0-5.3 0h-2.8a2.7 2.7 0 0 0-5.3 0z"/><circle cx="7.4" cy="17.4" r="2"/><circle cx="17.4" cy="17.4" r="2"/>',
- book:'<path fill-rule="evenodd" d="M5.6 2.3H20.1v19.4H5.6a1.7 1.7 0 0 1-1.7-1.7V4a1.7 1.7 0 0 1 1.7-1.7zm.4 14.5v1.7h12.4v-1.7z"/>'
+ shower:'<path d="M3.6 21.8V8.4a4.9 4.9 0 0 1 9.1-2.5l.4.7h6.4v1.7h-7.4l-.9-1.5a3.2 3.2 0 0 0-5.9 1.6v13.4z"/><g class="ak"><circle cx="15.4" cy="11.6" r="1.1"/><circle cx="19" cy="11.6" r="1.1"/><circle cx="15.4" cy="15.4" r="1.1"/><circle cx="19" cy="15.4" r="1.1"/><circle cx="15.4" cy="19.2" r="1.1"/><circle cx="19" cy="19.2" r="1.1"/></g>',
+ wifi:'<circle class="ak" cx="12" cy="18.6" r="1.9"/><path class="ak" d="M12 12.2c1.8 0 3.5.7 4.8 1.8l1.7-1.8A9.7 9.7 0 0 0 12 9.7a9.7 9.7 0 0 0-6.5 2.5l1.7 1.8a7.1 7.1 0 0 1 4.8-1.8z"/><path d="M12 6c3.1 0 6 1.2 8.1 3.1l1.7-1.8A14.2 14.2 0 0 0 12 3.5 14.2 14.2 0 0 0 2.2 7.3l1.7 1.8A11.8 11.8 0 0 1 12 6z"/>',
+ flame:'<path class="rt" d="M12 22.3c4.4 0 7.2-3 7.2-6.6 0-4.9-4.4-7.2-4.4-11.5-2.2 1.1-3.3 2.8-3.3 4.9-1.1-1.1-1.7-2.2-1.7-3.8-2.8 2.2-5 5.5-5 10.4 0 3.6 2.8 6.6 7.2 6.6z"/>',
+ bed:'<path d="M2.3 18.9V6.2h1.9v6.1h16.1v-1.1a3.5 3.5 0 0 0-3.5-3.5h-4.6V6h4.6a5.4 5.4 0 0 1 5.4 5.4v7.5h-1.9v-2.4H4.2v2.4z"/><circle class="ak" cx="7.9" cy="9.6" r="2.3"/>',
+ van:'<path d="M2.3 16.5V6.4h11.1l4.5 4.5h3.9v5.6h-1.7a2.7 2.7 0 0 0-5.3 0h-2.8a2.7 2.7 0 0 0-5.3 0z"/><circle class="ak" cx="7.4" cy="17.4" r="2"/><circle class="ak" cx="17.4" cy="17.4" r="2"/>',
+ book:'<path d="M5.6 2.3H20.1v19.4H5.6a1.7 1.7 0 0 1-1.7-1.7V4a1.7 1.7 0 0 1 1.7-1.7z"/><rect class="ak" x="6.4" y="16.4" width="12" height="2"/>'
 };
 function svg(name){
   return '<svg class="ic-lin" viewBox="0 0 24 24" aria-hidden="true">'+(ICONS[name]||'')+'</svg>'+
