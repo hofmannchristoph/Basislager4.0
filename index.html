@@ -2032,7 +2032,7 @@ tocBody.addEventListener('click',function(ev){
   var b=ev.target.closest?ev.target.closest('.tocitem'):null;
   if(!b) return;
   var id=b.getAttribute('data-go');
-  toc.classList.remove('open');unlock();
+  toc.classList.remove('open');ausloeser=null;stillegen(false);unlock();
   setTimeout(function(){
     var el=document.getElementById(id);
     if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
@@ -2158,7 +2158,8 @@ out.addEventListener('click',function(ev){
   if(b){
     var e=index[parseInt(b.getAttribute('data-i'),10)];
     if(!e) return;
-    sheet.classList.remove('open');input.blur();input.value='';lastQ=null;unlock();
+    sheet.classList.remove('open');input.blur();input.value='';lastQ=null;
+    ausloeser=null;stillegen(false);unlock();
     setTimeout(function(){
       e.el.scrollIntoView({behavior:'smooth',block:e.chapter?'start':'center'});
       if(!e.chapter){
@@ -2189,7 +2190,7 @@ function merkeAusloeser(){
   if(a && a!==document.body) ausloeser=a;
 }
 function fokusZurueck(){
-  if(ausloeser && document.contains(ausloeser)){ try{ausloeser.focus();}catch(e){} }
+  if(ausloeser && document.contains(ausloeser)){ try{ausloeser.focus({preventScroll:true});}catch(e){ try{ausloeser.focus();}catch(e2){} } }
   ausloeser=null;
 }
 
