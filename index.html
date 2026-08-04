@@ -222,8 +222,9 @@ figure img{display:block;width:100%;border-radius:var(--r);border:1px solid var(
 figcaption{font-size:14px;line-height:1.45;color:var(--grey);margin-top:9px}
 .g2{display:grid;gap:20px}
 @media(min-width:620px){.g2{grid-template-columns:1fr 1fr}}
-.narrow{max-width:290px}
-.mid{max-width:400px}
+/* Schmale Abbildungen mittig in der Spalte, Bildlegende bündig zum Bild */
+.narrow{max-width:290px;margin-left:auto;margin-right:auto}
+.mid{max-width:400px;margin-left:auto;margin-right:auto}
 
 /* Video */
 .vids{margin:0 0 6px}
@@ -425,7 +426,7 @@ body.ux-sorba .cred .cp{align-self:stretch;display:flex;align-items:center;paddi
   background:linear-gradient(180deg,#FAFAFA,#E4E4E4)}
 
 /* Abbildungen und Videos */
-body.ux-sorba figure{margin:0 0 9px}
+body.ux-sorba figure{margin-top:0;margin-bottom:9px}
 body.ux-sorba figure img{border-radius:0;border:1px solid #ABADB3}
 body.ux-sorba figcaption{font-size:11px;margin-top:4px}
 body.ux-sorba .g2{gap:9px}
