@@ -3,7 +3,7 @@
    vollstaendig lesbar bleibt. Die Videos liegen bei alugha und YouTube
    und brauchen weiterhin Internet — sie werden bewusst nicht gecacht. */
 
-var CACHE = 'bordbuch-v2';
+var CACHE = 'bordbuch-v3';
 var DATEIEN = [
   'index.html',
   'manifest.webmanifest',
@@ -12,7 +12,8 @@ var DATEIEN = [
   'icon-512.png',
   /* Herstelleranleitungen: liegen mit im Speicher, damit sie auch
      auf dem Platz ohne Empfang verfuegbar sind. */
-  'anleitungen/E-P-Hydraulics-Levelsystem-Bedienungsanleitung.pdf'
+  'anleitungen/E-P-Hydraulics-Levelsystem-Bedienungsanleitung.pdf',
+  'anleitungen/MaxxFan-Deluxe-Bedienungsanleitung.pdf'
 ];
 
 self.addEventListener('install', function(e){
