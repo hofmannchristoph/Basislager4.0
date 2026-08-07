@@ -22,7 +22,7 @@
   --ink:#222;--ink2:#3F3F3F;--grey:#717171;--grey2:#9C9C9C;
   --line:#DDD;--line2:#EBEBEB;--paper:#fff;--soft:#F7F7F7;
   --warn:#FFF4F6;--warn-line:#F6C9D2;--tip:#F2F7F7;--tip-line:#C6DEDE;--tip-ink:#0B6E6E;
-  --mark:#FFE8AD;
+  --mark:#FFE8AD;--ok:#1E9E5A;
   --f:"Figtree",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   --r:14px;--rs:10px;
   --sh:0 1px 2px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.05);
@@ -335,6 +335,26 @@ footer .brand{width:104px;height:72px;color:var(--rausch);opacity:.9;margin:0 0 
 body.ux-biwak footer .brand{width:74px;height:51px;color:#5C7C9E;opacity:1;margin-bottom:8px}
 body.ux-biwak .shint .brand{width:96px;height:66px;color:#C8C8C8}
 
+/* Abhakbare Schritte in den Ablaufkapiteln */
+.chkkopf{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin:0 0 10px;font-size:13px;font-weight:600;color:var(--grey)}
+.chkkopf .zur{border:0;background:none;font-family:inherit;font-size:13px;font-weight:600;
+  color:var(--rausch-text);cursor:pointer;padding:4px 2px}
+ol.steps li.hakbar{cursor:pointer;border-radius:10px;transition:opacity .15s ease}
+ol.steps li.hakbar:active{background:var(--soft)}
+ol.steps li.erledigt{opacity:.48}
+ol.steps li.erledigt::before{content:"✓";background:var(--ok);font-size:15px}
+
+/* Schnellzugriff */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 6px}
+.tile{display:flex;flex-direction:column;gap:9px;padding:15px 14px;text-decoration:none;
+  border:1px solid var(--line);border-radius:var(--rs);background:var(--paper);color:var(--ink)}
+.tile:active{background:var(--soft)}
+.tile svg{width:22px;height:22px;stroke:var(--rausch-text);fill:none;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round}
+.tile b{font-size:15px;font-weight:700;letter-spacing:-.02em;line-height:1.25}
+.tile span{font-size:12.5px;color:var(--grey);line-height:1.35}
+
 .flash{animation:fl 1.8s ease-out 1}
 @keyframes fl{0%,30%{background:var(--mark)}100%{background:transparent}}
 @media (prefers-reduced-motion:reduce){.flash{animation:none;outline:2px solid var(--rausch);outline-offset:4px;border-radius:6px}}
@@ -361,7 +381,7 @@ body.ux-biwak{
   --rausch:#0A84FF;--rausch-dk:#409CFF;--rausch-text:#6FD3FF;
   --warn:rgba(240,136,62,.13);--warn-line:rgba(240,136,62,.38);
   --tip:rgba(10,132,255,.12);--tip-line:rgba(10,132,255,.34);--tip-ink:#6FD3FF;
-  --mark:rgba(255,214,10,.30);
+  --mark:rgba(255,214,10,.30);--ok:#34C759;
   --sh:0 1px 2px rgba(0,0,0,.45);--shx:0 10px 30px rgba(0,0,0,.55);
   --dock:calc(74px + env(safe-area-inset-bottom));
   color:#FFFFFF;
@@ -514,6 +534,10 @@ body.ux-biwak kbd{background:rgba(255,255,255,.10);border-color:rgba(255,255,255
 body.ux-biwak a.link{color:#6FD3FF;border-bottom-color:#6FD3FF}
 body.ux-biwak a.xref{color:#6FD3FF;text-decoration-color:rgba(111,211,255,.45)}
 body.ux-biwak a.xref:active{color:#A8E5FF;text-decoration-color:#A8E5FF}
+body.ux-biwak .tile{border-color:rgba(255,255,255,.06);box-shadow:var(--kante);
+  background:linear-gradient(180deg,rgba(255,255,255,.095),rgba(255,255,255,.04))}
+body.ux-biwak .tile span{color:rgba(255,255,255,.52)}
+body.ux-biwak ol.steps li.hakbar:active{background:rgba(255,255,255,.06)}
 body.ux-biwak .store{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14);
   color:#FFFFFF}
 body.ux-biwak .store span small{color:rgba(255,255,255,.50)}
@@ -1791,6 +1815,32 @@ body.ux-biwak .uxbtn .lbl-alt{display:inline}
 <!-- ══════════ NACHSCHLAGEN ══════════ -->
 <p class="part" role="heading" aria-level="2" data-cat="info" data-icon="book"><span>Nachschlagen</span></p>
 
+<section id="schnellzugriff" data-keys="schnellzugriff direkt links oberflaeche campernet vrm portal victron fernzugriff anleitungen pdf zugriff werkzeuge">
+  <h2 aria-level="3">Schnellzugriff</h2>
+  <p class="lede">Was man unterwegs am häufigsten aufruft, ohne danach zu suchen.</p>
+
+  <div class="tiles">
+    <a class="tile" href="http://10.10.10.10" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5a10 10 0 0 1 14 0M8 16a6 6 0 0 1 8 0M12 19.5h.01"/></svg>
+      <b>Campernet</b><span>Oberfläche des Routers, 10.10.10.10</span>
+    </a>
+    <a class="tile" href="https://vrm.victronenergy.com" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4.5 13.5H11l-1 8.5 8.5-11.5H12z"/></svg>
+      <b>VRM-Portal</b><span>Anlage aus der Ferne ansehen</span>
+    </a>
+    <a class="tile" href="anleitungen/E-P-Hydraulics-Levelsystem-Bedienungsanleitung.pdf" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>
+      <b>Hubstützen</b><span>Anleitung E&amp;P Levelsystem</span>
+    </a>
+    <a class="tile" href="anleitungen/MaxxFan-Deluxe-Bedienungsanleitung.pdf" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>
+      <b>MaxxFan</b><span>Anleitung Dachlüfter</span>
+    </a>
+  </div>
+
+  <p class="vnote">Das Campernet erreichst du nur, wenn du im WLAN <b>Basislager 4.0</b> bist.</p>
+</section>
+
 <section id="zentralpanel" data-keys="zentralpanel niesmann bischoff taste licht wasserpumpe pumpe gasheizung waermetauscher fahrbetrieb hauptschalter rot batterie tank bedienteil wo schalte ich ein">
   <h2 aria-level="3">Zentralpanel</h2>
   <p class="lede">Das Niesmann+Bischoff-Panel rechts in der Klappe. Sieben Tasten, von links nach rechts.</p>
@@ -2269,6 +2319,81 @@ document.addEventListener('keydown',function(e){
   if((e.metaKey||e.ctrlKey)&&(e.key==='k'||e.key==='K')){e.preventDefault();openSearch();}
   if(e.key==='Escape'&&toc.classList.contains('open')) closeToc();
 });
+
+/* ---------- Schritte abhaken ----------
+   Die Ablaufkapitel sind Checklisten. Wer beim Beladen unterbrochen wird,
+   soll wiederfinden, wo er war. Der Stand liegt im Geraetespeicher und ist
+   an den Wortlaut des Schritts gebunden, nicht an seine Position — aendert
+   sich ein Schritt, verliert nur dieser sein Haekchen. */
+(function(){
+  var KAPITEL=['inbetriebnahme','ankommen','abfahren','ausserbetriebnahme','auswintern'];
+  var KEY='bordbuch-haken';
+  var stand={};
+  try{ stand=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){ stand={}; }
+  function sichern(){ try{ localStorage.setItem(KEY, JSON.stringify(stand)); }catch(e){} }
+  function kennung(t){
+    var h=5381, txt=(t||'').replace(/\s+/g,' ').trim().toLowerCase();
+    for(var i=0;i<txt.length;i++) h=((h<<5)+h+txt.charCodeAt(i))|0;
+    return 'h'+(h>>>0).toString(36);
+  }
+
+  KAPITEL.forEach(function(id){
+    var sec=document.getElementById(id); if(!sec) return;
+    sec.querySelectorAll('ol.steps').forEach(function(liste){
+      var punkte=Array.prototype.slice.call(liste.children);
+      if(!punkte.length) return;
+
+      var kopf=document.createElement('p');
+      kopf.className='chkkopf';
+      var zaehler=document.createElement('span');
+      var zuruecksetzen=document.createElement('button');
+      zuruecksetzen.type='button'; zuruecksetzen.className='zur'; zuruecksetzen.textContent='Zurücksetzen';
+      kopf.appendChild(zaehler); kopf.appendChild(zuruecksetzen);
+      liste.parentNode.insertBefore(kopf, liste);
+
+      function auffrischen(){
+        var fertig=punkte.filter(function(li){return li.classList.contains('erledigt');}).length;
+        zaehler.textContent = fertig ? fertig+' von '+punkte.length+' erledigt' : punkte.length+' Schritte';
+        zuruecksetzen.style.visibility = fertig ? 'visible' : 'hidden';
+      }
+
+      punkte.forEach(function(li){
+        var k=kennung(li.textContent);
+        li.classList.add('hakbar');
+        li.setAttribute('role','checkbox');
+        li.setAttribute('tabindex','0');
+        if(stand[k]){ li.classList.add('erledigt'); }
+        li.setAttribute('aria-checked', stand[k] ? 'true' : 'false');
+
+        function umschalten(){
+          var neu=!li.classList.contains('erledigt');
+          li.classList.toggle('erledigt', neu);
+          li.setAttribute('aria-checked', neu ? 'true' : 'false');
+          if(neu) stand[k]=1; else delete stand[k];
+          sichern(); auffrischen();
+        }
+        li.addEventListener('click', function(ev){
+          if(ev.target.closest('a')) return;      // Verweise bleiben Verweise
+          umschalten();
+        });
+        li.addEventListener('keydown', function(ev){
+          if(ev.key===' '||ev.key==='Enter'){ ev.preventDefault(); umschalten(); }
+        });
+      });
+
+      zuruecksetzen.addEventListener('click', function(){
+        punkte.forEach(function(li){
+          li.classList.remove('erledigt');
+          li.setAttribute('aria-checked','false');
+          delete stand[kennung(li.textContent)];
+        });
+        sichern(); auffrischen();
+      });
+
+      auffrischen();
+    });
+  });
+})();
 
 /* ---------- Querverweise im Fliesstext ----------
    Wird ein Geraet erwaehnt, das anderswo ein eigenes Kapitel hat, wird die
