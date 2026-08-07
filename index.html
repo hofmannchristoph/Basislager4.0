@@ -55,7 +55,8 @@ img{max-width:100%;height:auto}
 .stat svg{grid-row:1/3;width:20px;height:20px;stroke:var(--grey);fill:none;stroke-width:1.8;
   stroke-linecap:round;stroke-linejoin:round}
 .stat b{font-size:16px;font-weight:700;letter-spacing:-.02em;align-self:end}
-.stat span{color:var(--grey);font-weight:500;font-size:12.5px;letter-spacing:0;align-self:start}
+.stat span{color:var(--grey);font-weight:500;font-size:12px;letter-spacing:0;align-self:start;
+  line-height:1.3}
 
 /* Suchleiste im Kopf — Anmutung wie die Suchzeile der Airbnb-App */
 .sbar{display:flex;align-items:center;gap:13px;width:100%;margin:20px 0 4px;padding:11px 18px;
@@ -335,19 +336,22 @@ footer .brand{width:104px;height:72px;color:var(--rausch);opacity:.9;margin:0 0 
 body.ux-biwak footer .brand{width:74px;height:51px;color:#5C7C9E;opacity:1;margin-bottom:8px}
 body.ux-biwak .shint .brand{width:96px;height:66px;color:#C8C8C8}
 
-/* Zustandszeile mit Livewerten aus dem VRM */
-.live{display:flex;align-items:center;gap:0;margin:14px 0 0;padding:9px 4px;
-  border:1px solid var(--line);border-radius:99px;overflow-x:auto;
-  scrollbar-width:none;-webkit-overflow-scrolling:touch}
-.live::-webkit-scrollbar{display:none}
-.live .w{display:flex;align-items:baseline;gap:5px;flex:0 0 auto;padding:0 13px;
-  border-right:1px solid var(--line2);white-space:nowrap}
-.live .w:last-child{border-right:0}
-.live .w b{font-size:15px;font-weight:700;letter-spacing:-.02em}
-.live .w span{font-size:12px;color:var(--grey)}
-.live .w.matt b{color:var(--grey)}
-.livezeit{margin:7px 0 0;font-size:11.5px;color:var(--grey2);text-align:center}
-.livezeit.alt{color:var(--warn-line)}
+/* Livewerte: der aktuelle Stand steht in der Kachel, die Kapazitaet
+   daneben. Der Balken macht den Fuellstand auf einen Blick lesbar. */
+.stat.hatlive{grid-template-rows:auto auto auto}
+.stat .fuell{grid-column:2;height:4px;margin-top:7px;border-radius:99px;
+  background:var(--line2);overflow:hidden}
+.stat .fuell i{display:block;height:100%;border-radius:99px;
+  background:var(--fuellfarbe,var(--rausch));transition:width .5s ease}
+@media (prefers-reduced-motion:reduce){.stat .fuell i{transition:none}}
+
+/* Nebenwerte und Zeitstempel in einer ruhigen Zeile */
+.live{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin:11px 2px 0;
+  font-size:12.5px;color:var(--grey)}
+.live .w{display:inline-flex;align-items:baseline;gap:5px;white-space:nowrap}
+.live .w b{font-weight:700;color:var(--ink2);letter-spacing:-.01em}
+.live .zeit{margin-left:auto;color:var(--grey2);font-size:11.5px}
+.live .zeit.alt{color:var(--warn-line)}
 
 /* Abhakbare Schritte in den Ablaufkapiteln */
 .chkkopf{display:flex;align-items:center;justify-content:space-between;gap:12px;
@@ -554,11 +558,9 @@ body.ux-biwak a.xref:active{color:#A8E5FF;text-decoration-color:#A8E5FF}
 body.ux-biwak .tile{border-color:rgba(255,255,255,.06);box-shadow:var(--kante);
   background:linear-gradient(180deg,rgba(255,255,255,.095),rgba(255,255,255,.04))}
 body.ux-biwak .tile span{color:rgba(255,255,255,.52)}
-body.ux-biwak .live{border-color:rgba(255,255,255,.06);box-shadow:var(--kante);
-  background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.045))}
-body.ux-biwak .live .w{border-right-color:rgba(255,255,255,.09)}
-body.ux-biwak .live .w b{color:#FFFFFF}
-body.ux-biwak .live .w span{color:rgba(255,255,255,.50)}
+body.ux-biwak .live{color:rgba(255,255,255,.52)}
+body.ux-biwak .live .w b{color:rgba(255,255,255,.92)}
+body.ux-biwak .stat .fuell{background:rgba(255,255,255,.12)}
 body.ux-biwak ol.steps li.hakbar:active{background:rgba(255,255,255,.06)}
 body.ux-biwak .store{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14);
   color:#FFFFFF}
@@ -2392,56 +2394,101 @@ document.addEventListener('keydown',function(e){
   if(e.key==='Escape'&&toc.classList.contains('open')) closeToc();
 });
 
-/* ---------- Zustandszeile aus dem VRM ----------
+/* ---------- Livewerte aus dem VRM ----------
    Der Zwischendienst haelt das Zugriffstoken und gibt nur die paar Werte
-   zurueck, die hier stehen. Ohne Empfang bleibt der zuletzt gesehene
-   Stand sichtbar, mit Zeitangabe — lieber ein alter Wert mit Datum als
-   gar keiner. */
+   zurueck, die hier stehen. Der aktuelle Stand ersetzt in den Kacheln die
+   Kapazitaet, die daneben als Beisatz stehen bleibt. Ohne Empfang bleibt
+   der zuletzt gesehene Stand sichtbar — lieber ein alter Wert mit Datum
+   als eine leere Flaeche. */
 (function(){
   var DIENST='https://basislager-vrm.ch-hofmann.workers.dev/';
   var SPEICHER='bordbuch-vrm';
   var zeile=document.getElementById('live');
   if(!zeile) return;
 
-  var FELDER=[
-    {name:'ladestand',      titel:'Batterie'},
-    {name:'batterieleistung',titel:'Leistung'},
-    {name:'solar_heute',    titel:'Solar heute'},
-    {name:'frischwasser',   titel:'Frisch'},
-    {name:'abwasser',       titel:'Abwasser'},
-    {name:'wohnraum',       titel:'Wohnraum'}
+  /* Je Kachel: welcher Livewert, welcher Fuellstand, welche Farbe.
+     ampel(p) bekommt den Fuellstand in Prozent. */
+  var KACHELN={
+    batterie:{ wert:'ladestand', anteil:'ladestand', beisatz:'540 Ah',
+               ampel:function(p){ return p<20?'#D6224A':p<50?'#E08A2B':'#1E9E5A'; } },
+    ac:      { wert:'batterieleistung', titel:'Leistung' },
+    frisch:  { wert:'frischwasser', anteil:'frischwasser', menge:'frischwasser_menge',
+               fassung:200, beisatz:'200 l',
+               ampel:function(p){ return p<15?'#D6224A':'#2E80C4'; } },
+    abwasser:{ wert:'abwasser', anteil:'abwasser', menge:'abwasser_menge',
+               fassung:150, beisatz:'150 l',
+               ampel:function(p){ return p>85?'#D6224A':p>60?'#E08A2B':'#7A8B4A'; } }
+  };
+
+  /* Was nicht in eine Kachel passt, steht in der Zeile darunter. */
+  var NEBEN=[
+    {name:'solar_heute', titel:'Solar heute'},
+    {name:'wohnraum',    titel:'Wohnraum'},
+    {name:'aussen',      titel:'Aussen'}
   ];
 
-  function zeit(sek){
+  function esc2(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function uhrzeit(sek){
     var d=new Date(sek*1000);
     return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);
   }
+  function zahl(x){ var n=parseFloat(String(x).replace(',','.')); return isNaN(n)?null:n; }
 
   function zeichnen(daten, frisch){
     var karte={};
     (daten.werte||[]).forEach(function(w){ karte[w.name]=w; });
-    var teile=FELDER.filter(function(f){return karte[f.name] && karte[f.name].wert;});
-    if(!teile.length){ zeile.hidden=true; return; }
+    var etwas=false;
 
-    zeile.innerHTML=teile.map(function(f){
-      return '<span class="w"><b>'+esc(String(karte[f.name].wert))+'</b><span>'+esc(f.titel)+'</span></span>';
-    }).join('');
-    zeile.hidden=false;
+    Object.keys(KACHELN).forEach(function(schl){
+      var k=KACHELN[schl];
+      var kachel=document.querySelector('.hero .stat[data-mess="'+schl+'"]');
+      var q=karte[k.wert];
+      if(!kachel||!q||!q.wert) return;
+      etwas=true;
 
-    var alt=zeile.nextElementSibling;
-    if(!alt||!alt.classList.contains('livezeit')){
-      alt=document.createElement('p'); alt.className='livezeit';
-      zeile.parentNode.insertBefore(alt, zeile.nextSibling);
+      if(!kachel.dataset.ruhe){
+        var b0=kachel.querySelector('b'), s0=kachel.querySelector('span');
+        kachel.dataset.ruhe=(b0?b0.textContent:'')+'|'+(s0?s0.textContent:'');
+      }
+      var titel=k.titel||kachel.dataset.ruhe.split('|')[1];
+
+      kachel.querySelector('b').textContent=q.wert;
+      var beisatz=k.beisatz;
+      if(k.menge && karte[k.menge]){
+        var m=zahl(karte[k.menge].roh!=null?karte[k.menge].roh:karte[k.menge].wert);
+        if(m!=null) beisatz=Math.round(m*1000)+' l';
+      }
+      kachel.querySelector('span').textContent = beisatz ? titel+' · '+beisatz : titel;
+
+      if(k.anteil && karte[k.anteil]){
+        var p=zahl(karte[k.anteil].roh!=null?karte[k.anteil].roh:karte[k.anteil].wert);
+        if(p!=null){
+          p=Math.max(0,Math.min(100,p));
+          var balken=kachel.querySelector('.fuell');
+          if(!balken){
+            balken=document.createElement('div'); balken.className='fuell';
+            balken.innerHTML='<i></i>'; kachel.appendChild(balken);
+            kachel.classList.add('hatlive');
+          }
+          balken.firstChild.style.width=p+'%';
+          if(k.ampel) kachel.style.setProperty('--fuellfarbe', k.ampel(p));
+        }
+      }
+    });
+
+    var teile=NEBEN.filter(function(f){ return karte[f.name] && karte[f.name].wert; })
+      .map(function(f){ return '<span class="w"><b>'+esc2(karte[f.name].wert)+'</b>'+esc2(f.titel)+'</span>'; });
+    if(teile.length||etwas){
+      teile.push('<span class="zeit'+(frisch?'':' alt')+'">'+
+        (frisch?'aktualisiert ':'zuletzt gesehen ')+uhrzeit(daten.abgerufen)+'</span>');
+      zeile.innerHTML=teile.join('');
+      zeile.hidden=false;
     }
-    alt.textContent = frisch ? 'Aktualisiert um '+zeit(daten.abgerufen)
-                             : 'Zuletzt gesehen um '+zeit(daten.abgerufen);
-    alt.classList.toggle('alt', !frisch);
   }
 
-  /* Zuerst der gespeicherte Stand, damit sofort etwas dasteht */
   var alt=null;
   try{ alt=JSON.parse(localStorage.getItem(SPEICHER)||'null'); }catch(e){}
-  if(alt && alt.werte) zeichnen(alt,false);
+  if(alt&&alt.werte) zeichnen(alt,false);
 
   function holen(){
     var abbruch=new AbortController();
@@ -2453,14 +2500,12 @@ document.addEventListener('keydown',function(e){
         try{ localStorage.setItem(SPEICHER, JSON.stringify(d)); }catch(e){}
         zeichnen(d,true);
       })
-      .catch(function(){ /* stiller Rueckfall auf den gespeicherten Stand */ })
+      .catch(function(){})
       .then(function(){ clearTimeout(uhr); });
   }
 
   holen();
-  document.addEventListener('visibilitychange', function(){
-    if(!document.hidden) holen();
-  });
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) holen(); });
 })();
 
 /* ---------- Schritte abhaken ----------

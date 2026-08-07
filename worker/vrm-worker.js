@@ -34,7 +34,9 @@ const AUSWAHL = {
   'PVP':  { name: 'solar_jetzt' },
   'YT':   { name: 'solar_heute' },
   'tl':   { 24: 'abwasser', 25: 'frischwasser' },
-  'tsT':  { 24: 'tiefkuehlfach', 25: 'kuehlschrank', 26: 'wohnraum', 27: 'aussen' }
+  'tr':   { 24: 'abwasser_menge', 25: 'frischwasser_menge' },
+  'tsT':  { 24: 'tiefkuehlfach', 25: 'kuehlschrank', 26: 'wohnraum', 27: 'aussen' },
+  'OP1':  { name: 'ac_abgabe' }
 };
 
 function benennen(w) {
