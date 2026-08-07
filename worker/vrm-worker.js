@@ -36,6 +36,8 @@ const AUSWAHL = {
   'tl':   { 24: 'abwasser', 25: 'frischwasser' },
   'tr':   { 24: 'abwasser_menge', 25: 'frischwasser_menge' },
   'tsT':  { 24: 'tiefkuehlfach', 25: 'kuehlschrank', 26: 'wohnraum', 27: 'aussen' },
+  'tsH':  { 24: 'tiefkuehlfach_feuchte', 25: 'kuehlschrank_feuchte',
+            26: 'wohnraum_feuchte', 27: 'aussen_feuchte' },
   'OP1':  { name: 'ac_abgabe' }
 };
 

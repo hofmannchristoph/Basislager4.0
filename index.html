@@ -1097,6 +1097,9 @@ body.ux-biwak .uxbtn .lbl-alt{display:inline}
   <p class="tag">Nachgerüstet</p>
   <p class="lede">Die Klimaanlage heisst <b>Truma Saphir vario</b> und sitzt im Staukasten. Das Kästchen oben Mitte in der Klappe ist nur Anzeige und Infrarot-Empfänger — gesteuert wird ausschliesslich über die Fernbedienung.</p>
 
+  <h3>Temperaturen im Fahrzeug</h3>
+  <div id="fuehler" hidden></div>
+
   <div class="cal warn">
     <span class="t"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 2.5 17.4A1.9 1.9 0 0 0 4.2 20.3h15.6a1.9 1.9 0 0 0 1.7-2.9L13.7 3.9a1.9 1.9 0 0 0-3.4 0z"/></svg>Klappe offen lassen</span>
     <p>Ohne offene Klappe erreicht das Infrarot-Signal den Empfänger nicht. Fernbedienung mit freier Sichtlinie auf das Kästchen richten.</p>
@@ -2411,7 +2414,7 @@ document.addEventListener('keydown',function(e){
   var KACHELN={
     batterie:{ wert:'ladestand', anteil:'ladestand', beisatz:'540 Ah',
                ampel:function(p){ return p<20?'#D6224A':p<50?'#E08A2B':'#1E9E5A'; } },
-    ac:      { wert:'batterieleistung', titel:'Leistung' },
+    ac:      { wert:'restlaufzeit', titel:'Reserve' },
     frisch:  { wert:'frischwasser', anteil:'frischwasser', menge:'frischwasser_menge',
                fassung:200, beisatz:'200 l',
                ampel:function(p){ return p<15?'#D6224A':'#2E80C4'; } },
@@ -2422,9 +2425,18 @@ document.addEventListener('keydown',function(e){
 
   /* Was nicht in eine Kachel passt, steht in der Zeile darunter. */
   var NEBEN=[
-    {name:'solar_heute', titel:'Solar heute'},
-    {name:'wohnraum',    titel:'Wohnraum'},
-    {name:'aussen',      titel:'Aussen'}
+    {name:'batteriezustand', titel:'Batterie', karte:{charging:'lädt', discharging:'entlädt', idle:'ruht'}},
+    {name:'solar_heute',     titel:'Solar heute'},
+    {name:'wohnraum',        titel:'Wohnraum'},
+    {name:'aussen',          titel:'Aussen'}
+  ];
+
+  /* Temperaturuebersicht im Kapitel Waerme & Klima */
+  var FUEHLER=[
+    {name:'wohnraum',      feuchte:'wohnraum_feuchte',      titel:'Wohnraum'},
+    {name:'aussen',        feuchte:'aussen_feuchte',        titel:'Aussen'},
+    {name:'kuehlschrank',  feuchte:'kuehlschrank_feuchte',  titel:'Kühlschrank'},
+    {name:'tiefkuehlfach', feuchte:'tiefkuehlfach_feuchte', titel:'Tiefkühlfach'}
   ];
 
   function esc2(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -2477,13 +2489,35 @@ document.addEventListener('keydown',function(e){
     });
 
     var teile=NEBEN.filter(function(f){ return karte[f.name] && karte[f.name].wert; })
-      .map(function(f){ return '<span class="w"><b>'+esc2(karte[f.name].wert)+'</b>'+esc2(f.titel)+'</span>'; });
+      .map(function(f){
+        var v=String(karte[f.name].wert);
+        if(f.karte && f.karte[v]) v=f.karte[v];
+        return '<span class="w"><b>'+esc2(v)+'</b>'+esc2(f.titel)+'</span>';
+      });
+    zeichneFuehler(karte, frisch, daten);
+
     if(teile.length||etwas){
       teile.push('<span class="zeit'+(frisch?'':' alt')+'">'+
         (frisch?'aktualisiert ':'zuletzt gesehen ')+uhrzeit(daten.abgerufen)+'</span>');
       zeile.innerHTML=teile.join('');
       zeile.hidden=false;
     }
+  }
+
+  function zeichneFuehler(karte, frisch, daten){
+    var ziel=document.getElementById('fuehler');
+    if(!ziel) return;
+    var reihen=FUEHLER.filter(function(f){ return karte[f.name] && karte[f.name].wert; });
+    if(!reihen.length) return;
+    ziel.innerHTML='<div class="rows">'+reihen.map(function(f){
+      var fe=karte[f.feuchte];
+      var zusatz=fe&&fe.wert?' · '+esc2(fe.wert)+' Feuchte':'';
+      return '<div class="r"><span class="lab">'+esc2(f.titel)+'</span>'+
+             '<span class="val"><b>'+esc2(karte[f.name].wert)+'</b>'+zusatz+'</span></div>';
+    }).join('')+'</div><p class="livezeit'+(frisch?'':' alt')+'">'+
+      (frisch?'Gemessen um ':'Zuletzt gesehen um ')+uhrzeit(daten.abgerufen)+
+      ' · der Cerbo meldet alle 15 Minuten</p>';
+    ziel.hidden=false;
   }
 
   var alt=null;
