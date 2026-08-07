@@ -49,10 +49,13 @@ img{max-width:100%;height:auto}
 .hero .sub{font-size:16px;color:var(--grey);margin:0 0 20px;font-weight:500}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 @media(min-width:620px){.stats{grid-template-columns:repeat(4,1fr)}}
-.stat{display:flex;flex-direction:column;gap:1px;border:1px solid var(--line2);
-  border-radius:var(--rs);padding:9px 13px;font-size:16px;font-weight:700;letter-spacing:-.02em;
-  background:var(--soft)}
-.stat span{color:var(--grey);font-weight:500;font-size:12.5px;letter-spacing:0}
+.stat{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;
+  column-gap:9px;row-gap:1px;align-items:center;border:1px solid var(--line2);
+  border-radius:var(--rs);padding:9px 13px;background:var(--soft)}
+.stat svg{grid-row:1/3;width:20px;height:20px;stroke:var(--grey);fill:none;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+.stat b{font-size:16px;font-weight:700;letter-spacing:-.02em;align-self:end}
+.stat span{color:var(--grey);font-weight:500;font-size:12.5px;letter-spacing:0;align-self:start}
 
 /* Suchleiste im Kopf — Anmutung wie die Suchzeile der Airbnb-App */
 .sbar{display:flex;align-items:center;gap:13px;width:100%;margin:20px 0 4px;padding:11px 18px;
@@ -376,10 +379,7 @@ body.ux-biwak .hero h1{color:#FFFFFF;letter-spacing:-.03em}
 body.ux-biwak .hero .sub{color:rgba(255,255,255,.56)}
 body.ux-biwak .stats{gap:10px}
 body.ux-biwak .stat{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);
-  border-radius:16px;padding:11px 14px;color:#FFFFFF;font-size:19px;font-weight:700;
-  letter-spacing:-.02em}
-body.ux-biwak .stat span{color:rgba(255,255,255,.52);font-size:12px;font-weight:500;
-  text-transform:uppercase;letter-spacing:.06em}
+  border-radius:16px;padding:11px 13px;color:#FFFFFF}
 
 /* Suchfeld wie die Ortssuche der Vorlage */
 body.ux-biwak .sbar{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
@@ -532,6 +532,42 @@ body.ux-biwak .sempty{color:rgba(255,255,255,.62)}
 body.ux-biwak .sempty b{color:#FFFFFF}
 body.ux-biwak .shint .brand{color:rgba(255,255,255,.14)}
 
+/* Symbolkacheln fuer Gruppenzeilen, wie in den Listen der Vorlage */
+body.ux-biwak .part svg,body.ux-biwak .tocgrp svg{width:28px;height:28px;padding:6px;
+  border-radius:9px;background:rgba(255,255,255,.08);box-sizing:border-box;
+  stroke-width:2;flex:0 0 28px}
+body.ux-biwak .part,body.ux-biwak .tocgrp{gap:11px}
+body.ux-biwak .part[data-cat="start"] svg,body.ux-biwak .tocgrp[data-cat="start"] svg{color:#FF9E70;background:rgba(255,158,112,.16)}
+body.ux-biwak .part[data-cat="strom"] svg,body.ux-biwak .tocgrp[data-cat="strom"] svg{color:#FFD166;background:rgba(255,209,102,.16)}
+body.ux-biwak .part[data-cat="wasser"] svg,body.ux-biwak .tocgrp[data-cat="wasser"] svg{color:#6FD3FF;background:rgba(111,211,255,.16)}
+body.ux-biwak .part[data-cat="klima"] svg,body.ux-biwak .tocgrp[data-cat="klima"] svg{color:#FF8A75;background:rgba(255,138,117,.16)}
+body.ux-biwak .part[data-cat="kueche"] svg,body.ux-biwak .tocgrp[data-cat="kueche"] svg{color:#B4DC79;background:rgba(180,220,121,.16)}
+body.ux-biwak .part[data-cat="bad"] svg,body.ux-biwak .tocgrp[data-cat="bad"] svg{color:#5FD6C8;background:rgba(95,214,200,.16)}
+body.ux-biwak .part[data-cat="medien"] svg,body.ux-biwak .tocgrp[data-cat="medien"] svg{color:#A5AAFF;background:rgba(165,170,255,.16)}
+body.ux-biwak .part[data-cat="gas"] svg,body.ux-biwak .tocgrp[data-cat="gas"] svg{color:#FF7A6B;background:rgba(255,122,107,.16)}
+body.ux-biwak .part[data-cat="wohnen"] svg,body.ux-biwak .tocgrp[data-cat="wohnen"] svg{color:#E5AE79;background:rgba(229,174,121,.16)}
+body.ux-biwak .part[data-cat="aussen"] svg,body.ux-biwak .tocgrp[data-cat="aussen"] svg{color:#7BD99A;background:rgba(123,217,154,.16)}
+body.ux-biwak .part[data-cat="info"] svg,body.ux-biwak .tocgrp[data-cat="info"] svg{color:#CBB0FF;background:rgba(203,176,255,.16)}
+
+/* Symbole der Hinweiskaesten in einer getoenten Scheibe */
+body.ux-biwak .cal .t svg{width:26px;height:26px;padding:5px;border-radius:50%;
+  background:rgba(255,255,255,.08);box-sizing:border-box;flex:0 0 26px;stroke-width:2}
+body.ux-biwak .cal.warn .t svg{background:rgba(240,136,62,.20)}
+body.ux-biwak .cal.tip .t svg{background:rgba(111,211,255,.18)}
+
+/* Kennzahlen: Symbol in der Signalfarbe der jeweiligen Groesse */
+body.ux-biwak .stat svg{stroke-width:2}
+body.ux-biwak .stat[data-mess="batterie"] svg{stroke:#B4DC79}
+body.ux-biwak .stat[data-mess="ac"] svg{stroke:#FFD166;fill:#FFD166;stroke-width:1}
+body.ux-biwak .stat[data-mess="frisch"] svg{stroke:#6FD3FF}
+body.ux-biwak .stat[data-mess="abwasser"] svg{stroke:#E5AE79}
+body.ux-biwak .stat b{color:#FFFFFF;font-size:19px}
+body.ux-biwak .stat span{color:rgba(255,255,255,.52);font-size:12px;
+  text-transform:uppercase;letter-spacing:.06em}
+
+/* Werkzeugleiste: gezeichnete Symbole wie in Reiterleisten ueblich */
+body.ux-biwak .dock button svg{stroke-width:1.9}
+
 /* Fusszeile */
 body.ux-biwak footer{border-top-color:rgba(255,255,255,.10);color:rgba(255,255,255,.50)}
 body.ux-biwak footer b{color:rgba(255,255,255,.82)}
@@ -557,10 +593,10 @@ body.ux-biwak .uxbtn .lbl-alt{display:inline}
   <h1>Basislager 4.0</h1>
   <p class="sub">Niesmann + Bischoff Arto 88 · Modelljahr 2016</p>
   <div class="stats">
-    <div class="stat">540 Ah <span>Batterie</span></div>
-    <div class="stat">1600 W <span>Dauer AC</span></div>
-    <div class="stat">200 l <span>Frisch</span></div>
-    <div class="stat">150 l <span>Abwasser</span></div>
+    <div class="stat" data-mess="batterie"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="7.5" width="16" height="9" rx="2.5"/><path d="M21.5 10.5v3"/><path d="M5.5 10.5h6"/></svg><b>540 Ah</b><span>Batterie</span></div>
+    <div class="stat" data-mess="ac"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2.5 4.5 13.5H11l-1 8 8.5-11.5H12z"/></svg><b>1600 W</b><span>Dauer AC</span></div>
+    <div class="stat" data-mess="frisch"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.7s6 6.4 6 10.5a6 6 0 0 1-12 0C6 9.1 12 2.7 12 2.7z"/></svg><b>200 l</b><span>Frisch</span></div>
+    <div class="stat" data-mess="abwasser"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.7s6 6.4 6 10.5a6 6 0 0 1-12 0C6 9.1 12 2.7 12 2.7z"/><path d="M9.5 13.5h5"/></svg><b>150 l</b><span>Abwasser</span></div>
   </div>
 
   <button class="sbar" id="sbar" type="button">
@@ -1903,6 +1939,11 @@ var GROUPS=[];
     }
     if(n.tagName==='SECTION'&&n.id&&cur) cur.secs.push(n);
   });
+  /* Die Gruppenzeilen im Dokument bekommen dasselbe Symbol wie die
+     Bereichswahl. Bisher stand dort nur Text. */
+  GROUPS.forEach(function(g){
+    if(g.el && !g.el.querySelector('svg')) g.el.insertAdjacentHTML('afterbegin', svg(g.icon));
+  });
 })();
 
 /* ---------- Kategorieleiste ---------- */
@@ -1998,7 +2039,7 @@ tocBody.innerHTML=GROUPS.map(function(g){
       (v?'<span class="tv">'+v+' Video'+(v>1?'s':'')+'</span>':'')+
       '<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>';
   }).join('');
-  return '<p class="tocgrp">'+svg(g.icon)+esc(g.label)+'</p>'+items;
+  return '<p class="tocgrp" data-cat="'+esc(g.id||'')+'">'+svg(g.icon)+esc(g.label)+'</p>'+items;
 }).join('');
 
 tocBody.addEventListener('click',function(ev){
