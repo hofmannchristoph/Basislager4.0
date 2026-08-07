@@ -336,6 +336,27 @@ footer .brand{width:104px;height:72px;color:var(--rausch);opacity:.9;margin:0 0 
 body.ux-biwak footer .brand{width:74px;height:51px;color:#5C7C9E;opacity:1;margin-bottom:8px}
 body.ux-biwak .shint .brand{width:96px;height:66px;color:#C8C8C8}
 
+/* Vertiefung: was nicht zum Alltag gehoert, liegt eingeklappt darunter.
+   Native details/summary — damit funktioniert Tastatur und Vorlesen ohne
+   eigenes Zutun. */
+details.tiefer{margin:0 0 22px;border-top:1px solid var(--line2)}
+details.tiefer > summary{display:flex;align-items:center;gap:9px;list-style:none;
+  cursor:pointer;padding:14px 2px;font-size:15px;font-weight:700;letter-spacing:-.02em;
+  color:var(--ink)}
+details.tiefer > summary::-webkit-details-marker{display:none}
+details.tiefer > summary .chev{width:16px;height:16px;flex:0 0 16px;stroke:var(--grey);
+  fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;
+  transition:transform .2s ease;margin-left:auto}
+details.tiefer[open] > summary .chev{transform:rotate(180deg)}
+details.tiefer > summary .zahl{font-size:12.5px;font-weight:600;color:var(--grey);
+  background:var(--soft);border-radius:99px;padding:3px 9px}
+details.tiefer > summary:hover{color:var(--rausch-text)}
+@media (prefers-reduced-motion:reduce){details.tiefer > summary .chev{transition:none}}
+body.ux-biwak details.tiefer{border-top-color:rgba(255,255,255,.08)}
+body.ux-biwak details.tiefer > summary{color:#FFFFFF}
+body.ux-biwak details.tiefer > summary .zahl{background:rgba(255,255,255,.09);
+  color:rgba(255,255,255,.62)}
+
 /* Livewerte: der aktuelle Stand steht in der Kachel, die Kapazitaet
    daneben. Der Balken macht den Fuellstand auf einen Blick lesbar. */
 .stat.hatlive{grid-template-rows:auto auto auto}
@@ -2200,7 +2221,7 @@ tocBody.addEventListener('click',function(ev){
   toc.classList.remove('open');ausloeser=null;stillegen(false);unlock();
   setTimeout(function(){
     var el=document.getElementById(id);
-    if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+    if(el){ if(window.__aufklappen) window.__aufklappen(el); el.scrollIntoView({behavior:'smooth',block:'start'}); }
   },60);
 });
 
@@ -2326,6 +2347,7 @@ out.addEventListener('click',function(ev){
     sheet.classList.remove('open');input.blur();input.value='';lastQ=null;
     ausloeser=null;stillegen(false);unlock();
     setTimeout(function(){
+      if(window.__aufklappen) window.__aufklappen(e.el);
       e.el.scrollIntoView({behavior:'smooth',block:e.chapter?'start':'center'});
       if(!e.chapter){
         e.el.classList.remove('flash');void e.el.offsetWidth;e.el.classList.add('flash');
@@ -2396,6 +2418,47 @@ document.addEventListener('keydown',function(e){
   if((e.metaKey||e.ctrlKey)&&(e.key==='k'||e.key==='K')){e.preventDefault();openSearch();}
   if(e.key==='Escape'&&toc.classList.contains('open')) closeToc();
 });
+
+/* ---------- Vertiefung einklappen ----------
+   Die Videobloecke sind der groesste Brocken in den Kapiteln und gehoeren
+   zum Vorbereiten, nicht zum Alltag. Sie liegen deshalb eingeklappt unter
+   einer Zeile, die sagt, was dahinter steckt. Der Inhalt bleibt im
+   Dokument — die Suche findet ihn weiterhin und klappt ihn beim Springen
+   von selbst auf. */
+(function(){
+  var CHEV='<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+
+  document.querySelectorAll('section[id] .vids').forEach(function(block){
+    var anzahl=block.querySelectorAll('.vid').length;
+    if(!anzahl) return;
+    var huelle=document.createElement('details');
+    huelle.className='tiefer';
+    var kopf=document.createElement('summary');
+    kopf.innerHTML=(anzahl===1?'Video ansehen':'Videos ansehen')+
+      '<span class="zahl">'+anzahl+'</span>'+CHEV;
+    block.parentNode.insertBefore(huelle, block);
+    huelle.appendChild(kopf);
+    huelle.appendChild(block);
+  });
+
+  /* Beim Springen alle darueberliegenden Klappen oeffnen, sonst zeigt die
+     Suche auf etwas Unsichtbares. */
+  window.__aufklappen=function(el){
+    var e=el;
+    while(e && e!==document.body){
+      if(e.tagName==='DETAILS') e.open=true;
+      e=e.parentElement;
+    }
+  };
+
+  /* Gilt auch fuer Verweise im Fliesstext, die ueber den Anker springen. */
+  document.addEventListener('click', function(ev){
+    var a=ev.target.closest?ev.target.closest('a[href^="#"]'):null;
+    if(!a) return;
+    var ziel=document.getElementById(a.getAttribute('href').slice(1));
+    if(ziel) window.__aufklappen(ziel);
+  }, true);
+})();
 
 /* ---------- Livewerte aus dem VRM ----------
    Der Zwischendienst haelt das Zugriffstoken und gibt nur die paar Werte
