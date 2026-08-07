@@ -23,17 +23,26 @@
 
 const VRM = 'https://vrmapi.victronenergy.com/v2';
 
-/* Was das Bordbuch anzeigen soll. Die Kennungen stammen aus der
-   Diagnose-Antwort; unbekannte werden still uebergangen. */
-const AUSWAHL = [
-  'SOC', 'bv/Soc', 'Soc',
-  'P', 'bv/P', 'Pdc',
-  'V', 'bv/V',
-  'PVP', 'PVpower', 'Pdc_pv',
-  'T1', 'T2', 'T3',
-  'FL1', 'FL2', 'FL3', 'FL4',
-  'AC_IN_P', 'AC_OUT_P', 'ACL1In', 'ACL1Out'
-];
+/* Was das Bordbuch anzeigen soll. Kennungen aus der Diagnose-Antwort
+   dieser Anlage. Tanks und Fuehler werden ueber die Instanz zugeordnet,
+   weil derselbe Code mehrfach vorkommt. */
+const AUSWAHL = {
+  'bs':   { name: 'ladestand' },
+  'bp':   { name: 'batterieleistung' },
+  'bt':   { name: 'restlaufzeit' },
+  'bst':  { name: 'batteriezustand' },
+  'PVP':  { name: 'solar_jetzt' },
+  'YT':   { name: 'solar_heute' },
+  'tl':   { 24: 'abwasser', 25: 'frischwasser' },
+  'tsT':  { 24: 'tiefkuehlfach', 25: 'kuehlschrank', 26: 'wohnraum', 27: 'aussen' }
+};
+
+function benennen(w) {
+  const eintrag = AUSWAHL[w.code];
+  if (!eintrag) return null;
+  if (eintrag.name) return eintrag.name;
+  return eintrag[w.instanz] || null;
+}
 
 export default {
   async fetch(request, env) {
@@ -89,8 +98,12 @@ export default {
       })).filter(w => w.code || w.beschreibung);
 
       if (!url.searchParams.get('alles')) {
-        const gewaehlt = werte.filter(w => AUSWAHL.includes(w.code));
-        if (gewaehlt.length) werte = gewaehlt;
+        /* Bewusst kein Rueckfall auf alles: sonst stuenden Seriennummern,
+           IP-Adresse und Standort im oeffentlich abrufbaren Ergebnis. */
+        werte = werte
+          .map(w => ({ ...w, name: benennen(w) }))
+          .filter(w => w.name)
+          .map(w => ({ name: w.name, wert: w.wert, roh: w.roh, zeit: w.zeit }));
       }
 
       return antwort({

@@ -335,6 +335,20 @@ footer .brand{width:104px;height:72px;color:var(--rausch);opacity:.9;margin:0 0 
 body.ux-biwak footer .brand{width:74px;height:51px;color:#5C7C9E;opacity:1;margin-bottom:8px}
 body.ux-biwak .shint .brand{width:96px;height:66px;color:#C8C8C8}
 
+/* Zustandszeile mit Livewerten aus dem VRM */
+.live{display:flex;align-items:center;gap:0;margin:14px 0 0;padding:9px 4px;
+  border:1px solid var(--line);border-radius:99px;overflow-x:auto;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.live::-webkit-scrollbar{display:none}
+.live .w{display:flex;align-items:baseline;gap:5px;flex:0 0 auto;padding:0 13px;
+  border-right:1px solid var(--line2);white-space:nowrap}
+.live .w:last-child{border-right:0}
+.live .w b{font-size:15px;font-weight:700;letter-spacing:-.02em}
+.live .w span{font-size:12px;color:var(--grey)}
+.live .w.matt b{color:var(--grey)}
+.livezeit{margin:7px 0 0;font-size:11.5px;color:var(--grey2);text-align:center}
+.livezeit.alt{color:var(--warn-line)}
+
 /* Abhakbare Schritte in den Ablaufkapiteln */
 .chkkopf{display:flex;align-items:center;justify-content:space-between;gap:12px;
   margin:0 0 10px;font-size:13px;font-weight:600;color:var(--grey)}
@@ -540,6 +554,11 @@ body.ux-biwak a.xref:active{color:#A8E5FF;text-decoration-color:#A8E5FF}
 body.ux-biwak .tile{border-color:rgba(255,255,255,.06);box-shadow:var(--kante);
   background:linear-gradient(180deg,rgba(255,255,255,.095),rgba(255,255,255,.04))}
 body.ux-biwak .tile span{color:rgba(255,255,255,.52)}
+body.ux-biwak .live{border-color:rgba(255,255,255,.06);box-shadow:var(--kante);
+  background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.045))}
+body.ux-biwak .live .w{border-right-color:rgba(255,255,255,.09)}
+body.ux-biwak .live .w b{color:#FFFFFF}
+body.ux-biwak .live .w span{color:rgba(255,255,255,.50)}
 body.ux-biwak ol.steps li.hakbar:active{background:rgba(255,255,255,.06)}
 body.ux-biwak .store{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14);
   color:#FFFFFF}
@@ -649,6 +668,8 @@ body.ux-biwak .uxbtn .lbl-alt{display:inline}
     <div class="stat" data-mess="frisch"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.7s6 6.4 6 10.5a6 6 0 0 1-12 0C6 9.1 12 2.7 12 2.7z"/></svg><b>200 l</b><span>Frisch</span></div>
     <div class="stat" data-mess="abwasser"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.7s6 6.4 6 10.5a6 6 0 0 1-12 0C6 9.1 12 2.7 12 2.7z"/><path d="M9.5 13.5h5"/></svg><b>150 l</b><span>Abwasser</span></div>
   </div>
+
+  <div class="live" id="live" hidden></div>
 
   <button class="sbar" id="sbar" type="button">
     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
@@ -2370,6 +2391,77 @@ document.addEventListener('keydown',function(e){
   if((e.metaKey||e.ctrlKey)&&(e.key==='k'||e.key==='K')){e.preventDefault();openSearch();}
   if(e.key==='Escape'&&toc.classList.contains('open')) closeToc();
 });
+
+/* ---------- Zustandszeile aus dem VRM ----------
+   Der Zwischendienst haelt das Zugriffstoken und gibt nur die paar Werte
+   zurueck, die hier stehen. Ohne Empfang bleibt der zuletzt gesehene
+   Stand sichtbar, mit Zeitangabe — lieber ein alter Wert mit Datum als
+   gar keiner. */
+(function(){
+  var DIENST='https://basislager-vrm.ch-hofmann.workers.dev/';
+  var SPEICHER='bordbuch-vrm';
+  var zeile=document.getElementById('live');
+  if(!zeile) return;
+
+  var FELDER=[
+    {name:'ladestand',      titel:'Batterie'},
+    {name:'batterieleistung',titel:'Leistung'},
+    {name:'solar_heute',    titel:'Solar heute'},
+    {name:'frischwasser',   titel:'Frisch'},
+    {name:'abwasser',       titel:'Abwasser'},
+    {name:'wohnraum',       titel:'Wohnraum'}
+  ];
+
+  function zeit(sek){
+    var d=new Date(sek*1000);
+    return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);
+  }
+
+  function zeichnen(daten, frisch){
+    var karte={};
+    (daten.werte||[]).forEach(function(w){ karte[w.name]=w; });
+    var teile=FELDER.filter(function(f){return karte[f.name] && karte[f.name].wert;});
+    if(!teile.length){ zeile.hidden=true; return; }
+
+    zeile.innerHTML=teile.map(function(f){
+      return '<span class="w"><b>'+esc(String(karte[f.name].wert))+'</b><span>'+esc(f.titel)+'</span></span>';
+    }).join('');
+    zeile.hidden=false;
+
+    var alt=zeile.nextElementSibling;
+    if(!alt||!alt.classList.contains('livezeit')){
+      alt=document.createElement('p'); alt.className='livezeit';
+      zeile.parentNode.insertBefore(alt, zeile.nextSibling);
+    }
+    alt.textContent = frisch ? 'Aktualisiert um '+zeit(daten.abgerufen)
+                             : 'Zuletzt gesehen um '+zeit(daten.abgerufen);
+    alt.classList.toggle('alt', !frisch);
+  }
+
+  /* Zuerst der gespeicherte Stand, damit sofort etwas dasteht */
+  var alt=null;
+  try{ alt=JSON.parse(localStorage.getItem(SPEICHER)||'null'); }catch(e){}
+  if(alt && alt.werte) zeichnen(alt,false);
+
+  function holen(){
+    var abbruch=new AbortController();
+    var uhr=setTimeout(function(){abbruch.abort();},9000);
+    fetch(DIENST,{signal:abbruch.signal,cache:'no-store'})
+      .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function(d){
+        if(d.fehler||!d.werte||!d.werte.length) throw new Error(d.fehler||'leer');
+        try{ localStorage.setItem(SPEICHER, JSON.stringify(d)); }catch(e){}
+        zeichnen(d,true);
+      })
+      .catch(function(){ /* stiller Rueckfall auf den gespeicherten Stand */ })
+      .then(function(){ clearTimeout(uhr); });
+  }
+
+  holen();
+  document.addEventListener('visibilitychange', function(){
+    if(!document.hidden) holen();
+  });
+})();
 
 /* ---------- Schritte abhaken ----------
    Die Ablaufkapitel sind Checklisten. Wer beim Beladen unterbrochen wird,
