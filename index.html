@@ -2414,7 +2414,7 @@ document.addEventListener('keydown',function(e){
   var KACHELN={
     batterie:{ wert:'ladestand', anteil:'ladestand', beisatz:'540 Ah',
                ampel:function(p){ return p<20?'#D6224A':p<50?'#E08A2B':'#1E9E5A'; } },
-    ac:      { wert:'restlaufzeit', titel:'Reserve' },
+    ac:      { wert:'solar_heute', titel:'Solar heute' },
     frisch:  { wert:'frischwasser', anteil:'frischwasser', menge:'frischwasser_menge',
                fassung:200, beisatz:'200 l',
                ampel:function(p){ return p<15?'#D6224A':'#2E80C4'; } },
@@ -2426,7 +2426,7 @@ document.addEventListener('keydown',function(e){
   /* Was nicht in eine Kachel passt, steht in der Zeile darunter. */
   var NEBEN=[
     {name:'batteriezustand', titel:'Batterie', karte:{charging:'lädt', discharging:'entlädt', idle:'ruht'}},
-    {name:'solar_heute',     titel:'Solar heute'},
+    {name:'solar_gestern',   titel:'Solar gestern'},
     {name:'wohnraum',        titel:'Wohnraum'},
     {name:'aussen',          titel:'Aussen'}
   ];
@@ -2466,6 +2466,9 @@ document.addEventListener('keydown',function(e){
 
       kachel.querySelector('b').textContent=q.wert;
       var beisatz=k.beisatz;
+      if(k.zusatz && karte[k.zusatz] && karte[k.zusatz].wert){
+        beisatz=(k.zusatzText||'')+karte[k.zusatz].wert;
+      }
       if(k.menge && karte[k.menge]){
         var m=zahl(karte[k.menge].roh!=null?karte[k.menge].roh:karte[k.menge].wert);
         if(m!=null) beisatz=Math.round(m*1000)+' l';

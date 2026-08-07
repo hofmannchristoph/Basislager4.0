@@ -33,6 +33,7 @@ const AUSWAHL = {
   'bst':  { name: 'batteriezustand' },
   'PVP':  { name: 'solar_jetzt' },
   'YT':   { name: 'solar_heute' },
+  'YY':   { name: 'solar_gestern' },
   'tl':   { 24: 'abwasser', 25: 'frischwasser' },
   'tr':   { 24: 'abwasser_menge', 25: 'frischwasser_menge' },
   'tsT':  { 24: 'tiefkuehlfach', 25: 'kuehlschrank', 26: 'wohnraum', 27: 'aussen' },
