@@ -77,6 +77,10 @@ img{max-width:100%;height:auto}
   border-bottom:2px solid transparent;font-family:inherit;min-width:70px}
 .cat svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.7;
   stroke-linecap:round;stroke-linejoin:round}
+/* Symbolsatz: gezeichnet als Grundform, flaechig wo Flaeche besser traegt.
+   Immer nur einer von beiden ist sichtbar. */
+.ic-vol{display:none}
+
 /* Hauptsymbole flaechig und dezent farbig, mit weichem Schatten fuer Tiefe */
 .cat .ic-lin{display:none}
 .cat .ic-vol{display:block;width:25px;height:25px;fill:currentColor;stroke:none;
@@ -298,7 +302,7 @@ a.link{color:var(--ink);font-weight:700;text-decoration:none;border-bottom:2px s
 a.xref{color:inherit;font-weight:600;text-decoration:underline;
   text-decoration-color:var(--grey2);text-decoration-thickness:1px;text-underline-offset:3px}
 a.xref:active{color:var(--rausch-text);text-decoration-color:var(--rausch-text)}
-body.ux-sorba a.xref{font-weight:400;color:#155A96;text-decoration-color:#9AB4D4}
+body.ux-biwak a.xref{font-weight:400;color:#155A96;text-decoration-color:#9AB4D4}
 /* Store-Verweise zurückhaltend: umrandet statt schwarz ausgefüllt,
    damit sie neben dem Fliesstext nicht dominieren. */
 .stores{display:flex;flex-wrap:wrap;gap:9px;margin:4px 0 22px}
@@ -315,8 +319,8 @@ body.ux-sorba a.xref{font-weight:400;color:#155A96;text-decoration-color:#9AB4D4
 :focus-visible{outline:3px solid var(--rausch-text);outline-offset:2px;border-radius:4px}
 .pbtn:focus-visible{outline-color:#fff;outline-offset:-5px}
 .sfield:focus-within{border-color:var(--ink);box-shadow:0 0 0 3px rgba(34,34,34,.14)}
-body.ux-sorba :focus-visible{outline:2px solid #1F6FB5;outline-offset:1px;border-radius:0}
-body.ux-sorba .sfield:focus-within{border-color:#1F6FB5;box-shadow:0 0 0 2px rgba(31,111,181,.25)}
+body.ux-biwak :focus-visible{outline:2px solid #1F6FB5;outline-offset:1px;border-radius:0}
+body.ux-biwak .sfield:focus-within{border-color:#1F6FB5;box-shadow:0 0 0 2px rgba(31,111,181,.25)}
 
 /* Bildzeichen. Als Maske eingebunden, damit die Linienfarbe dem Thema
    folgt statt fest rot zu sein. */
@@ -325,8 +329,8 @@ body.ux-sorba .sfield:focus-within{border-color:#1F6FB5;box-shadow:0 0 0 2px rgb
           mask:var(--brand) center/contain no-repeat}
 footer .brand{width:104px;height:72px;color:var(--rausch);opacity:.9;margin:0 0 14px}
 .shint .brand{width:132px;height:91px;color:var(--line);margin:6px auto 18px}
-body.ux-sorba footer .brand{width:74px;height:51px;color:#5C7C9E;opacity:1;margin-bottom:8px}
-body.ux-sorba .shint .brand{width:96px;height:66px;color:#C8C8C8}
+body.ux-biwak footer .brand{width:74px;height:51px;color:#5C7C9E;opacity:1;margin-bottom:8px}
+body.ux-biwak .shint .brand{width:96px;height:66px;color:#C8C8C8}
 
 .flash{animation:fl 1.8s ease-out 1}
 @keyframes fl{0%,30%{background:var(--mark)}100%{background:transparent}}
@@ -337,243 +341,212 @@ footer{padding:30px var(--gut) calc(34px + var(--dock));color:var(--grey);font-s
 footer b{color:var(--ink)}
 
 /* ============================================================
-   Variante SORBA — Oberflaeche wie die Bueroanwendung.
-   Farbwelt nach den Bildschirmfotos: neutrales Grau als Traeger,
-   Blau nur in der Titelleiste und bei Verweisen, Symbole grau-blau
-   mit sparsamen roten Akzenten. Bernstein markiert Ausgewaehltes,
-   Gruen die abzulesenden Werte, Gelb die Hinweise.
-   Geschaltet ueber body.ux-sorba, Umschalter in der Werkzeugleiste.
+   Variante Biwak — dunkle Ansicht fuers Fahrzeug bei Nacht.
+   Angelehnt an die Anmutung von Gezeiten-Apps: tiefes Marineblau,
+   Karten mit weichen Rundungen, grosse helle Zahlen ueber kleinen
+   Etiketten, Cyan als Signalfarbe, schwebende Leiste unten.
+   Geschaltet ueber body.ux-biwak, Umschalter in der Werkzeugleiste.
    ============================================================ */
-body.ux-sorba{
-  --f:Tahoma,"Segoe UI",Geneva,Verdana,sans-serif;
-  --r:0px;--rs:0px;
-  --ink:#000;--ink2:#141414;--grey:#4A4A4A;--grey2:#707070;
-  --line:#B0B0B0;--line2:#D7D7D7;--paper:#fff;--soft:#F0F0F0;
-  --rausch:#1F6FB5;--rausch-dk:#155A96;--rausch-text:#155A96;
-  --warn:#FFFFC8;--warn-line:#C7C288;--tip:#E8F0F8;--tip-line:#A9C1D9;--tip-ink:#155A96;
-  --mark:#FFF07A;--sh:none;--shx:none;
-  --cat:66px;--dock:calc(36px + env(safe-area-inset-bottom));--gut:9px;
-  font-size:12.5px;line-height:1.42;letter-spacing:0;background:#E2E2E2;
-  -webkit-font-smoothing:auto;
+body.ux-biwak{
+  --f:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --r:20px;--rs:14px;
+  --ink:#FFFFFF;--ink2:rgba(255,255,255,.87);
+  --grey:rgba(255,255,255,.58);--grey2:rgba(255,255,255,.40);
+  --line:rgba(255,255,255,.16);--line2:rgba(255,255,255,.09);
+  --paper:#131E2C;--soft:rgba(255,255,255,.06);
+  --rausch:#0A84FF;--rausch-dk:#409CFF;--rausch-text:#6FD3FF;
+  --warn:rgba(240,136,62,.13);--warn-line:rgba(240,136,62,.38);
+  --tip:rgba(10,132,255,.12);--tip-line:rgba(10,132,255,.34);--tip-ink:#6FD3FF;
+  --mark:rgba(255,214,10,.30);
+  --sh:0 1px 2px rgba(0,0,0,.45);--shx:0 10px 30px rgba(0,0,0,.55);
+  --dock:calc(74px + env(safe-area-inset-bottom));
+  color:#FFFFFF;
+  background:#08101B;
+  -webkit-font-smoothing:antialiased;
 }
-body.ux-sorba .wrap{max-width:940px;background:#F0F0F0;
-  border-left:1px solid #FFFFFF;border-right:1px solid #A6A6A6}
+body.ux-biwak .wrap{max-width:820px;
+  background:linear-gradient(180deg,#0E1B2B 0%,#16293E 42%,#102033 100%);
+  background-attachment:fixed}
 
-/* Titelleiste: flach, mittig, mit runder Anwendungsschaltflaeche */
-body.ux-sorba .hero{display:flex;flex-direction:column;padding:0;background:#F0F0F0}
-body.ux-sorba .hero h1{order:1;position:relative;display:flex;align-items:center;
-  justify-content:center;margin:0;font-size:12px;font-weight:400;line-height:1.5;
-  letter-spacing:0;color:#FFFFFF;background:#1F6FB5;
-  padding:calc(4px + env(safe-area-inset-top)) 32px 4px}
-body.ux-sorba .hero h1::before{content:"";position:absolute;left:8px;top:50%;
-  width:26px;height:18px;margin-top:-9px;border:0;border-radius:0;background:#FFFFFF;
-  -webkit-mask:var(--brand) center/contain no-repeat;
-          mask:var(--brand) center/contain no-repeat}
-body.ux-sorba .hero .sub{order:2;margin:0;padding:6px 9px 3px;font-size:11px;
-  color:#4A4A4A;font-weight:400}
-body.ux-sorba .hero .stats{order:3;gap:0;padding:0 9px 7px}
-body.ux-sorba .stat{flex-direction:row;align-items:baseline;border-radius:0;
-  border:1px solid #ABADB3;margin:0 -1px -1px 0;background:#FFFFFF;padding:1px 7px;
-  font-size:11px;font-weight:400;gap:5px;letter-spacing:0}
-body.ux-sorba .stat span{color:#4A4A4A;font-size:11px}
-/* Karteireiter, sitzt auf dem Menueband auf */
-body.ux-sorba .hero .kicker{order:5;display:inline-flex;align-self:flex-start;
-  margin:0 0 -1px 5px;padding:2px 13px;border-radius:0;background:#FAFAFA;
-  border:1px solid #A6A6A6;border-bottom-color:#FAFAFA;position:relative;z-index:1;
-  color:#000;font-size:11px;font-weight:400;letter-spacing:0}
+/* Kopfbereich: grosser Titel, Kennzahlen als Karten, Suchfeld */
+body.ux-biwak .hero{padding:calc(26px + env(safe-area-inset-top)) var(--gut) 16px}
+body.ux-biwak .hero .kicker{background:rgba(111,211,255,.14);color:#6FD3FF;
+  border:1px solid rgba(111,211,255,.24);font-weight:600}
+body.ux-biwak .hero h1{color:#FFFFFF;letter-spacing:-.03em}
+body.ux-biwak .hero .sub{color:rgba(255,255,255,.56)}
+body.ux-biwak .stats{gap:10px}
+body.ux-biwak .stat{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);
+  border-radius:16px;padding:11px 14px;color:#FFFFFF;font-size:19px;font-weight:700;
+  letter-spacing:-.02em}
+body.ux-biwak .stat span{color:rgba(255,255,255,.52);font-size:12px;font-weight:500;
+  text-transform:uppercase;letter-spacing:.06em}
 
-/* Symbolsatz: gezeichnet im Bordbuch, flaechig in SORBA */
-.ic-vol{display:none}
-body.ux-sorba .ic-lin{display:none}
-body.ux-sorba .ic-vol{display:block;fill:#5C7C9E;stroke:none}
-body.ux-sorba .ic-vol .ak{fill:#1F6FB5}
-body.ux-sorba .ic-vol .rt{fill:#C0392B}
+/* Suchfeld wie die Ortssuche der Vorlage */
+body.ux-biwak .sbar{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+  box-shadow:none;padding:12px 18px}
+body.ux-biwak .sbar:active{background:rgba(255,255,255,.13);box-shadow:none}
+body.ux-biwak .sbar svg{stroke:rgba(255,255,255,.72)}
+body.ux-biwak .sbar .sb b{color:#FFFFFF}
+body.ux-biwak .sbar .sb small{color:rgba(255,255,255,.50)}
 
-body.ux-sorba .sbar{order:4;border-radius:0;border:1px solid #ABADB3;background:#fff;
-  margin:0 9px 7px;padding:2px 7px;gap:6px;box-shadow:none;width:auto;align-self:stretch}
-body.ux-sorba .sbar:active{background:#FFE49E;box-shadow:none}
-body.ux-sorba .sbar svg{width:13px;height:13px;flex:0 0 13px;stroke:#5C7C9E;stroke-width:2}
-body.ux-sorba .sbar .sb{flex-direction:row;gap:5px;align-items:baseline}
-body.ux-sorba .sbar .sb b{font-size:11px;font-weight:400;letter-spacing:0}
-body.ux-sorba .sbar .sb small{font-size:10.5px;color:#707070}
+/* Bereichswahl als Kapselreihe, aktiver Eintrag leuchtet cyan */
+body.ux-biwak .cats{background:transparent;border-bottom:0;padding:2px 12px 12px;gap:8px;
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+body.ux-biwak .cat{flex-direction:row;gap:8px;min-width:0;padding:8px 15px;
+  border:1px solid rgba(255,255,255,.16);border-radius:99px;background:rgba(255,255,255,.05)}
+body.ux-biwak .cat span{font-size:13.5px;font-weight:600;color:rgba(255,255,255,.72);
+  letter-spacing:-.01em}
+body.ux-biwak .cat.on{background:rgba(10,132,255,.24);border-color:rgba(111,211,255,.55)}
+body.ux-biwak .cat.on span{color:#6FD3FF;font-weight:700}
+body.ux-biwak .cat .ic-lin{display:none}
+body.ux-biwak .cat .ic-vol{display:block;width:19px;height:19px;fill:currentColor;stroke:none;
+  filter:none;opacity:1;transform:none}
+body.ux-biwak .cat[data-cat="start"]{color:#FF9E70}
+body.ux-biwak .cat[data-cat="strom"]{color:#FFD166}
+body.ux-biwak .cat[data-cat="wasser"]{color:#6FD3FF}
+body.ux-biwak .cat[data-cat="klima"]{color:#FF8A75}
+body.ux-biwak .cat[data-cat="kueche"]{color:#B4DC79}
+body.ux-biwak .cat[data-cat="bad"]{color:#5FD6C8}
+body.ux-biwak .cat[data-cat="medien"]{color:#A5AAFF}
+body.ux-biwak .cat[data-cat="gas"]{color:#FF7A6B}
+body.ux-biwak .cat[data-cat="wohnen"]{color:#E5AE79}
+body.ux-biwak .cat[data-cat="aussen"]{color:#7BD99A}
+body.ux-biwak .cat[data-cat="info"]{color:#CBB0FF}
 
-/* Menueband mit flaechigen Symbolen und Beschriftung darunter */
-body.ux-sorba .cats{padding:0;gap:0;align-items:stretch;
-  border-top:1px solid #A6A6A6;border-bottom:1px solid #A6A6A6;
-  -webkit-backdrop-filter:none;backdrop-filter:none;
-  background:linear-gradient(180deg,#FAFAFA 0%,#F0F0F0 54%,#E4E4E4 100%)}
-body.ux-sorba .cat{flex-direction:column;justify-content:flex-start;gap:4px;min-width:64px;
-  padding:7px 9px 6px;border:0;border-right:1px solid #D4D4D4;background:none;color:#5C7C9E}
-body.ux-sorba .cat:last-child{border-right:0}
-body.ux-sorba .cat svg{width:27px;height:27px}
-body.ux-sorba .cat .ic-vol{width:27px;height:27px;opacity:1;filter:none;transform:none;fill:#5C7C9E}
-body.ux-sorba .cat .ic-vol .ak{fill:#1F6FB5;opacity:1}
-body.ux-sorba .cat .ic-vol .rt{fill:#C0392B;opacity:1}
-body.ux-sorba .cat span{max-width:70px;font-size:10.5px;font-weight:400;line-height:1.2;
-  letter-spacing:0;color:#151515;white-space:normal;text-align:center}
-body.ux-sorba .cat.on{background:linear-gradient(180deg,#FFF4D0,#FFE49E);
-  box-shadow:inset 0 0 0 1px #E0BE6A}
-body.ux-sorba .cat.on span{font-weight:700}
+/* Abschnitte als Karten */
+body.ux-biwak .pad{padding:0 var(--gut) var(--dock)}
+body.ux-biwak .part{margin:26px 0 12px;padding:0;border-top:0;color:#6FD3FF;
+  font-size:12px;letter-spacing:.10em}
+body.ux-biwak section{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);
+  border-radius:var(--r);padding:20px 18px 18px;margin:0 0 14px;
+  scroll-margin-top:calc(var(--cat) + 10px)}
+body.ux-biwak h2{color:#FFFFFF;letter-spacing:-.03em;font-size:clamp(23px,5.6vw,29px)}
+body.ux-biwak .lede{color:rgba(255,255,255,.66)}
+body.ux-biwak h3{color:#FFFFFF}
+body.ux-biwak h4{color:#FFFFFF}
+body.ux-biwak p{color:rgba(255,255,255,.84)}
+body.ux-biwak b,body.ux-biwak strong{color:#FFFFFF}
+body.ux-biwak .tag{border-color:rgba(255,255,255,.18);color:rgba(255,255,255,.62);
+  background:rgba(255,255,255,.05)}
 
-/* Gruppenrahmen je Abschnitt, Kopf grau statt blau */
-body.ux-sorba .pad{padding:8px max(8px,env(safe-area-inset-left)) var(--dock)
-  max(8px,env(safe-area-inset-right))}
-body.ux-sorba .part{margin:11px 0 6px;padding:2px 8px;gap:6px;border:1px solid #B0B0B0;
-  font-size:11px;letter-spacing:.02em;color:#155A96;
-  background:linear-gradient(180deg,#FAFAFA,#E6E6E6)}
-body.ux-sorba .part:first-child{margin-top:0}
-body.ux-sorba .part svg{width:13px;height:13px}
-body.ux-sorba section{padding:0 9px 9px;margin:0 0 9px;background:#FFFFFF;
-  border:1px solid #B0B0B0;scroll-margin-top:calc(var(--cat) + 4px)}
-body.ux-sorba h2{margin:0 -9px 9px;padding:3px 9px;font-size:12px;font-weight:700;
-  line-height:1.5;letter-spacing:0;color:#000;border-bottom:1px solid #B0B0B0;
-  background:linear-gradient(180deg,#FAFAFA,#E6E6E6)}
-body.ux-sorba .lede{font-size:11.5px;line-height:1.45;margin:0 0 9px;color:#141414}
-body.ux-sorba h3{font-size:11.5px;font-weight:700;margin:12px 0 5px;letter-spacing:0;
-  padding-bottom:2px;border-bottom:1px solid #D7D7D7}
-body.ux-sorba h4{font-size:11.5px;font-weight:700;margin:0 0 3px;letter-spacing:0}
-body.ux-sorba p{margin:0 0 8px;font-size:11.5px}
-body.ux-sorba .tag{border-radius:0;border:1px solid #ABADB3;background:#FFFFFF;
-  padding:1px 7px;font-size:10.5px;margin-bottom:8px;color:#000}
+/* Datenzeilen: Etikett klein und gedaempft, Wert hell */
+body.ux-biwak .rows{border-top-color:rgba(255,255,255,.10)}
+body.ux-biwak .rows .r{border-bottom-color:rgba(255,255,255,.08)}
+body.ux-biwak .rows .r .lab{color:rgba(255,255,255,.52);font-size:12px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.06em}
+body.ux-biwak .rows .r .val{color:rgba(255,255,255,.88)}
 
-/* Datenraster: weiss, duenne Linien, graue Beschriftungsspalte */
-body.ux-sorba .rows{border:1px solid #B0B0B0;border-bottom:0;margin:0 0 9px}
-body.ux-sorba .rows .r{display:flex;gap:0;align-items:stretch;padding:0;background:#FFFFFF;
-  border-bottom:1px solid #D7D7D7}
-body.ux-sorba .rows .r .lab{flex:0 0 36%;margin:0;padding:2px 7px;font-size:11px;
-  font-weight:400;color:#000;background:#F0F0F0;border-right:1px solid #D7D7D7}
-body.ux-sorba .rows .r .val{flex:1;padding:2px 7px;font-size:11.5px;line-height:1.4;color:#141414}
-body.ux-sorba .cal .rows{border-color:#B0B0B0}
-body.ux-sorba .cal .rows .r{border-bottom-color:#D7D7D7}
+/* Ablaeufe */
+body.ux-biwak ol.steps li{color:rgba(255,255,255,.84)}
+body.ux-biwak ol.steps li::before{background:#0A84FF;color:#FFFFFF}
+body.ux-biwak ul.ticks li{color:rgba(255,255,255,.84)}
+body.ux-biwak ul.ticks li::before{background:#6FD3FF}
 
-/* Nummerierte Ablaeufe */
-body.ux-sorba ol.steps{margin:0 0 9px}
-body.ux-sorba ol.steps li{padding:0 0 6px 24px;font-size:11.5px;line-height:1.45}
-body.ux-sorba ol.steps li::before{width:16px;height:16px;border-radius:0;top:2px;
-  background:#1F6FB5;font-size:10.5px;font-weight:700}
-body.ux-sorba ul.ticks{margin:0 0 9px}
-body.ux-sorba ul.ticks li{padding-left:16px;margin-bottom:4px;font-size:11.5px;line-height:1.45}
-body.ux-sorba ul.ticks li::before{left:4px;top:7px;width:5px;height:5px;border-radius:0;
-  background:#5C7C9E}
+/* Hinweiskaesten */
+body.ux-biwak .cal{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10)}
+body.ux-biwak .cal .t{color:rgba(255,255,255,.60);font-size:12px;text-transform:uppercase;
+  letter-spacing:.07em}
+body.ux-biwak .cal.warn{background:rgba(240,136,62,.11);border-color:rgba(240,136,62,.32)}
+body.ux-biwak .cal.warn .t{color:#FFB27A}
+body.ux-biwak .cal.tip{background:rgba(10,132,255,.10);border-color:rgba(10,132,255,.30)}
+body.ux-biwak .cal.tip .t{color:#6FD3FF}
+body.ux-biwak .cal p{color:rgba(255,255,255,.82)}
+body.ux-biwak .vnote{color:#FFB27A}
 
-/* Meldungsfelder: Gelb fuer Hinweise, Blau fuer Erklaerungen */
-body.ux-sorba .cal{border-radius:0;border:1px solid #B0B0B0;background:#FAFAFA;
-  padding:7px 9px 8px;margin:0 0 9px}
-body.ux-sorba .cal .t{margin:-7px -9px 7px;padding:2px 8px;font-size:11px;color:#000;
-  background:linear-gradient(180deg,#FAFAFA,#E6E6E6);border-bottom:1px solid #B0B0B0;
-  letter-spacing:0}
-body.ux-sorba .cal.warn{background:#FFFFF0;border-color:#C7C288}
-body.ux-sorba .cal.warn .t{background:#FFFFC8;border-bottom-color:#C7C288;color:#8A6A00}
-body.ux-sorba .cal.tip{background:#F6FAFD;border-color:#A9C1D9}
-body.ux-sorba .cal.tip .t{background:#E1ECF6;border-bottom-color:#A9C1D9;color:#155A96}
-body.ux-sorba .cal p{font-size:11.5px;margin-bottom:7px}
+/* Merkmale und Tasten */
+body.ux-biwak .chip{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14);
+  color:rgba(255,255,255,.86)}
+body.ux-biwak .chip s{color:#6FD3FF}
+body.ux-biwak .key{border-bottom-color:rgba(255,255,255,.08)}
+body.ux-biwak .key:first-child{border-top-color:rgba(255,255,255,.08)}
+body.ux-biwak .key .n{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);
+  color:#FFFFFF}
+body.ux-biwak .key .tx b{color:#FFFFFF}
+body.ux-biwak .key .tx span{color:rgba(255,255,255,.58)}
 
-/* Merkmalsfelder */
-body.ux-sorba .chips{gap:0;margin:0 0 9px}
-body.ux-sorba .chip{border-radius:0;border:1px solid #ABADB3;background:#FFFFFF;
-  margin:0 -1px -1px 0;padding:2px 8px;font-size:11px;gap:5px}
-
-/* Tastenliste */
-body.ux-sorba .keys{margin:0 0 9px}
-body.ux-sorba .key{gap:8px;padding:4px 0;border-bottom:1px solid #D7D7D7}
-body.ux-sorba .key .n{flex:0 0 17px;height:17px;border-radius:0;border:1px solid #ABADB3;
-  background:#F0F0F0;font-size:10.5px;margin-top:1px}
-body.ux-sorba .key .tx b{font-size:11.5px}
-body.ux-sorba .key .tx span{font-size:11px}
-
-/* Eingabefelder, abzulesende Werte gruen hinterlegt */
-body.ux-sorba .creds{margin:0 0 9px;border:1px solid #B0B0B0;border-bottom:0}
-body.ux-sorba .cred{border:0;border-bottom:1px solid #D7D7D7;border-radius:0;
-  background:#FFFFFF;padding:0;margin:0;gap:0;box-shadow:none}
-body.ux-sorba .cred .ci{display:flex;align-items:stretch;flex:1;min-width:0}
-body.ux-sorba .cred .k{flex:0 0 36%;padding:2px 7px;font-size:11px;font-weight:400;
-  color:#000;background:#F0F0F0;border-right:1px solid #D7D7D7}
-body.ux-sorba .cred .v{flex:1;padding:2px 7px;font-size:11.5px;font-weight:400;
-  letter-spacing:0;background:#DCEDD5;color:#123D12}
-body.ux-sorba .cred:active .v{background:#C4E3B9}
-body.ux-sorba .cred .cp{align-self:stretch;display:flex;align-items:center;padding:0 8px;
-  font-size:10.5px;font-weight:400;color:#000;border-left:1px solid #B0B0B0;
-  background:linear-gradient(180deg,#FAFAFA,#E4E4E4)}
+/* Zugangsdaten: grosser heller Wert wie eine Messgroesse */
+body.ux-biwak .cred{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);
+  box-shadow:none}
+body.ux-biwak .cred:active{background:rgba(255,255,255,.11)}
+body.ux-biwak .cred .k{color:rgba(255,255,255,.50);text-transform:uppercase;letter-spacing:.06em}
+body.ux-biwak .cred .v{color:#FFFFFF}
+body.ux-biwak .cred .cp{color:#6FD3FF}
 
 /* Abbildungen und Videos */
-body.ux-sorba figure{margin-top:0;margin-bottom:9px}
-body.ux-sorba figure img{border-radius:0;border:1px solid #ABADB3}
-body.ux-sorba figcaption{font-size:11px;margin-top:4px}
-body.ux-sorba .g2{gap:9px}
-body.ux-sorba .vid{padding:9px 0;border-top:1px solid #D7D7D7}
-body.ux-sorba .player{border-radius:0;border:1px solid #ABADB3}
-body.ux-sorba .vmeta{font-size:10.5px;font-weight:700;color:#155A96;margin:7px 0 2px}
-body.ux-sorba .vfall a{border-radius:0;border:1px solid #ABADB3;padding:2px 9px;
-  font-size:11px;font-weight:400;letter-spacing:0;gap:6px;color:#000;
-  background:linear-gradient(180deg,#FAFAFA,#E4E4E4)}
-body.ux-sorba .vfall a:active{background:#FFE49E}
-body.ux-sorba .vfall a svg{width:12px;height:12px;flex:0 0 12px}
-body.ux-sorba .vfall small{font-size:10.5px;margin-top:4px}
-body.ux-sorba .pbtn .pdur{border-radius:0;font-size:10.5px}
+body.ux-biwak figure img{border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.04);
+  filter:brightness(.94) contrast(1.02)}
+body.ux-biwak figcaption{color:rgba(255,255,255,.52)}
+body.ux-biwak .vid{border-top-color:rgba(255,255,255,.08)}
+body.ux-biwak .player{border:1px solid rgba(255,255,255,.10)}
+body.ux-biwak .vmeta{color:#6FD3FF;text-transform:uppercase;letter-spacing:.07em;font-size:11.5px}
+body.ux-biwak .vfall a{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
+  color:#FFFFFF}
+body.ux-biwak .vfall a:active{background:rgba(10,132,255,.26)}
+body.ux-biwak .vfall small{color:rgba(255,255,255,.48)}
 
-/* Sonstiges im Fliesstext */
-body.ux-sorba kbd{border-radius:0;border:1px solid #ABADB3;background:#F0F0F0;
-  font-size:11px;padding:0 5px}
-body.ux-sorba a.link{border-bottom-width:1px;border-bottom-color:#1F6FB5;color:#1F6FB5}
-body.ux-sorba .store{border-radius:0;border:1px solid #ABADB3;color:#000;
-  padding:3px 10px;min-width:0;gap:7px;background:linear-gradient(180deg,#FAFAFA,#E4E4E4)}
-body.ux-sorba .store:active{background:#FFE49E;border-color:#E0BE6A}
-body.ux-sorba .store svg{width:15px;height:15px;flex:0 0 15px;color:#5C7C9E}
-body.ux-sorba .store span{font-size:11px;font-weight:400;letter-spacing:0}
-body.ux-sorba .store span small{font-size:10px;font-weight:400;color:#4A4A4A;opacity:1}
-body.ux-sorba .stores{gap:5px;margin-bottom:9px}
+/* Fliesstext */
+body.ux-biwak kbd{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.18);
+  color:#FFFFFF}
+body.ux-biwak a.link{color:#6FD3FF;border-bottom-color:#6FD3FF}
+body.ux-biwak a.xref{color:#6FD3FF;text-decoration-color:rgba(111,211,255,.45)}
+body.ux-biwak a.xref:active{color:#A8E5FF;text-decoration-color:#A8E5FF}
+body.ux-biwak .store{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14);
+  color:#FFFFFF}
+body.ux-biwak .store span small{color:rgba(255,255,255,.50)}
+body.ux-biwak mark,body.ux-biwak .shit mark{background:rgba(255,214,10,.28);color:#FFFFFF}
 
-/* Werkzeugleiste unten */
-body.ux-sorba .dock{border-top:1px solid #A6A6A6;padding-left:4px;padding-right:4px;
-  -webkit-backdrop-filter:none;backdrop-filter:none;
-  background:linear-gradient(180deg,#FAFAFA,#EDEDED)}
-body.ux-sorba .dock button{flex:0 1 auto;flex-direction:row;gap:6px;height:35px;padding:0 11px;
-  color:#000;border:1px solid transparent}
-body.ux-sorba .dock button:active{color:#000;border-color:#E0BE6A;background:#FFE49E}
-body.ux-sorba .dock button svg{width:15px;height:15px;stroke-width:1.7}
-body.ux-sorba .dock button span{font-size:11px;font-weight:400}
+/* Werkzeugleiste: schwebende Kapsel wie die Reiterleiste der Vorlage */
+body.ux-biwak .dock{left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));
+  border:1px solid rgba(255,255,255,.12);border-radius:26px;padding:0;
+  background:rgba(19,32,48,.86);
+  -webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);
+  box-shadow:0 10px 32px rgba(0,0,0,.55)}
+body.ux-biwak .dock button{height:56px;color:rgba(255,255,255,.62);border-radius:20px;margin:4px 3px}
+body.ux-biwak .dock button span{font-size:11px;font-weight:600}
+body.ux-biwak .dock button:active{color:#6FD3FF;background:rgba(10,132,255,.22)}
 
-/* Dialoge fuer Inhalt und Suche */
-body.ux-sorba .ovl{background:#F0F0F0}
-body.ux-sorba .ovlbar{gap:7px;border-bottom:1px solid #A6A6A6;padding:0 6px 0 0;
-  background:#1F6FB5;min-height:26px}
-body.ux-sorba .ovlbar .ovltitle{color:#FFFFFF;font-size:11.5px;font-weight:400;letter-spacing:0}
-body.ux-sorba .ovlbar .sfield{margin:3px 0}
-body.ux-sorba .xbtn{width:20px;height:20px;margin:3px 0 3px 4px;border-radius:0;
-  border:1px solid #A6A6A6;color:#000;background:linear-gradient(180deg,#FAFAFA,#E4E4E4)}
-body.ux-sorba .xbtn svg{width:11px;height:11px}
-body.ux-sorba .xbtn:active{background:#E8B4AE;border-color:#C0392B}
-body.ux-sorba .sfield{border-radius:0;border:1px solid #ABADB3;background:#FFFFFF;
-  height:22px;padding:0 6px;gap:6px}
-body.ux-sorba #sinput{font-size:11.5px;font-weight:400}
-body.ux-sorba .ovlbody{background:#FFFFFF}
-body.ux-sorba .scount,body.ux-sorba .tocgrp{padding:4px 8px 3px;font-size:10.5px;
-  letter-spacing:0;margin:0;color:#155A96;border-bottom:1px solid #D7D7D7;
-  background:linear-gradient(180deg,#FAFAFA,#E6E6E6)}
-body.ux-sorba .tocgrp svg{width:13px;height:13px}
-body.ux-sorba .tocitem,body.ux-sorba .shit{padding:3px 8px;border-bottom:1px solid #D7D7D7}
-body.ux-sorba .tocitem:active,body.ux-sorba .shit:active{background:#FFE49E}
-body.ux-sorba .tocitem b{font-size:11.5px;letter-spacing:0}
-body.ux-sorba .tocitem .td{font-size:10.5px;margin-top:0;color:#4A4A4A}
-body.ux-sorba .tocitem .tv{border-radius:0;border:1px solid #ABADB3;background:#FFFFFF;
-  color:#000;font-size:10px;padding:0 5px;font-weight:400}
-body.ux-sorba .tocitem .chev{width:12px;height:12px;stroke:#707070}
-body.ux-sorba .shit .sec{font-size:10px;color:#155A96}
-body.ux-sorba .shit .txt{font-size:11.5px;line-height:1.4}
-body.ux-sorba .shint span{border-radius:0;border:1px solid #ABADB3;background:#FFFFFF;
-  padding:2px 8px;font-size:11px;margin:0 4px 4px 0}
-body.ux-sorba .sempty{font-size:11.5px;padding:9px 8px}
+/* Dialoge */
+body.ux-biwak .ovl{background:#0C1725}
+body.ux-biwak .ovlbar{border-bottom-color:rgba(255,255,255,.10);background:#0C1725}
+body.ux-biwak .ovltitle{color:#FFFFFF}
+body.ux-biwak .xbtn{background:rgba(255,255,255,.10);color:#FFFFFF}
+body.ux-biwak .xbtn:active{background:rgba(255,255,255,.18)}
+body.ux-biwak .sfield{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.14)}
+body.ux-biwak #sinput{color:#FFFFFF}
+body.ux-biwak #sinput::placeholder{color:rgba(255,255,255,.42)}
+body.ux-biwak .ovlbody{background:#0C1725}
+body.ux-biwak .scount,body.ux-biwak .tocgrp{color:#6FD3FF}
+body.ux-biwak .tocitem,body.ux-biwak .shit{border-bottom-color:rgba(255,255,255,.08)}
+body.ux-biwak .tocitem:active,body.ux-biwak .shit:active{background:rgba(10,132,255,.18)}
+body.ux-biwak .tocitem b{color:#FFFFFF}
+body.ux-biwak .tocitem .td{color:rgba(255,255,255,.52)}
+body.ux-biwak .tocitem .tv{background:rgba(111,211,255,.16);color:#6FD3FF;
+  border:1px solid rgba(111,211,255,.28)}
+body.ux-biwak .tocitem .chev{stroke:rgba(255,255,255,.36)}
+body.ux-biwak .shit .sec{color:#6FD3FF}
+body.ux-biwak .shit .txt{color:rgba(255,255,255,.82)}
+body.ux-biwak .shint b{color:rgba(255,255,255,.56)}
+body.ux-biwak .shint span{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14);
+  color:#FFFFFF}
+body.ux-biwak .sempty{color:rgba(255,255,255,.62)}
+body.ux-biwak .sempty b{color:#FFFFFF}
+body.ux-biwak .shint .brand{color:rgba(255,255,255,.14)}
 
-/* Fusszeile als Statusleiste */
-body.ux-sorba footer{margin-top:0;padding:5px 9px calc(10px + var(--dock));font-size:10.5px;
-  line-height:1.45;border-top:1px solid #A6A6A6;
-  background:linear-gradient(180deg,#FAFAFA,#EDEDED)}
+/* Fusszeile */
+body.ux-biwak footer{border-top-color:rgba(255,255,255,.10);color:rgba(255,255,255,.50)}
+body.ux-biwak footer b{color:rgba(255,255,255,.82)}
+body.ux-biwak footer .brand{color:#6FD3FF;opacity:.85}
+
+/* Fokus */
+body.ux-biwak :focus-visible{outline:3px solid #6FD3FF;outline-offset:2px}
+body.ux-biwak .sfield:focus-within{border-color:#6FD3FF;
+  box-shadow:0 0 0 3px rgba(111,211,255,.22)}
 
 /* Umschalter zwischen den Oberflaechen */
 .uxbtn .lbl{display:inline}
 .uxbtn .lbl-alt{display:none}
-body.ux-sorba .uxbtn .lbl{display:none}
-body.ux-sorba .uxbtn .lbl-alt{display:inline}
+body.ux-biwak .uxbtn .lbl{display:none}
+body.ux-biwak .uxbtn .lbl-alt{display:inline}
 </style>
 </head>
 <body>
@@ -1844,7 +1817,7 @@ body.ux-sorba .uxbtn .lbl-alt{display:inline}
   <button id="uxbtn" class="uxbtn" type="button" aria-label="Oberfläche wechseln">
     <svg class="ic-lin" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M8 4v5"/></svg>
     <svg class="ic-vol" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M2.4 3.9h19.2v16.2H2.4zm2.2 5.3v8.7h14.8V9.2z"/></svg>
-    <span><span class="lbl">SORBA</span><span class="lbl-alt">Bordbuch</span></span>
+    <span><span class="lbl">Biwak</span><span class="lbl-alt">Bordbuch</span></span>
   </button>
 </nav>
 
@@ -1892,8 +1865,8 @@ var ICONS={
  book:'<path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H19v18H5.5A1.5 1.5 0 0 1 4 19.5z"/><path d="M4 17h15"/>'
 };
 
-/* Flaechige Fassung fuer die SORBA-Oberflaeche. Dort sind die Symbole
-   ausgefuellt statt gezeichnet, so wie im Menueband der Anwendung. */
+/* Flaechige Fassung der Symbole. Wird in der Kategorieleiste beider
+   Themen verwendet, farbig im Bordbuch, cyan-getoent in Biwak. */
 var ICONS_VOLL={
  compass:'<path fill-rule="evenodd" d="M12 1.8a10.2 10.2 0 1 0 0 20.4 10.2 10.2 0 0 0 0-20.4zm4.8 5.4-2.5 6.3-6.3 2.5 2.5-6.3z"/>',
  bolt:'<path class="ak" d="M13.6 1.9 4 13.9h6.3L9.5 22.1 20.1 9.5h-6.7z"/>',
@@ -2317,17 +2290,18 @@ document.addEventListener('keydown',function(e){
 })();
 
 /* ---------- Oberflaeche umschalten ----------
-   Zwei Gestaltungen im selben Dokument: das Bordbuch und die SORBA-Variante.
+   Zwei Gestaltungen im selben Dokument: das helle Bordbuch und Biwak,
+   die dunkle Ansicht fuer die Nacht im Fahrzeug.
    Die Wahl bleibt im Geraetespeicher, damit sie den Neustart ueberlebt. */
 (function(){
   var KEY='bordbuch-ux', btn=document.getElementById('uxbtn');
   var themeMeta=document.querySelector('meta[name=theme-color]');
 
   function setzen(ux){
-    var sorba = ux==='sorba';
-    document.body.classList.toggle('ux-sorba', sorba);
-    if(themeMeta) themeMeta.setAttribute('content', sorba ? '#EDEBE4' : '#ffffff');
-    if(btn) btn.setAttribute('aria-pressed', sorba ? 'true' : 'false');
+    var dunkel = ux==='biwak';
+    document.body.classList.toggle('ux-biwak', dunkel);
+    if(themeMeta) themeMeta.setAttribute('content', dunkel ? '#0C1725' : '#ffffff');
+    if(btn) btn.setAttribute('aria-pressed', dunkel ? 'true' : 'false');
   }
 
   var gespeichert;
@@ -2335,7 +2309,7 @@ document.addEventListener('keydown',function(e){
   setzen(gespeichert || 'bordbuch');
 
   if(btn) btn.addEventListener('click', function(){
-    var neu = document.body.classList.contains('ux-sorba') ? 'bordbuch' : 'sorba';
+    var neu = document.body.classList.contains('ux-biwak') ? 'bordbuch' : 'biwak';
     setzen(neu);
     try{ localStorage.setItem(KEY, neu); }catch(e){}
     window.scrollTo(0, 0);
