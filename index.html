@@ -453,12 +453,17 @@ details.tiefer > summary:hover{color:var(--rausch-text)}
 @media (prefers-reduced-motion:reduce){.stat .fuell i{transition:none}}
 
 /* Nebenwerte und Zeitstempel in einer ruhigen Zeile */
-.live{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin:11px 2px 0;
+.live{display:grid;grid-template-columns:repeat(2,1fr);gap:7px 14px;margin:12px 2px 0;
   font-size:0.7353rem;color:var(--grey)}
-.live .w{display:inline-flex;align-items:baseline;gap:5px;white-space:nowrap}
-.live .w b{font-weight:700;color:var(--ink2);letter-spacing:-.01em}
-.live .zeit{margin-left:auto;color:var(--grey2);font-size:0.6765rem}
+.live .w{display:flex;align-items:baseline;gap:5px;min-width:0}
+.live .w b{font-weight:700;color:var(--ink2);letter-spacing:-.01em;white-space:nowrap}
+.live .zeit{grid-column:1/-1;justify-self:end;color:var(--grey2);font-size:0.6765rem;margin-top:1px}
 .live .zeit.alt{color:var(--warn-line)}
+/* Auf breiten Bildschirmen wieder eine Reihe */
+@media(min-width:620px){
+  .live{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
+  .live .zeit{margin-left:auto}
+}
 /* Temperaturen: eigene Zeile, damit sie sich nicht mit den Stromwerten mischen */
 .live.temps{margin-top:7px;padding-top:8px;border-top:1px solid var(--line2)}
 
