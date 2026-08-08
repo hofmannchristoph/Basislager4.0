@@ -23,7 +23,6 @@
    Aufrufe:
      /anlagen   listet die Anlagen des Kontos mit ihrer Kennung
      /          liefert die aktuellen Messwerte der eingestellten Anlage
-     /?alles=1  wie oben, aber ohne Vorauswahl — zum Nachsehen, was es gibt
      /frage     POST {frage, verlauf} — beantwortet eine Frage aus dem Bordbuch
    ================================================================= */
 
@@ -143,14 +142,13 @@ export default {
         zeit: r.timestamp ?? null
       })).filter(w => w.code || w.beschreibung);
 
-      if (!url.searchParams.get('alles')) {
-        /* Bewusst kein Rueckfall auf alles: sonst stuenden Seriennummern,
-           IP-Adresse und Standort im oeffentlich abrufbaren Ergebnis. */
-        werte = werte
-          .map(w => ({ ...w, name: benennen(w) }))
-          .filter(w => w.name)
-          .map(w => ({ name: w.name, wert: w.wert, roh: w.roh, zeit: w.zeit }));
-      }
+      /* Nur die benannten Werte, nie alles: sonst stuenden Seriennummern,
+         IP-Adresse und Standort im oeffentlich abrufbaren Ergebnis. Zum
+         Nachsehen neuer Kennungen die Vorauswahl voruebergehend erweitern. */
+      werte = werte
+        .map(w => ({ ...w, name: benennen(w) }))
+        .filter(w => w.name)
+        .map(w => ({ name: w.name, wert: w.wert, roh: w.roh, zeit: w.zeit }));
 
       return antwort({
         anlage: String(anlage),
