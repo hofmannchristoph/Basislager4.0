@@ -125,6 +125,74 @@ img{max-width:100%;height:auto}
 .dock button span{font-size:10.5px;font-weight:600}
 .dock button:active{color:var(--rausch-text)}
 
+
+/* ---------- Frag das Bordbuch ----------
+   Ein eigener Knopf ueber der Leiste. Bewusst mit Wort statt nur Symbol —
+   eine Sprechblase allein sagt nicht, dass man ganze Fragen stellen darf.
+   Er liegt unter den Overlays, damit er dort nicht durchscheint. */
+.fabfrage{position:fixed;z-index:46;right:max(var(--gut),env(safe-area-inset-right));
+  bottom:calc(var(--dock) + 14px);display:flex;align-items:center;gap:8px;
+  height:46px;padding:0 18px 0 15px;border:0;border-radius:99px;cursor:pointer;
+  font-family:inherit;font-size:15px;font-weight:700;letter-spacing:-.01em;
+  background:var(--rausch);color:#fff;box-shadow:var(--shx);
+  transition:transform .18s ease,opacity .18s ease}
+.fabfrage svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round}
+.fabfrage:active{transform:scale(.95)}
+.fabfrage.weg{opacity:0;pointer-events:none;transform:translateY(8px)}
+
+/* Verlauf */
+#flog{padding:18px var(--gut) 8px}
+.fq,.fa{max-width:88%;font-size:16px;line-height:1.55;margin:0 0 14px}
+.fq{margin-left:auto;background:var(--rausch);color:#fff;border-radius:18px 18px 5px 18px;
+  padding:10px 15px;font-weight:500}
+.fa{background:var(--soft);border-radius:18px 18px 18px 5px;padding:12px 15px;color:var(--ink)}
+.fa p{margin:0 0 9px}
+.fa p:last-child{margin-bottom:0}
+.fa ol,.fa ul{margin:0 0 9px;padding-left:20px}
+.fa li{margin-bottom:5px}
+.fkap{display:flex;flex-wrap:wrap;gap:7px;margin:-6px 0 15px}
+.fkap button{border:1px solid var(--line);background:var(--paper);border-radius:99px;
+  padding:6px 13px;font-family:inherit;font-size:13.5px;font-weight:600;
+  color:var(--rausch-text);cursor:pointer}
+.fkap button:active{background:var(--soft)}
+.ffehler{background:var(--warn);border:1px solid var(--warn-line);border-radius:14px;
+  padding:12px 15px;font-size:15px;line-height:1.5;margin:0 0 14px;color:var(--ink)}
+
+/* Warten */
+.fdenkt{display:flex;gap:5px;padding:15px;background:var(--soft);
+  border-radius:18px 18px 18px 5px;width:fit-content;margin:0 0 14px}
+.fdenkt i{width:7px;height:7px;border-radius:50%;background:var(--grey);
+  animation:fpuls 1.3s ease-in-out infinite}
+.fdenkt i:nth-child(2){animation-delay:.18s}
+.fdenkt i:nth-child(3){animation-delay:.36s}
+@keyframes fpuls{0%,60%,100%{opacity:.28;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+@media (prefers-reduced-motion:reduce){.fdenkt i{animation:none;opacity:.5}}
+
+/* Leerer Zustand mit Beispielen */
+.fstart{padding:6px 0 0}
+.fstart .brand{width:42px;height:42px;margin-bottom:12px}
+.fstart h3{font-size:19px;font-weight:800;letter-spacing:-.02em;margin:0 0 6px}
+.fstart .vor{font-size:15px;color:var(--grey);line-height:1.5;margin:0 0 18px}
+.fstart b{display:block;font-size:12.5px;font-weight:700;color:var(--grey);margin-bottom:10px}
+.fstart span{display:block;border:1px solid var(--line);border-radius:14px;padding:11px 15px;
+  margin-bottom:8px;font-size:15px;font-weight:500;cursor:pointer;line-height:1.4}
+.fstart span:active{background:var(--soft)}
+.fnote{font-size:12.5px;color:var(--grey2);line-height:1.5;margin:14px 0 0}
+
+/* Eingabe unten, wie in einem Sprachfenster */
+.ffoot{flex:0 0 auto;display:flex;align-items:center;gap:10px;border-top:1px solid var(--line2);
+  padding:12px max(var(--gut),env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) max(var(--gut),env(safe-area-inset-left))}
+.ffoot .sfield{flex:1}
+#finput{flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--ink);
+  font-family:inherit;font-size:16px;font-weight:500;-webkit-appearance:none;appearance:none}
+#finput::placeholder{color:var(--grey2);font-weight:400}
+.fsend{flex:0 0 auto;width:44px;height:44px;border:0;border-radius:50%;background:var(--rausch);
+  color:#fff;display:grid;place-items:center;cursor:pointer}
+.fsend:disabled{background:var(--line);color:var(--grey2);cursor:default}
+.fsend svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:2.2;
+  stroke-linecap:round;stroke-linejoin:round}
+
 /* ---------- Overlays ---------- */
 .ovl{position:fixed;left:0;right:0;top:0;height:100%;height:100dvh;z-index:70;
   background:var(--paper);display:none;flex-direction:column}
@@ -608,6 +676,17 @@ body.ux-biwak .ovlbar{border-bottom-color:rgba(255,255,255,.10);background:#0C17
 body.ux-biwak .ovltitle{color:#FFFFFF}
 body.ux-biwak .xbtn{background:rgba(255,255,255,.10);color:#FFFFFF}
 body.ux-biwak .xbtn:active{background:rgba(255,255,255,.18)}
+
+/* Frag das Bordbuch in der dunklen Ansicht */
+body.ux-biwak .fabfrage{background:linear-gradient(180deg,#2B9BFF,#0A84FF);
+  box-shadow:0 8px 26px rgba(10,132,255,.45),var(--kante)}
+body.ux-biwak .fq{background:linear-gradient(180deg,#2B9BFF,#0A84FF);color:#FFFFFF}
+body.ux-biwak .fa{background:rgba(255,255,255,.07);box-shadow:var(--kante)}
+body.ux-biwak .fkap button{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.10)}
+body.ux-biwak .fstart span{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.09)}
+body.ux-biwak .ffoot{border-top-color:rgba(255,255,255,.10);background:#0C1725}
+body.ux-biwak .fsend{background:linear-gradient(180deg,#2B9BFF,#0A84FF)}
+body.ux-biwak .fsend:disabled{background:rgba(255,255,255,.10);color:rgba(255,255,255,.30)}
 body.ux-biwak .sfield{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.14)}
 body.ux-biwak #sinput{color:#FFFFFF}
 body.ux-biwak #sinput::placeholder{color:rgba(255,255,255,.42)}
@@ -1963,6 +2042,31 @@ body.ux-biwak .uxbtn .lbl-alt{display:inline}
   <div class="ovlbody" id="tocbody"></div>
 </div>
 
+<button class="fabfrage" id="fragebtn" type="button">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-3.3-.6L3 21l1.8-5a8.2 8.2 0 0 1-.8-3.5 8.4 8.4 0 0 1 8.5-8.4 8.4 8.4 0 0 1 8.5 8.4z"/><path d="M12 8.2l.7 1.9 1.9.7-1.9.7-.7 1.9-.7-1.9-1.9-.7 1.9-.7z"/></svg>
+  <span>Fragen</span>
+</button>
+
+<div class="ovl" id="fsheet" role="dialog" aria-modal="true" aria-label="Frag das Bordbuch">
+  <div class="ovlbar">
+    <button class="xbtn" id="fclose" type="button" aria-label="Schliessen">
+      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <p class="ovltitle">Frag das Bordbuch</p>
+  </div>
+  <div class="ovlbody" id="flog" aria-live="polite"></div>
+  <form class="ffoot" id="fform" autocomplete="off">
+    <div class="sfield">
+      <input id="finput" type="text" placeholder="Frage eingeben" enterkeyhint="send"
+        autocomplete="off" autocorrect="on" autocapitalize="sentences" spellcheck="false"
+        aria-label="Deine Frage" maxlength="500">
+    </div>
+    <button class="fsend" id="fsend" type="submit" aria-label="Frage senden">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg>
+    </button>
+  </form>
+</div>
+
 <div class="ovl" id="sheet" role="dialog" aria-modal="true" aria-label="Suche">
   <div class="ovlbar">
     <button class="xbtn" id="sclose" type="button" aria-label="Schliessen">
@@ -2121,7 +2225,10 @@ function unlock(){
   document.body.style.top='';
   window.scrollTo(0,scrollY);
 }
-function anyOpen(){return toc.classList.contains('open')||sheet.classList.contains('open');}
+var fsheet=document.getElementById('fsheet');
+var fabfrage=document.getElementById('fragebtn');
+function anyOpen(){return toc.classList.contains('open')||sheet.classList.contains('open')||
+  (fsheet&&fsheet.classList.contains('open'));}
 
 /* Inhaltsverzeichnis */
 tocBody.innerHTML=GROUPS.map(function(g){
@@ -2148,6 +2255,161 @@ tocBody.addEventListener('click',function(ev){
     if(el){ if(window.__aufklappen) window.__aufklappen(el); el.scrollIntoView({behavior:'smooth',block:'start'}); }
   },60);
 });
+
+/* ---------- Frag das Bordbuch ----------
+   Ein Zusatz, kein Ersatz. Die Stichwortsuche liegt im Geraet und
+   funktioniert ohne Empfang weiter; dieses Fenster braucht Netz, kann
+   dafuer ganze Fragen beantworten und die Livewerte einbeziehen.
+   Der Zwischendienst haelt den Schluessel und liest das veroeffentlichte
+   Bordbuch selbst — die Antwort stammt also immer aus dem, was hier steht. */
+(function(){
+  var DIENST='https://basislager-vrm.ch-hofmann.workers.dev/frage';
+  var flog=document.getElementById('flog');
+  var fform=document.getElementById('fform');
+  var finput=document.getElementById('finput');
+  var fsend=document.getElementById('fsend');
+  if(!fsheet||!flog||!fabfrage) return;
+
+  var verlauf=[];      /* was bisher gefragt und geantwortet wurde */
+  var laeuft=false;
+
+  var BEISPIELE=[
+    'Wie lange muss der Kühlschrank laufen, bevor ich einräume?',
+    'Was muss ich vor dem Ausfahren der Hubstützen beachten?',
+    'Reicht mein Frischwasser noch für zwei Tage?',
+    'Wie wechsle ich den Folienliner der Toilette?'
+  ];
+
+  function start(){
+    flog.innerHTML='<div class="fstart">'+
+      '<div class="brand" role="img" aria-label="Basislager 4.0"></div>'+
+      '<h3>Frag das Bordbuch</h3>'+
+      '<p class="vor">Stell eine ganze Frage, so wie du sie einem Menschen stellen würdest. '+
+      'Die Antwort kommt aus diesem Bordbuch und bezieht die aktuellen Werte der Anlage ein.</p>'+
+      '<b>Zum Beispiel</b>'+
+      BEISPIELE.map(function(b){return '<span>'+esc(b)+'</span>';}).join('')+
+      '<p class="fnote">Braucht Empfang. Ohne Netz hilft die Suche weiter — die liegt im Gerät.</p>'+
+      '</div>';
+  }
+
+  function oeffne(){
+    merkeAusloeser(); lock(); stillegen(true);
+    fsheet.classList.add('open');
+    if(!verlauf.length) start();
+    setTimeout(function(){finput.focus();},30);
+  }
+  function schliesse(){
+    fsheet.classList.remove('open'); finput.blur();
+    stillegen(false); unlock(); fokusZurueck();
+  }
+  window.__frageZu=schliesse;
+
+  function runter(){ flog.scrollTop=flog.scrollHeight; }
+
+  /* Die Antwort kommt als schlichter Text. Nur das Noetigste umsetzen:
+     Absaetze, Listen, Fettes. Alles andere bleibt Text. */
+  function inline(t){
+    return esc(t).replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>');
+  }
+  function alsHtml(t){
+    var raus=[], liste=null;
+    String(t).split('\n').forEach(function(z){
+      z=z.trim();
+      if(!z){ if(liste){raus.push('</'+liste+'>');liste=null;} return; }
+      var num=z.match(/^(\d+)[.)]\s+(.*)$/), pkt=z.match(/^[-•*]\s+(.*)$/);
+      if(num||pkt){
+        var art=num?'ol':'ul';
+        if(liste!==art){ if(liste) raus.push('</'+liste+'>'); raus.push('<'+art+'>'); liste=art; }
+        raus.push('<li>'+inline(num?num[2]:pkt[1])+'</li>');
+        return;
+      }
+      if(liste){ raus.push('</'+liste+'>'); liste=null; }
+      raus.push('<p>'+inline(z)+'</p>');
+    });
+    if(liste) raus.push('</'+liste+'>');
+    return raus.join('');
+  }
+
+  function zeige(text, kapitel){
+    flog.insertAdjacentHTML('beforeend','<div class="fa">'+alsHtml(text)+'</div>');
+    var chips=(kapitel||[]).map(function(id){
+      var sek=document.getElementById(id);
+      if(!sek||sek.tagName!=='SECTION') return '';
+      var h=sek.querySelector('h2');
+      return '<button type="button" data-go="'+esc(id)+'">'+esc(h?tidy(h.textContent):id)+'</button>';
+    }).filter(Boolean).join('');
+    if(chips) flog.insertAdjacentHTML('beforeend','<div class="fkap">'+chips+'</div>');
+  }
+
+  function fehler(m){
+    flog.insertAdjacentHTML('beforeend','<p class="ffehler">'+esc(m)+
+      '<br><br>Die <b>Suche</b> braucht kein Netz und findet dieselben Inhalte.</p>');
+  }
+
+  function abschicken(frage){
+    frage=(frage||'').trim();
+    if(!frage||laeuft) return;
+    if(flog.querySelector('.fstart')) flog.innerHTML='';
+    laeuft=true; fsend.disabled=true; finput.value='';
+
+    flog.insertAdjacentHTML('beforeend','<p class="fq">'+esc(frage)+'</p>');
+    flog.insertAdjacentHTML('beforeend','<div class="fdenkt" id="fdenkt"><i></i><i></i><i></i></div>');
+    runter();
+
+    var abbruch=new AbortController();
+    var uhr=setTimeout(function(){abbruch.abort();},30000);
+
+    fetch(DIENST,{
+      method:'POST', signal:abbruch.signal,
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({frage:frage, verlauf:verlauf.slice(-6)})
+    })
+    .then(function(r){
+      return r.json().catch(function(){return {};}).then(function(d){ return {ok:r.ok, d:d}; });
+    })
+    .then(function(x){
+      var d=x.d||{};
+      if(!x.ok||d.fehler||!d.antwort) throw new Error(d.fehler||'Der Assistent hat nicht geantwortet.');
+      verlauf.push({rolle:'du', text:frage});
+      verlauf.push({rolle:'ich', text:d.antwort});
+      var w=document.getElementById('fdenkt'); if(w) w.remove();
+      zeige(d.antwort, d.kapitel);
+    })
+    .catch(function(e){
+      var w=document.getElementById('fdenkt'); if(w) w.remove();
+      fehler(e && e.name==='AbortError'
+        ? 'Das hat zu lange gedauert — vermutlich ist der Empfang zu schwach.'
+        : (navigator.onLine===false ? 'Kein Empfang.' : String((e&&e.message)||e)));
+    })
+    .then(function(){
+      clearTimeout(uhr); laeuft=false; fsend.disabled=false; runter();
+    });
+  }
+
+  fabfrage.addEventListener('click', oeffne);
+  document.getElementById('fclose').addEventListener('click', schliesse);
+  fform.addEventListener('submit', function(e){ e.preventDefault(); abschicken(finput.value); });
+
+  flog.addEventListener('click', function(ev){
+    if(!ev.target.closest) return;
+    var b=ev.target.closest('.fstart span');
+    if(b){ abschicken(b.textContent); return; }
+    var k=ev.target.closest('.fkap button');
+    if(k){
+      var id=k.getAttribute('data-go');
+      schliesse();
+      setTimeout(function(){
+        var el=document.getElementById(id);
+        if(el){ if(window.__aufklappen) window.__aufklappen(el);
+                el.scrollIntoView({behavior:'smooth',block:'start'}); }
+      },60);
+    }
+  });
+
+  document.addEventListener('keydown', function(e){
+    if(e.key==='Escape' && fsheet.classList.contains('open')) schliesse();
+  });
+})();
 
 /* ---------- Suche ---------- */
 function norm(s){
@@ -2288,13 +2550,15 @@ out.addEventListener('click',function(ev){
    Hintergrund wird stillgelegt, beim Schliessen kehrt er zum Ausloeser
    zurueck. Sonst tippt man bei Tastaturbedienung hinter das Overlay. */
 var ausloeser=null;
-var hintergrund=[document.querySelector('.wrap'), document.querySelector('.dock')];
+var hintergrund=[document.querySelector('.wrap'), document.querySelector('.dock'), fabfrage];
 function stillegen(an){
   hintergrund.forEach(function(el){
     if(!el) return;
     if(an){el.setAttribute('inert','');el.setAttribute('aria-hidden','true');}
     else {el.removeAttribute('inert');el.removeAttribute('aria-hidden');}
   });
+  /* Der Frageknopf schwebt ueber allem — bei offenem Fenster muss er weg. */
+  if(fabfrage) fabfrage.classList.toggle('weg', !!an);
 }
 function merkeAusloeser(){
   var a=document.activeElement;
@@ -2330,7 +2594,7 @@ document.getElementById('sclose').addEventListener('click',closeSearch);
 document.getElementById('tocbtn').addEventListener('click',openToc);
 document.getElementById('tocclose').addEventListener('click',closeToc);
 document.getElementById('topbtn').addEventListener('click',function(){
-  if(anyOpen()){closeToc();closeSearch();}
+  if(anyOpen()){closeToc();closeSearch();if(window.__frageZu) window.__frageZu();}
   window.scrollTo({top:0,behavior:'smooth'});
 });
 input.addEventListener('input',function(){window.requestAnimationFrame(run);});
