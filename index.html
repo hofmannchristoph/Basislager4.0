@@ -642,6 +642,7 @@ footer b{color:var(--ink)}
     <li>Spülenabdeckung in die Aussparung unter dem Becken, Küchenauszüge mit dem silbernen Hebel verriegeln.</li>
     <li>Hängeschränke zu, Polster und Kissen verstaut.</li>
     <li>Clesana-Schublade leeren.</li>
+    <li>Abflussstopfen in Spüle, Waschbecken und Dusche einsetzen.</li>
     <li>Klappe zu den Bedienelementen schliessen.</li>
     <li>Wechselrichter aus, wenn unterwegs kein 230 V gebraucht wird.</li>
     <li>Hubbett hochgefahren, beide Deckengurte eingehängt, Leseleuchten dort aus.</li>
@@ -828,6 +829,14 @@ footer b{color:var(--ink)}
     <span class="chip"><s>Nicht gleichzeitig</s>Klimaanlage und Kaffeemaschine</span>
   </div>
 
+  <h3>Landstrom anschliessen</h3>
+  <ul class="ticks">
+    <li>Kabel <b>ganz von der Trommel abrollen</b> — aufgerollt wird es gefährlich heiss. Höchstens 25 m, mindestens 2,5 mm².</li>
+    <li>Zuerst am Fahrzeug einstecken und das Kabel verlegen, zuletzt an der Säule. Beim Abbau umgekehrt: zuerst die Säule.</li>
+    <li>Lösen an der Fahrzeugdose (Fahrerseite): blauen Sicherungshebel drücken und mit Gegendruck aufs Gehäuse ziehen.</li>
+    <li>Zündung an bei noch gestecktem Kabel gibt einen Warnton — den ernst nehmen, eine automatische Trennung gibt es nicht.</li>
+  </ul>
+
   </details>
 </section>
 
@@ -928,9 +937,12 @@ footer b{color:var(--ink)}
     <h3>Schutz der Anlage</h3>
     <ul class="ticks">
       <li><b>Reihenfolge beim Entleeren:</b> zuerst Pumpe am Zentralpanel aus, dann alle Hähne auf Mittelstellung öffnen, erst dann die Ablassventile. Sonst drückt der Leitungsdruck die Dichtung aus dem Ventil — es tropft danach für immer.</li>
-      <li>Der Frostwächter öffnet von selbst bei etwa +3 °C — <b>und auch, wenn die Batterie abgeklemmt wird</b>. Nach Arbeiten an der Elektrik deshalb prüfen, ob der Boiler noch voll ist.</li>
+      <li><b>Es gibt keinen automatischen Frostablass.</b> Bei Frostgefahr ohne laufende Heizung das Wasser von Hand ablassen — gelber Hebel im Anschlussraum auf der Fahrerseite.</li>
       <li>Die Pumpe verträgt rund 15 Minuten Dauerbetrieb. Springt sie an, ohne dass jemand Wasser zapft, ist etwas undicht.</li>
-      <li>Dichtheitstest: Hähne kurz öffnen und schliessen, Pumpe ausschalten, eine Stunde warten, Pumpe wieder ein — läuft sie länger als fünf Sekunden ohne Zapfen, verliert das System Wasser.</li>
+      <li>Dichtheitstest: Hähne kurz öffnen und schliessen, Pumpe ausschalten, eine Stunde warten, Pumpe wieder ein — läuft sie länger als fünf Sekunden ohne Zapfen, verliert das System Wasser. Ein kurzes Anspringen ist normal.</li>
+      <li>Kein kochendes Wasser in den Abfluss — die Rohre vertragen nur 80 °C. Und ein übervoller Abwassertank kann während der Fahrt in Dusche und Spüle zurücksteigen.</li>
+      <li>Beim Tanken meldet sich das Zentralpanel: ein Ton bei 75 %, zwei bei 85 %, ein langer bei 95 % — beim ersten Ton den Zulauf drosseln.</li>
+      <li>Vor der Fahrt die Abflussstopfen in Spüle, Waschbecken und Dusche einsetzen — sonst schwappen die Siphons leer und es riecht.</li>
     </ul>
   
   <p class="vfall"><a href="anleitungen/original/NB-08-Wasser-Sanitaer.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>Original: Wasser &amp; Sanitär</a><small>Das Werks-Kapitel mit allen Abbildungen. Braucht Empfang.</small></p>
@@ -1175,12 +1187,24 @@ footer b{color:var(--ink)}
   </div>
 
   
+  <h3>Meldungen am Panel</h3>
+  <div class="rows">
+    <div class="r"><span class="lab">Gasausfall</span><span class="val">Heizung aus, 30 Sekunden warten, Gasflamme neu antippen</span></div>
+    <div class="r"><span class="lab">Ventilatorausfall</span><span class="val">stellt sich nach 5 Minuten selbst zurück — erst bei Wiederholung in die Werkstatt</span></div>
+    <div class="r"><span class="lab">Überhitzung</span><span class="val">den 12-V-Steckkontakt im Anschlussfach am Aggregat (Sofakasten) ziehen, kurz warten, wieder einstecken. Die Panel-Programmierung geht dabei verloren</span></div>
+    <div class="r"><span class="lab">Fenster offen</span><span class="val"><b>ignorieren</b> — ein Fensterkontakt ist bei uns gar nicht verbaut</span></div>
+    <div class="r"><span class="lab">Nach Datenverlust</span><span class="val">stellt sich die Alde auf Gas, 22 °C und 1 kW — Uhr und Automatiken neu setzen</span></div>
+  </div>
+
   <h3>Wenn die Heizung nicht richtig warm wird</h3>
   <ul class="ticks">
     <li>Glykolstand prüfen: kalt rund 1 cm über MIN am Ausgleichsbehälter im Kleiderschrank. Unter MIN fördert die Pumpe nicht.</li>
     <li>Nach jeder längeren Standzeit gehört das System entlüftet — Umwälzpumpe aus, das höchste Lüftungsventil (Küchenhängeschrank) zuerst, auch das Ventil am Wärmetauscher einbeziehen. Werden die Heizkörper nur nahe am Gerät warm, ist Luft im System.</li>
     <li>Sinkt die Bordspannung unter 10,5 Volt, schaltet die Heizung ab und startet über 11 Volt von selbst wieder.</li>
     <li>Wird das Zentralpanel am Hauptschalter ausgeschaltet, gehen Uhr und Automatik-Programmierung der Alde verloren.</li>
+    <li><b>Kein Warmwasser?</b> Fast immer eine von zwei Ursachen: Die Nachtautomatik ist aktiv (sie sperrt die Temperatur- und Warmwasser-Felder — sie erscheinen grau), oder die Umwälzpumpe steht auf Dauerbetrieb — zurück auf «Therm» stellen.</li>
+    <li>Den Temperaturfühler im Menü auf «Auto» lassen — die Einstellung «Paneel» misst hinter der Klappe und heizt falsch.</li>
+    <li>Der Lageplan der neun Entlüftungsventile steht im Original: <a class="xref" href="anleitungen/original/NB-09-Heizung.pdf#page=113" target="_blank" rel="noopener">Seite 113</a>, die Zugriffs-Fotos ab <a class="xref" href="anleitungen/original/NB-09-Heizung.pdf#page=115" target="_blank" rel="noopener">Seite 115</a>.</li>
   </ul>
 
   <h3>Hauptmenü</h3>
@@ -1285,6 +1309,12 @@ footer b{color:var(--ink)}
     <span class="t"><svg viewBox="0 0 24 24"><path d="M12 16v-4M12 8h.01"/><circle cx="12" cy="12" r="9"/></svg>Vor dem Kochen</span>
     <p>Der Gashahn für das Kochfeld muss offen sein. Alle Haupthähne liegen im Schrank unter der Spüle, mehr dazu im Bereich Gas.</p>
   </div>
+
+  <ul class="ticks">
+    <li>Zündet ein Brenner nach 15 Sekunden nicht: abbrechen und <b>eine Minute warten</b> — sonst Verpuffungsgefahr. Dasselbe gilt, wenn eine Flamme erlischt.</li>
+    <li>Piezo-Zündung tot? Mit Streichholz oder Stabfeuerzeug von Hand zünden — und die <a class="xref" href="#sicherungen">Sicherung</a> auf Platz 13 prüfen.</li>
+    <li>Die Glasabdeckung erst schliessen, wenn die Brenner kalt sind.</li>
+  </ul>
 
   <div class="vids">
       <article class="vid">
@@ -1392,6 +1422,32 @@ footer b{color:var(--ink)}
 <section id="wohnen" data-keys="wohnen schlafen bett stauraum kleiderschrank sitzecke tisch hubbett kindersicherung dachfenster kurbel fahrersitz drehen sitzheizung gurt treppe matratze gaeste kinder platz umbauen">
   <h2 aria-level="3">Wohnen &amp; Schlafen</h2>
   <p class="lede">Stauraum, Sitzecke, Hubbett, Dachfenster und die drehbaren Fahrerhaussitze.</p>
+  <details class="tiefer">
+    <summary>Fenster, Türen &amp; Kleinigkeiten<span class="zahl">mehr</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+    <h3>Fenster und Rollos</h3>
+    <ul class="ticks">
+      <li>Beim Aufstellfenster den <b>roten Sicherungsknopf immer ganz eindrücken</b>, sonst geht er kaputt. Zum Schliessen das Fenster erst über den obersten Rastpunkt anheben — nie gegen den Widerstand zuziehen.</li>
+      <li>Verdunkelung bei praller Sonne höchstens zwei Drittel schliessen — der Hitzestau wölbt sonst das Acrylglas.</li>
+      <li>Insektenschutzrollos nie zurückschnellen lassen, immer mit der Hand führen. Die Insektenschutztür der Eingangstür nur ganz auf oder ganz zu.</li>
+      <li>Fahrerhaus-Schiebefenster: Der Schnappverschluss muss hörbar einrasten, sonst lässt es sich von aussen aufschieben.</li>
+      <li>Beschlag <b>zwischen</b> den Acrylscheiben ist normal und verschwindet von selbst — die kleinen Stopfen an der Innenscheibe nie entfernen.</li>
+      <li>Den Frontrollladen im Stand nie ganz schliessen — der Hitzestau dahinter kann das Armaturenbrett verformen. Immer einen Spalt lassen.</li>
+    </ul>
+
+    <h3>Tür und Licht</h3>
+    <ul class="ticks">
+      <li>Von innen abschliessen ohne Schlüssel: den Schnäpper in der Mulde des Schlossmoduls drücken. Der Zug am Griff öffnet trotzdem immer.</li>
+      <li>Die festgestellte Tür zum Lösen <b>am Türrahmen auf Höhe des Feststellers</b> ziehen — nie am Griff, das reisst die Verkleidung aus.</li>
+      <li>Hubbett-Leseleuchten tot? Der Doppellampen-Taster an der Fahrerhaus-Konsole schaltet beide ab — dort wieder einschalten, erst dann reagiert der Knopf an der Lampe.</li>
+    </ul>
+
+    <h3>Gut zu wissen</h3>
+    <ul class="ticks">
+      <li>Beschlagene Frontscheibe: mittlere Lüftungsdüsen schliessen, Gebläse voll aufdrehen — die ganze Luft geht auf die Scheibe.</li>
+      <li>Die fest eingebaute Zwangsbelüftung im Dach nie abdecken oder zustellen — sie schützt vor Abgasen und Erstickung.</li>
+    </ul>
+  </details>
+
   <div class="vids">
       <article class="vid">
         <div class="player" data-embed="https://alugha.com/embed/web-player?v=5facea80-ef97-11eb-9a5a-b7b059913b89">
@@ -1740,7 +1796,10 @@ footer b{color:var(--ink)}
     <ul class="ticks">
       <li><b>Am Berg nie mit dem Gaspedal halten</b> — die Comfort-Matic hat eine Trockenkupplung, sie überhitzt dabei. Handbremse benutzen.</li>
       <li><b>Es gibt keinen Warnton</b>, wenn man den Fahrerplatz mit eingelegtem Gang verlässt. Vor dem Aussteigen auf N schalten oder Motor aus.</li>
-      <li>Die Bergabfahrhilfe (Taste an der Schalterkonsole) hält das Tempo zwischen 4 und 25 km/h — sie ersetzt die Motorbremse nicht.</li>
+      <li><b>Tempomat an Steigungen ausschalten:</b> Mit aktivem Tempomat schaltet die Comfort-Matic am Berg nicht zurück, sondern in den Leerlauf. Passiert es: Schalthebel auf Minus drücken.</li>
+      <li>Meldung «Kupplungstemperatur»: sofort anhalten und abkühlen lassen. Voll beladen liegt die Grenze bei rund 10 % Steigung.</li>
+      <li>Die Bergabfahrhilfe (Taste an der Schalterkonsole) hält das Tempo zwischen 4 und 25 km/h — über 50 km/h schaltet sie ganz ab und muss neu aktiviert werden. Sie ersetzt die Motorbremse nicht.</li>
+      <li>Schneeketten: nur auf die Vorderachse und nur auf Stahlfelgen, höchstens 50 km/h, nach wenigen Metern nachspannen.</li>
       <li>Über 3,5 Tonnen gelten Lastwagen-Regeln: in Deutschland ausserorts 80, Autobahn 100 km/h, Lkw-Überholverbote gelten mit.</li>
       <li>Auf Fähre und Autozug immer <b>vorwärts</b> verladen — Fahrtwind reisst sonst Klappen und Dachhauben auf.</li>
     </ul>
@@ -1818,6 +1877,28 @@ footer b{color:var(--ink)}
     <div class="r"><span class="lab">Gasheizung</span><span class="val">Zentralpanel, Taste ganz rechts</span></div>
   </div>
 
+  <details class="tiefer">
+    <summary>Unterwegs mit Gas<span class="zahl">mehr</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+    <h3>Während der Fahrt</h3>
+    <p>Heizen mit der Alde ist dank dem Crash-Sensor-Regler europaweit erlaubt. Der Herd bleibt aus und sein Ventil zu. <b>Alles aus und Flaschenventile zu</b> gilt an der Tankstelle (auf dem ganzen Gelände), auf der Fähre, im Tunnel, im Parkhaus und auf dem Autozug.</p>
+
+    <h3>Beim Flaschenwechsel</h3>
+    <ul class="ticks">
+      <li>Schwarzen Dichtring am Anschluss prüfen — ohne Dichtring nie anschliessen.</li>
+      <li>Flaschenventil ganz aufdrehen, dann eine Vierteldrehung zurück — so klemmt es nie fest.</li>
+      <li>Danach Lecksuchspray auf die Verschraubung. Undichte Stellen nie mit einer Flamme suchen.</li>
+      <li>Der grüne Knopf an der DuoControl muss auch nach jedem geschlossenen Flaschenventil neu gedrückt werden — nicht nur nach einer Erschütterung.</li>
+    </ul>
+
+    <h3>Im Ausland</h3>
+    <ul class="ticks">
+      <li>Flaschen nie an LPG-Zapfsäulen füllen lassen — nur nach Gewicht beim Gashändler. Das Adapter-Set gehört ins Fahrzeug.</li>
+      <li>Südländisches Gas enthält viel Butan: Es verdampft bei Kälte schlecht und verrusst mit der Zeit die Brenner.</li>
+      <li>Auch leere Flaschen immer zudrehen.</li>
+    </ul>
+    <p class="vnote">Faustregel für die Reserve: Die Heizung braucht rund 170 g pro Stunde — eine 11-kg-Flasche hält damit 2,5 bis 3 Tage Dauerheizen.</p>
+  </details>
+
   <div class="vids">
       <article class="vid">
         <div class="player" data-embed="https://alugha.com/embed/web-player?v=56f69d10-efaf-11eb-8e4b-93333b5761b3">
@@ -1883,10 +1964,20 @@ footer b{color:var(--ink)}
     <p>Die Notkurbel sitzt oben neben dem Hubbett auf der Fahrerseite am Gelenkbolzen. Vorher die 7,5-A-Sicherung an der Konsole unter dem Armaturenbrett prüfen (Platz 6).</p>
 
     <h3>Küchen- oder Bettkasten-Verriegelung öffnet nicht</h3>
-    <p>Küche: die Notschnur hinter der Sitzbank der Sitzgruppe ziehen. Bettkasten: durch die Öffnung in der Holzverkleidung von der Garage aus die Schubstange hochdrücken.</p>
+    <p>Zuerst 30 bis 40 Sekunden warten — die Taster sind über eine selbstheilende Sicherung geschützt, die sich von allein zurückstellt. Danach: Küche über die Notschnur hinter der Sitzbank, Bettkasten durch die Öffnung in der Holzverkleidung von der Garage aus (Schubstange hochdrücken).</p>
 
     <h3>Kein Gas nach Fahrt oder Erschütterung</h3>
     <p>Die DuoControl hat einen Crash-Sensor: den <b>grünen Knopf</b> am Regler drücken, dann kommt das Gas wieder. Nach jedem Flaschenwechsel zuerst kurz den Herd zünden — das treibt die Luft aus der Leitung, danach startet auch die Heizung.</p>
+
+    <h3>Für den Pannendienst</h3>
+    <div class="rows">
+      <div class="r"><span class="lab">Radmuttern</span><span class="val">180 Nm, über Kreuz — nach 50 km nachziehen lassen</span></div>
+      <div class="r"><span class="lab">Fahrgestellnummer</span><span class="val">vorderer Radkasten Beifahrerseite, Blick durch die seitliche Öffnung der Gaskasten-Verkleidung. Das Typschild klebt an der Wand im Einstieg</span></div>
+      <div class="r"><span class="lab">Abblendlicht</span><span class="val">H7, vom Motorraum aus selbst wechselbar — eine Ersatzlampe gehört an Bord. Die rote Leuchte links neben dem Lenkrad meldet den Ausfall</span></div>
+    </div>
+
+    <h3>Brand</h3>
+    <p>Alle raus und mindestens 50 Meter Abstand. Wenn gefahrlos möglich: Landstrom trennen und die Flaschenventile im Gaskasten schliessen — erst dann löschen.</p>
 
     <h3>Notausstiege</h3>
     <p>Die mit einem Aufkleber gekennzeichneten Aufbaufenster sind die Notausstiege — gut zu wissen, bevor man es wissen muss. Gästen beim ersten Rundgang zeigen.</p>
@@ -1917,6 +2008,7 @@ footer b{color:var(--ink)}
     <div class="r"><span class="lab">Breite mit Aussenspiegeln</span><span class="val"><b>2,74 m</b> — die Zahl für Engstellen und Fähren</span></div>
     <div class="r"><span class="lab">Wendekreis</span><span class="val">rund 17,3 m</span></div>
     <div class="r"><span class="lab">Reifengrösse</span><span class="val">225/75 R16 CP</span></div>
+    <div class="r"><span class="lab">Reifendruck, Werksangabe</span><span class="val">vorne 5,5 bar, hinten 3,8 bar — kalt gemessen, gilt für die Serienlast. Nach der Auflastung sicherheitshalber achsweise wiegen und den Druck vom Reifenhersteller bestätigen lassen</span></div>
     <div class="r"><span class="lab">Heckgarage, Öffnung</span><span class="val">92,5 cm breit, 113 cm hoch</span></div>
     <div class="r"><span class="lab">Heckgarage, innen</span><span class="val">217,5 × 140 cm, rund 125 cm hoch</span></div>
     <div class="r"><span class="lab">Überhang</span><span class="val">vorne 1,02 m, hinten 2,44 m — der lange Hintern schwenkt beim Rangieren weit aus</span></div>
@@ -1952,7 +2044,7 @@ footer b{color:var(--ink)}
     <div class="r"><span class="lab">Versicherung</span><span class="val">Schweizerische Mobiliar</span></div>
   </div>
 
-  <p class="vnote">Noch nachzutragen: Reifendruck vorne und hinten, Policennummer, Pannennummer und Fahrgestellnummer.</p>
+  <p class="vnote">Noch nachzutragen: Policennummer, Pannennummer und Fahrgestellnummer — wo die am Fahrzeug steht, sagt <a class="xref" href="#panne">Panne &amp; Notfall</a>.</p>
 
   <p class="vfall"><a href="anleitungen/original/NB-11-Technische-Daten.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>Original: Technische Daten</a><small>Alle Werksdaten des 88 LE — weitere Kapitel unter <a class="xref" href="#originale">Original-Unterlagen</a>.</small></p>
 </section>
@@ -1965,35 +2057,35 @@ footer b{color:var(--ink)}
   <div class="tiles">
     <a class="tile dok" href="anleitungen/original/NB-03-Fahrzeug.pdf" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
-      <span class="tx"><b>Fahrzeug</b><span>Chassis, Fahren, Sitze, Räder und Reifen, Tanken, Starthilfe, Pflege aussen · 124 Seiten, 20 MB</span></span>
+      <span class="tx"><b>Fahrzeug</b><span>Chassis &amp; Fahren: Comfort-Matic, Reifen, Radwechsel, Beladen · 124 Seiten, 20 MB</span></span>
     </a>
     <a class="tile dok" href="anleitungen/original/NB-04-Aufbau-Einrichtung.pdf" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
-      <span class="tx"><b>Aufbau &amp; Einrichtung</b><span>Türen, Fenster, Rollos, Hubbett, Sitzgruppen, Stauräume, Pflege innen · 112 Seiten, 16 MB</span></span>
+      <span class="tx"><b>Aufbau &amp; Einrichtung</b><span>Türen, Fenster, Dachluken, Sitzgruppe, Stauräume, Hubbett · 112 Seiten, 16 MB</span></span>
     </a>
     <a class="tile dok" href="anleitungen/original/NB-06-Elektrik.pdf" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
-      <span class="tx"><b>Elektrik</b><span>Bordnetz, Zentralpanel, Relaisbox und Sicherungen, Beleuchtung, Einstiegstufe · 122 Seiten, 17 MB</span></span>
+      <span class="tx"><b>Elektrik</b><span>Bordnetz, Panels, Sicherungen, Beleuchtung, Stufe, Rollladen · 122 Seiten, 17 MB</span></span>
     </a>
     <a class="tile dok" href="anleitungen/original/NB-08-Wasser-Sanitaer.pdf" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
-      <span class="tx"><b>Wasser &amp; Sanitär</b><span>Tanks, Pumpe, Ventile, Boiler und das ehemalige Cassetten-WC · 68 Seiten, 10 MB</span></span>
+      <span class="tx"><b>Wasser &amp; Sanitär</b><span>Tanks, Pumpe, Ventile, Siphons, Boiler und das alte WC · 68 Seiten, 10 MB</span></span>
     </a>
     <a class="tile dok" href="anleitungen/original/NB-09-Heizung.pdf" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
-      <span class="tx"><b>Heizung</b><span>Serienheizung und die verbaute Alde-Warmwasserheizung, Winterbetrieb · 122 Seiten, 17 MB</span></span>
+      <span class="tx"><b>Heizung</b><span>Serien-Truma und die verbaute Alde: Panel, Entlüften, Störungen · 122 Seiten, 17 MB</span></span>
     </a>
     <a class="tile dok" href="anleitungen/original/NB-07-Gas.pdf" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
-      <span class="tx"><b>Gas</b><span>Flaschen, Regler, Ventile, Sicherheit · 18 Seiten, 3 MB</span></span>
+      <span class="tx"><b>Gas</b><span>Flaschen, Regler, Fahrt-Regeln, Ausland-Adapter · 18 Seiten, 3 MB</span></span>
     </a>
     <a class="tile dok" href="anleitungen/original/NB-05-Kuechengeraete.pdf" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
-      <span class="tx"><b>Küchengeräte</b><span>Gasherd und die ursprünglichen Kühlgeräte · 36 Seiten, 6 MB</span></span>
+      <span class="tx"><b>Küchengeräte</b><span>Gasherd und die früheren Kühlgeräte · 36 Seiten, 6 MB</span></span>
     </a>
     <a class="tile dok" href="anleitungen/original/NB-02-Checklisten-Notrufe.pdf" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
-      <span class="tx"><b>Checklisten &amp; Notrufe</b><span>Listen vor Reise und Stilllegung, Wartungsfristen, Störfallsuche · 30 Seiten, 5 MB</span></span>
+      <span class="tx"><b>Checklisten &amp; Notrufe</b><span>Notrufe, Original-Checklisten und Störfallsuche · 30 Seiten, 5 MB</span></span>
     </a>
     <a class="tile dok" href="anleitungen/original/NB-10-Winter-Stilllegung.pdf" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
@@ -2001,15 +2093,15 @@ footer b{color:var(--ink)}
     </a>
     <a class="tile dok" href="anleitungen/original/NB-11-Technische-Daten.pdf" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
-      <span class="tx"><b>Technische Daten</b><span>Alle Aufbautypen mit Massen und Gewichten, Prüfdaten, Aufkleber · 76 Seiten, 10 MB</span></span>
+      <span class="tx"><b>Technische Daten</b><span>Alle Werksdaten: Reifendruck, Drehmomente, Aufkleber · 76 Seiten, 10 MB</span></span>
     </a>
     <a class="tile dok" href="anleitungen/original/NB-01-Einfuehrung.pdf" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
-      <span class="tx"><b>Einführung &amp; Übergabe</b><span>Vorwort, Garantie, Vertriebspartner · 34 Seiten, 4 MB</span></span>
+      <span class="tx"><b>Einführung &amp; Übergabe</b><span>Vorwort, Symbol-Legende und Händlerverzeichnis 2015 · 34 Seiten, 4 MB</span></span>
     </a>
     <a class="tile dok" href="anleitungen/original/NB-12-Symbole.pdf" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
-      <span class="tx"><b>Symbole &amp; Kurzübersicht</b><span>Zeichenerklärung und Bedien-Piktogramme · 24 Seiten, 4 MB</span></span>
+      <span class="tx"><b>Symbole &amp; Kurzübersicht</b><span>Symbol-Legende aller Panels und der Gesamtindex · 24 Seiten, 4 MB</span></span>
     </a>
   </div>
 </section>
