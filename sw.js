@@ -3,7 +3,7 @@
    vollstaendig lesbar bleibt. Die Videos liegen bei alugha und YouTube
    und brauchen weiterhin Internet — sie werden bewusst nicht gecacht. */
 
-var CACHE = 'bordbuch-v26';
+var CACHE = 'bordbuch-v27';
 var DATEIEN = [
   'index.html',
   'manifest.webmanifest',
@@ -44,9 +44,9 @@ self.addEventListener('fetch', function(e){
   var url = new URL(req.url);
   if(url.origin !== location.origin) return;   // alugha, YouTube: direkt durchlassen
 
-  /* Das Original-Bordbuch (26 MB) bewusst nie in den Geraetespeicher:
-     es wuerde jede Installation aufblasen. Immer direkt aus dem Netz. */
-  if(url.pathname.indexOf('NB-Arto-Original-Bordbuch') >= 0) return;
+  /* Die Original-Unterlagen (12 Kapitel, zusammen ueber 100 MB) bewusst
+     nie in den Geraetespeicher — immer direkt aus dem Netz. */
+  if(url.pathname.indexOf('/anleitungen/original/') >= 0) return;
 
   /* Aus dem Speicher anzeigen, im Hintergrund auffrischen.
      So ist die Seite sofort da und eine neue Fassung kommt beim naechsten

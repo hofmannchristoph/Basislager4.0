@@ -488,6 +488,9 @@ ol.steps li.erledigt::before{content:"✓";background:var(--ok);font-size:0.8824
 .tile svg{width:22px;height:22px;stroke:var(--rausch-text);fill:none;stroke-width:1.9;
   stroke-linecap:round;stroke-linejoin:round}
 .tile b{font-size:0.8824rem;font-weight:700;letter-spacing:-.02em;line-height:1.25}
+.tile.dok{flex-direction:row;align-items:flex-start;gap:13px}
+.tile.dok svg{flex:0 0 22px;margin-top:1px}
+.tile.dok .tx{display:flex;flex-direction:column;gap:3px;min-width:0}
 .tile span{font-size:0.7353rem;color:var(--grey);line-height:1.35}
 
 .flash{animation:fl 1.8s ease-out 1}
@@ -1931,7 +1934,64 @@ footer b{color:var(--ink)}
 
   <p class="vnote">Noch nachzutragen: Reifendruck vorne und hinten, Policennummer, Pannennummer und Fahrgestellnummer.</p>
 
-  <p class="vfall"><a href="anleitungen/NB-Arto-Original-Bordbuch.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>Original-Bordbuch von Niesmann+Bischoff</a><small>541 Seiten, 14. Auflage, deutsch — das vollständige Werk zu Fahrzeug und Aufbau. Mit 26 MB bewusst nicht im Offline-Speicher: zum Öffnen braucht es Empfang.</small></p>
+  <p class="vfall"><a href="#originale"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>Original-Unterlagen von Niesmann+Bischoff</a><small>Das komplette Werks-Bordbuch, nach Kapiteln getrennt — mit allen Abbildungen.</small></p>
+</section>
+
+<section id="originale" data-keys="original unterlagen bordbuch handbuch anleitung werk niesmann bischoff pdf nachschlagen dokumentation herstellerunterlagen kapitel">
+  <h2 aria-level="3">Original-Unterlagen</h2>
+  <p class="lede">Das Werks-Bordbuch von Niesmann+Bischoff, nach Kapiteln getrennt und mit allen Abbildungen. Zum Öffnen braucht es Empfang — die Dateien sind zu gross für den Offline-Speicher.</p>
+  <p class="vnote">Bei den umgebauten Systemen — Toilette, Kühlschrank, Strom — beschreibt das Werk den alten Zustand. Dort gilt dieses Bordbuch, nicht das Original.</p>
+
+  <div class="tiles">
+    <a class="tile dok" href="anleitungen/original/NB-03-Fahrzeug.pdf" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
+      <span class="tx"><b>Fahrzeug</b><span>Chassis, Fahren, Sitze, Räder und Reifen, Tanken, Starthilfe, Pflege aussen · 124 Seiten, 20 MB</span></span>
+    </a>
+    <a class="tile dok" href="anleitungen/original/NB-04-Aufbau-Einrichtung.pdf" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
+      <span class="tx"><b>Aufbau &amp; Einrichtung</b><span>Türen, Fenster, Rollos, Hubbett, Sitzgruppen, Stauräume, Pflege innen · 112 Seiten, 16 MB</span></span>
+    </a>
+    <a class="tile dok" href="anleitungen/original/NB-06-Elektrik.pdf" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
+      <span class="tx"><b>Elektrik</b><span>Bordnetz, Zentralpanel, Relaisbox und Sicherungen, Beleuchtung, Einstiegstufe · 122 Seiten, 17 MB</span></span>
+    </a>
+    <a class="tile dok" href="anleitungen/original/NB-08-Wasser-Sanitaer.pdf" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
+      <span class="tx"><b>Wasser &amp; Sanitär</b><span>Tanks, Pumpe, Ventile, Boiler und das ehemalige Cassetten-WC · 68 Seiten, 10 MB</span></span>
+    </a>
+    <a class="tile dok" href="anleitungen/original/NB-09-Heizung.pdf" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
+      <span class="tx"><b>Heizung</b><span>Serienheizung und die verbaute Alde-Warmwasserheizung, Winterbetrieb · 122 Seiten, 17 MB</span></span>
+    </a>
+    <a class="tile dok" href="anleitungen/original/NB-07-Gas.pdf" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
+      <span class="tx"><b>Gas</b><span>Flaschen, Regler, Ventile, Sicherheit · 18 Seiten, 3 MB</span></span>
+    </a>
+    <a class="tile dok" href="anleitungen/original/NB-05-Kuechengeraete.pdf" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
+      <span class="tx"><b>Küchengeräte</b><span>Gasherd und die ursprünglichen Kühlgeräte · 36 Seiten, 6 MB</span></span>
+    </a>
+    <a class="tile dok" href="anleitungen/original/NB-02-Checklisten-Notrufe.pdf" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
+      <span class="tx"><b>Checklisten &amp; Notrufe</b><span>Listen vor Reise und Stilllegung, Wartungsfristen, Störfallsuche · 30 Seiten, 5 MB</span></span>
+    </a>
+    <a class="tile dok" href="anleitungen/original/NB-10-Winter-Stilllegung.pdf" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
+      <span class="tx"><b>Winter &amp; Stilllegung</b><span>Wintercamping und Einlagern · 16 Seiten, 3 MB</span></span>
+    </a>
+    <a class="tile dok" href="anleitungen/original/NB-11-Technische-Daten.pdf" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
+      <span class="tx"><b>Technische Daten</b><span>Alle Aufbautypen mit Massen und Gewichten, Prüfdaten, Aufkleber · 76 Seiten, 10 MB</span></span>
+    </a>
+    <a class="tile dok" href="anleitungen/original/NB-01-Einfuehrung.pdf" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
+      <span class="tx"><b>Einführung &amp; Übergabe</b><span>Vorwort, Garantie, Vertriebspartner · 34 Seiten, 4 MB</span></span>
+    </a>
+    <a class="tile dok" href="anleitungen/original/NB-12-Symbole.pdf" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
+      <span class="tx"><b>Symbole &amp; Kurzübersicht</b><span>Zeichenerklärung und Bedien-Piktogramme · 24 Seiten, 4 MB</span></span>
+    </a>
+  </div>
 </section>
 
 <section id="zentralpanel" data-keys="zentralpanel niesmann bischoff taste licht wasserpumpe pumpe gasheizung waermetauscher fahrbetrieb hauptschalter rot batterie tank bedienteil wo schalte ich ein">
