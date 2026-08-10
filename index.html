@@ -500,6 +500,7 @@ ol.steps li.erledigt::before{content:"✓";background:var(--ok);font-size:0.8824
 footer{padding:30px var(--gut) calc(34px + var(--dock));color:var(--grey);font-size:0.8235rem;
   line-height:1.6;border-top:1px solid var(--line2);margin-top:36px}
 footer b{color:var(--ink)}
+footer .vers{margin-top:14px;font-size:0.7059rem;color:var(--grey2)}
 
 
 
@@ -2174,6 +2175,7 @@ footer b{color:var(--ink)}
   <p><b>Basislager 4.0</b> · Persönliches Bordbuch für Familie Hofmann. Ergänzt die Original-Herstellerunterlagen, ersetzt sie nicht.</p>
   <p>Die Videos stammen von Niesmann+Bischoff und zeigen den Arto Modelljahr 2019, unser Fahrzeug ist von 2016. Der Aufbau ist im Wesentlichen gleich, einzelne Details können abweichen. Die Player laden erst beim Antippen und brauchen dafür Internet.</p>
   <p>Enthält Zugangsdaten. Vor dem Weitergeben an Dritte bedenken.</p>
+  <p class="vers">Bordbuch Version 31</p>
 </footer>
 </div>
 
@@ -2907,6 +2909,21 @@ document.addEventListener('keydown',function(e){
     var d=new Date(sek*1000);
     return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);
   }
+  /* Massgebend ist, wann das Fahrzeug zuletzt GEMESSEN hat — nicht, wann
+     wir abgerufen haben. Steht es ohne Verbindung in der Halle, liefert
+     das VRM weiter die alten Werte samt ihrem Zeitstempel. */
+  function messzeit(daten){
+    var neuste=0;
+    (daten.werte||[]).forEach(function(w){ if(w.zeit && w.zeit>neuste) neuste=w.zeit; });
+    return neuste || daten.abgerufen || 0;
+  }
+  function relativ(sek){
+    var d=Math.floor(Date.now()/1000)-sek;
+    if(d<90) return 'gerade eben';
+    if(d<3600) return 'vor '+Math.round(d/60)+' Min.';
+    if(d<172800) return 'vor '+Math.round(d/3600)+' Std.';
+    return 'vor '+Math.round(d/86400)+' Tagen';
+  }
   function zahl(x){ var n=parseFloat(String(x).replace(',','.')); return isNaN(n)?null:n; }
 
   function zeichnen(daten, frisch){
@@ -2963,8 +2980,10 @@ document.addEventListener('keydown',function(e){
     zeichneTemps(karte);
 
     if(teile.length||etwas){
-      teile.push('<span class="zeit'+(frisch?'':' alt')+'">'+
-        (frisch?'aktualisiert ':'zuletzt gesehen ')+uhrzeit(daten.abgerufen)+'</span>');
+      var mz=messzeit(daten);
+      var veraltet=(Date.now()/1000-mz)>600;
+      teile.push('<span class="zeit'+((veraltet||!frisch)?' alt':'')+'">'+
+        (veraltet ? 'Stand '+relativ(mz) : 'aktualisiert '+uhrzeit(mz))+'</span>');
       zeile.innerHTML=teile.join('');
       zeile.hidden=false;
     }
