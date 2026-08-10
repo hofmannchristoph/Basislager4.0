@@ -3069,6 +3069,23 @@ document.addEventListener('keydown',function(e){
 })();
 
 
+/* ---------- PDFs im eigenen Betrachter, wenn die App vom Homescreen laeuft ----------
+   Ohne Browserleiste gibt es keinen Weg zurueck aus einem direkt
+   geoeffneten PDF. Der Betrachter lesen.html hat einen Zurueck-Knopf.
+   Im normalen Browser bleibt der direkte Link — dort gibt es Tabs. */
+(function(){
+  var alleinstehend = (window.matchMedia && matchMedia('(display-mode: standalone)').matches)
+                      || window.navigator.standalone === true;
+  if(!alleinstehend) return;
+  document.querySelectorAll('a[href^="anleitungen/"]').forEach(function(a){
+    var ziel=a.getAttribute('href');
+    if(!/\.pdf$/i.test(ziel)) return;
+    a.setAttribute('href','lesen.html?d='+encodeURIComponent(ziel).replace(/%2F/g,'/'));
+    a.removeAttribute('target');
+    a.removeAttribute('rel');
+  });
+})();
+
 /* ---------- Externe Links immer nach aussen ----------
    Liegt das Bordbuch als Symbol auf dem Homescreen, laeuft es ohne
    Browserleiste. Ein normaler Link wuerde die Seite ersetzen und es gaebe

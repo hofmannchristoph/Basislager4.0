@@ -3,9 +3,12 @@
    vollstaendig lesbar bleibt. Die Videos liegen bei alugha und YouTube
    und brauchen weiterhin Internet — sie werden bewusst nicht gecacht. */
 
-var CACHE = 'bordbuch-v27';
+var CACHE = 'bordbuch-v28';
 var DATEIEN = [
   'index.html',
+  'lesen.html',
+  'pdfjs/pdf.min.js',
+  'pdfjs/pdf.worker.min.js',
   'manifest.webmanifest',
   'icon-180.png',
   'icon-192.png',
