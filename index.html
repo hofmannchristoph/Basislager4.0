@@ -454,10 +454,11 @@ details.tiefer > summary:hover{color:var(--rausch-text)}
 
 /* Nebenwerte und Zeitstempel in einer ruhigen Zeile */
 .live{display:grid;grid-template-columns:repeat(2,1fr);gap:7px 14px;margin:12px 2px 0;
-  font-size:0.7353rem;color:var(--grey)}
+  align-items:baseline;font-size:0.7353rem;color:var(--grey)}
 .live .w{display:flex;align-items:baseline;gap:5px;min-width:0}
 .live .w b{font-weight:700;color:var(--ink2);letter-spacing:-.01em;white-space:nowrap}
-.live .zeit{grid-column:1/-1;justify-self:end;color:var(--grey2);font-size:0.6765rem;margin-top:1px}
+.live .zeit{justify-self:end;color:var(--grey2);font-size:0.6765rem}
+.live .zeit.voll{grid-column:1/-1;margin-top:1px}
 .live .zeit.alt{color:var(--warn-line)}
 /* Auf breiten Bildschirmen wieder eine Reihe */
 @media(min-width:620px){
@@ -2175,7 +2176,7 @@ footer .vers{margin-top:14px;font-size:0.7059rem;color:var(--grey2)}
   <p><b>Basislager 4.0</b> · Persönliches Bordbuch für Familie Hofmann. Ergänzt die Original-Herstellerunterlagen, ersetzt sie nicht.</p>
   <p>Die Videos stammen von Niesmann+Bischoff und zeigen den Arto Modelljahr 2019, unser Fahrzeug ist von 2016. Der Aufbau ist im Wesentlichen gleich, einzelne Details können abweichen. Die Player laden erst beim Antippen und brauchen dafür Internet.</p>
   <p>Enthält Zugangsdaten. Vor dem Weitergeben an Dritte bedenken.</p>
-  <p class="vers">Bordbuch Version 31</p>
+  <p class="vers">Bordbuch Version 32</p>
 </footer>
 </div>
 
@@ -2982,7 +2983,9 @@ document.addEventListener('keydown',function(e){
     if(teile.length||etwas){
       var mz=messzeit(daten);
       var veraltet=(Date.now()/1000-mz)>600;
-      teile.push('<span class="zeit'+((veraltet||!frisch)?' alt':'')+'">'+
+      /* Ist im Zweierraster eine Spalte frei, rueckt der Zeitstempel auf
+         dieselbe Hoehe — nur bei voller Reihe bekommt er die eigene Zeile. */
+      teile.push('<span class="zeit'+((veraltet||!frisch)?' alt':'')+(teile.length%2===0?' voll':'')+'">'+
         (veraltet ? 'Stand '+relativ(mz) : 'aktualisiert '+uhrzeit(mz))+'</span>');
       zeile.innerHTML=teile.join('');
       zeile.hidden=false;
