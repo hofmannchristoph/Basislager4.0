@@ -2197,7 +2197,7 @@ footer .vers{margin-top:14px;font-size:0.7059rem;color:var(--grey2)}
   <p><b>Basislager 4.0</b> · Persönliches Bordbuch für Familie Hofmann. Ergänzt die Original-Herstellerunterlagen, ersetzt sie nicht.</p>
   <p>Die Videos stammen von Niesmann+Bischoff und zeigen den Arto Modelljahr 2019, unser Fahrzeug ist von 2016. Der Aufbau ist im Wesentlichen gleich, einzelne Details können abweichen. Die Player laden erst beim Antippen und brauchen dafür Internet.</p>
   <p>Enthält Zugangsdaten. Vor dem Weitergeben an Dritte bedenken.</p>
-  <p class="vers">Bordbuch Version 38</p>
+  <p class="vers">Bordbuch Version 2.39</p>
 </footer>
 </div>
 
@@ -2498,16 +2498,30 @@ tocBody.addEventListener('click',function(ev){
     });
   }
 
-  /* Solarertrag: 14 Tage als weiche Balken, der gewaehlte Tag in Tinte. */
+  /* Solarertrag: 14 Tage als weiche Balken mit kWh-Gitter, gestrichelter
+     Durchschnittslinie und Wertfahne ueber dem gewaehlten Tag. */
   function solarBlatt(d){
     var reihe=d.solar||[];
     if(!reihe.length) return '<div class="stfehler">Noch keine Ertragsdaten im Portal.</div>';
-    var max=0.1; reihe.forEach(function(x){ if(x[1]>max) max=x[1]; });
+    var max=0.1, summe=0;
+    reihe.forEach(function(x){ if(x[1]>max) max=x[1]; summe+=x[1]; });
+    var schnitt=summe/reihe.length;
     var heute=reihe[reihe.length-1][1];
-    var summe=0; reihe.forEach(function(x){ summe+=x[1]; });
-    var B=340,H=150,unten=126,oben=14;
+    var B=340,H=176,unten=142,oben=34;
     var schritt=B/reihe.length, breite=Math.min(18, schritt*0.62);
+    function Y(v){ return unten-(v/max)*(unten-oben); }
     var st='';
+    /* Gitter mit kWh-Skala rechts, Grundlinie unten */
+    [max/2,max].forEach(function(v){
+      st+='<line x1="0" y1="'+Y(v).toFixed(1)+'" x2="'+(B-26)+'" y2="'+Y(v).toFixed(1)+'" stroke="#E0E0E0" stroke-width="1"/>'+
+          '<text x="'+B+'" y="'+(Y(v)+3).toFixed(1)+'" text-anchor="end" font-size="9" fill="#ADADAD">'+v.toFixed(1).replace('.',',')+'</text>';
+    });
+    st+='<line x1="0" y1="'+unten+'" x2="'+B+'" y2="'+unten+'" stroke="#DBDBDB" stroke-width="1"/>';
+    /* Durchschnitt der 14 Tage; die Beschriftung weicht der Skala aus */
+    var oy=Y(schnitt)+3;
+    if(Math.abs(Y(schnitt)-Y(max/2))<11) oy=Y(schnitt)+(Y(schnitt)>Y(max/2)?11:-6);
+    st+='<line x1="0" y1="'+Y(schnitt).toFixed(1)+'" x2="'+(B-26)+'" y2="'+Y(schnitt).toFixed(1)+'" stroke="#9A9A9A" stroke-width="1" stroke-dasharray="4 3"/>'+
+        '<text x="'+B+'" y="'+oy.toFixed(1)+'" text-anchor="end" font-size="9" fill="#6E6E6E">Ø</text>';
     reihe.forEach(function(x,i){
       var h=Math.max(3,(x[1]/max)*(unten-oben));
       var cx=i*schritt+schritt/2;
@@ -2515,8 +2529,11 @@ tocBody.addEventListener('click',function(ev){
       st+='<rect class="stbalken" x="'+(cx-breite/2).toFixed(1)+'" y="'+(unten-h).toFixed(1)+'" width="'+breite.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="5" fill="'+(letzte?'#0B0B0B':'#DDDDDD')+'"/>';
       if(i%2===(reihe.length%2===0?1:0)) st+='<text x="'+cx.toFixed(1)+'" y="'+(unten+16)+'" text-anchor="middle" font-size="10" fill="#8A8A8A">'+wt(x[0])+'</text>';
     });
+    /* Wertfahne ueber dem gewaehlten Balken */
+    var fx=Math.max(16,Math.min(B-16,(reihe.length-0.5)*schritt));
+    st+='<text class="stfahne" x="'+fx.toFixed(1)+'" y="'+Math.max(11,Y(heute)-9).toFixed(1)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#0B0B0B">'+heute.toFixed(1).replace('.',',')+'</text>';
     return '<p class="stgross"><b class="stwert">'+heute.toFixed(1).replace('.',',')+' kWh</b><span class="stwas">heute bisher</span></p>'+
-      '<p class="stuntertitel">Letzte 14 Tage · zusammen '+summe.toFixed(1).replace('.',',')+' kWh · bester Tag '+max.toFixed(1).replace('.',',')+' kWh</p>'+
+      '<p class="stuntertitel">Letzte 14 Tage · zusammen '+summe.toFixed(1).replace('.',',')+' kWh · Ø '+schnitt.toFixed(1).replace('.',',')+' · Spitze '+max.toFixed(1).replace('.',',')+' kWh</p>'+
       '<div class="stkarte"><svg viewBox="0 0 '+B+' '+H+'" role="img" aria-label="Solarertrag der letzten 14 Tage, Tag antippen für Details">'+st+'</svg></div>';
   }
 
@@ -2524,10 +2541,18 @@ tocBody.addEventListener('click',function(ev){
     var reihe=d.solar||[]; if(!reihe.length) return;
     var svgel=koerper.querySelector('svg'); if(!svgel) return;
     var balken=koerper.querySelectorAll('.stbalken');
+    var fahne=koerper.querySelector('.stfahne');
     var wert=koerper.querySelector('.stwert'), was=koerper.querySelector('.stwas');
+    var B=340,unten=142,oben=34;
+    var max=0.1; reihe.forEach(function(x){ if(x[1]>max) max=x[1]; });
+    var schritt=B/reihe.length;
     function zeige(i){
       for(var j=0;j<balken.length;j++) balken[j].setAttribute('fill', j===i?'#0B0B0B':'#DDDDDD');
-      wert.textContent=reihe[i][1].toFixed(1).replace('.',',')+' kWh';
+      var v=reihe[i][1];
+      fahne.setAttribute('x', Math.max(16,Math.min(B-16,(i+0.5)*schritt)).toFixed(1));
+      fahne.setAttribute('y', Math.max(11, unten-(v/max)*(unten-oben)-9).toFixed(1));
+      fahne.textContent=v.toFixed(1).replace('.',',');
+      wert.textContent=v.toFixed(1).replace('.',',')+' kWh';
       was.textContent=(i===reihe.length-1)?'heute bisher':datum(reihe[i][0]);
     }
     fingerAn(svgel, function(x){
@@ -2537,16 +2562,32 @@ tocBody.addEventListener('click',function(ev){
     });
   }
 
-  /* Ladestand: 48 Stunden als weiche Flaechenkurve mit Ableselinie. */
+  /* Ladestand: 48 Stunden als weiche Flaechenkurve mit Prozent-Gitter,
+     Mitternachtsmarken, Ableselinie und mitlaufender Zeitfahne. */
   function batterieBlatt(d){
     var reihe=d.ladestand||[];
     if(reihe.length<2) return '<div class="stfehler">Noch keine Verlaufsdaten im Portal.</div>';
-    var B=340,H=150,unten=128,oben=12;
+    var B=340,H=176,unten=142,oben=26;
     var min=100,max=0;
     reihe.forEach(function(x){ if(x[1]<min)min=x[1]; if(x[1]>max)max=x[1]; });
     var t0=reihe[0][0], t1=reihe[reihe.length-1][0];
     function X(t){ return ((t-t0)/Math.max(1,(t1-t0)))*B; }
     function Y(v){ return unten-(v/100)*(unten-oben); }
+    var st='', beschr='';
+    /* Prozent-Gitter; die 20-Prozent-Marke ist die Grenze, unter die
+       die Batterie nicht soll. Die Skala kommt erst NACH der Kurve in
+       das Bild, damit die Flaeche sie nicht verdeckt. */
+    [100,50,20].forEach(function(v){
+      st+='<line x1="0" y1="'+Y(v).toFixed(1)+'" x2="'+(B-26)+'" y2="'+Y(v).toFixed(1)+'" stroke="'+(v===20?'#EBC9C2':'#E0E0E0')+'" stroke-width="1"'+(v===20?' stroke-dasharray="4 3"':'')+'/>';
+      beschr+='<text x="'+B+'" y="'+(Y(v)+3).toFixed(1)+'" text-anchor="end" font-size="9" fill="'+(v===20?'#C98A7E':'#9A9A9A')+'">'+v+'</text>';
+    });
+    /* Mitternachtsmarken als Tagesgrenzen; am rechten Rand keine
+       Beschriftung, dort steht schon "jetzt" */
+    var mitternacht=new Date(t0*1000); mitternacht.setHours(24,0,0,0);
+    for(var tm=Math.floor(mitternacht.getTime()/1000); tm<t1; tm+=86400){
+      st+='<line x1="'+X(tm).toFixed(1)+'" y1="'+oben+'" x2="'+X(tm).toFixed(1)+'" y2="'+unten+'" stroke="#ECECEC" stroke-width="1"/>';
+      if(X(tm)<B-44) beschr+='<text x="'+X(tm).toFixed(1)+'" y="'+(unten+16)+'" text-anchor="middle" font-size="10" fill="#8A8A8A">'+wt(tm)+'</text>';
+    }
     var pfad='', flaeche='M0 '+unten;
     reihe.forEach(function(x,i){
       var p=X(x[0]).toFixed(1)+' '+Y(x[1]).toFixed(1);
@@ -2557,12 +2598,13 @@ tocBody.addEventListener('click',function(ev){
     var tief=(min<20);
     return '<p class="stgross"><b class="stwert">'+Math.round(akt)+' %</b><span class="stwas">Ladestand jetzt</span></p>'+
       '<p class="stuntertitel">Letzte 48 Stunden · Tiefstand '+Math.round(min)+' % · Höchststand '+Math.round(max)+' %</p>'+
-      '<div class="stkarte"><svg viewBox="0 0 '+B+' '+H+'" role="img" aria-label="Ladestand der letzten 48 Stunden, mit dem Finger darüberfahren">'+
-      '<path d="'+flaeche+'" fill="#E9E9E9"/>'+
+      '<div class="stkarte"><svg viewBox="0 0 '+B+' '+H+'" role="img" aria-label="Ladestand der letzten 48 Stunden, mit dem Finger darüberfahren">'+st+
+      '<path d="'+flaeche+'" fill="#E9E9E9" fill-opacity="0.75"/>'+
       '<path d="'+pfad+'" fill="none" stroke="'+(tief?'#E8503C':'#0B0B0B')+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>'+
-      '<line class="stlinie" x1="'+X(t1).toFixed(1)+'" y1="'+oben+'" x2="'+X(t1).toFixed(1)+'" y2="'+unten+'" stroke="#B5B5B5" stroke-width="1" stroke-dasharray="3 3"/>'+
+      '<line class="stlinie" x1="'+X(t1).toFixed(1)+'" y1="'+(oben-6)+'" x2="'+X(t1).toFixed(1)+'" y2="'+unten+'" stroke="#B5B5B5" stroke-width="1" stroke-dasharray="3 3"/>'+
       '<circle class="stpunkt" cx="'+X(t1).toFixed(1)+'" cy="'+Y(akt).toFixed(1)+'" r="4.5" fill="#0B0B0B" stroke="#FFFFFF" stroke-width="1.5"/>'+
-      '<text x="2" y="'+(unten+16)+'" font-size="10" fill="#8A8A8A">'+wt(t0)+' '+uhr(t0)+'</text>'+
+      '<text class="stzeit" x="'+Math.max(24,Math.min(B-24,X(t1))).toFixed(1)+'" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#0B0B0B">jetzt</text>'+
+      beschr+
       '<text x="'+B+'" y="'+(unten+16)+'" text-anchor="end" font-size="10" fill="#8A8A8A">jetzt</text>'+
       '</svg></div>';
   }
@@ -2571,8 +2613,9 @@ tocBody.addEventListener('click',function(ev){
     var reihe=d.ladestand||[]; if(reihe.length<2) return;
     var svgel=koerper.querySelector('svg'); if(!svgel) return;
     var linie=koerper.querySelector('.stlinie'), punkt=koerper.querySelector('.stpunkt');
+    var zeit=koerper.querySelector('.stzeit');
     var wert=koerper.querySelector('.stwert'), was=koerper.querySelector('.stwas');
-    var B=340,unten=128,oben=12;
+    var B=340,unten=142,oben=26;
     var t0=reihe[0][0], t1=reihe[reihe.length-1][0];
     fingerAn(svgel, function(x){
       var t=t0+(x/B)*(t1-t0);
@@ -2583,10 +2626,13 @@ tocBody.addEventListener('click',function(ev){
       }
       var px=((reihe[i][0]-t0)/Math.max(1,(t1-t0)))*B;
       var py=unten-(reihe[i][1]/100)*(unten-oben);
+      var letzte=(i===reihe.length-1);
       linie.setAttribute('x1',px.toFixed(1)); linie.setAttribute('x2',px.toFixed(1));
       punkt.setAttribute('cx',px.toFixed(1)); punkt.setAttribute('cy',py.toFixed(1));
+      zeit.setAttribute('x',Math.max(24,Math.min(B-24,px)).toFixed(1));
+      zeit.textContent=letzte?'jetzt':uhr(reihe[i][0]);
       wert.textContent=Math.round(reihe[i][1])+' %';
-      was.textContent=(i===reihe.length-1)?'Ladestand jetzt':datum(reihe[i][0])+' · '+uhr(reihe[i][0])+' Uhr';
+      was.textContent=letzte?'Ladestand jetzt':datum(reihe[i][0])+' · '+uhr(reihe[i][0])+' Uhr';
     });
   }
 
