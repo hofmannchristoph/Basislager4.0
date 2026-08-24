@@ -73,7 +73,14 @@ const AUSWAHL = {
   'tsT':  { 24: 'tiefkuehlfach', 25: 'kuehlschrank', 26: 'wohnraum', 27: 'aussen' },
   'tsH':  { 24: 'tiefkuehlfach_feuchte', 25: 'kuehlschrank_feuchte',
             26: 'wohnraum_feuchte', 27: 'aussen_feuchte' },
-  'OP1':  { name: 'ac_abgabe' }
+  'OP1':  { name: 'ac_abgabe' },
+  /* Landstrom-Erkennung: Zustand des MultiPlus und Spannung am
+     AC-Eingang. Bulk/Absorption/Float/Passthru heisst am Netz,
+     Inverting heisst ohne. */
+  'S':    { name: 'vebus_zustand' },
+  'IV1':  { name: 'netz_spannung' },
+  'IP1':  { name: 'netz_leistung' },
+  'AIS':  { name: 'netz_quelle' }
 };
 
 function benennen(w) {

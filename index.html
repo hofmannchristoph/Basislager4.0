@@ -2204,7 +2204,7 @@ footer .vers{margin-top:14px;font-size:0.7059rem;color:var(--grey2)}
   <p><b>Basislager 4.0</b> · Persönliches Bordbuch für Familie Hofmann. Ergänzt die Original-Herstellerunterlagen, ersetzt sie nicht.</p>
   <p>Die Videos stammen von Niesmann+Bischoff und zeigen den Arto Modelljahr 2019, unser Fahrzeug ist von 2016. Der Aufbau ist im Wesentlichen gleich, einzelne Details können abweichen. Die Player laden erst beim Antippen und brauchen dafür Internet.</p>
   <p>Enthält Zugangsdaten. Vor dem Weitergeben an Dritte bedenken.</p>
-  <p class="vers">Bordbuch Version 33</p>
+  <p class="vers">Bordbuch Version 34</p>
 </footer>
 </div>
 
@@ -2955,6 +2955,26 @@ document.addEventListener('keydown',function(e){
   }
   function zahl(x){ var n=parseFloat(String(x).replace(',','.')); return isNaN(n)?null:n; }
 
+  /* Landstrom angeschlossen? Zwei Quellen: die Spannung am AC-Eingang
+     des MultiPlus (ueber ~80 V liegt Netz an) und sein Betriebszustand
+     (Bulk/Absorption/Float/Passthru/Assist nur am Netz, Inverting nur
+     ohne). Liefert true, false oder null, wenn beides fehlt. */
+  function landstrom(karte){
+    var sp=karte['netz_spannung'];
+    if(sp){ var v=zahl(sp.roh!=null?sp.roh:sp.wert); if(v!=null) return v>80; }
+    var z=karte['vebus_zustand'];
+    if(z){
+      var roh=zahl(z.roh), txt=String(z.wert||'').toLowerCase();
+      if(roh!=null){
+        if([3,4,5,8,10,11].indexOf(roh)>=0) return true;
+        if(roh===9) return false;
+      }
+      if(/bulk|absorption|float|passthru|assist|supply/.test(txt)) return true;
+      if(/invert/.test(txt)) return false;
+    }
+    return null;
+  }
+
   function zeichnen(daten, frisch){
     var karte={};
     (daten.werte||[]).forEach(function(w){ karte[w.name]=w; });
@@ -3006,6 +3026,10 @@ document.addEventListener('keydown',function(e){
         if(f.karte && f.karte[v]) v=f.karte[v];
         return '<span class="w"><b>'+esc2(v)+'</b>'+esc2(f.titel)+'</span>';
       });
+    var netz=landstrom(karte);
+    if(netz!==null){
+      teile.splice(1,0,'<span class="w"><b>'+(netz?'angeschlossen':'getrennt')+'</b>Landstrom</span>');
+    }
     zeichneTemps(karte);
 
     if(teile.length||etwas){
