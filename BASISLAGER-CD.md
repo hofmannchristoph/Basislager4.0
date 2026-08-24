@@ -1,3 +1,15 @@
+> **Fassung 2 «weich» (August 2026).** Auf Entscheid des Besitzers wurde die
+> Gestaltung auf eine weiche, monochrome Anmutung im Stil der Uber-App
+> umgestellt. Damit sind aus diesem Dokument **überholt**: das Band-Signet
+> samt 42-Grad-Schnitt (ersetzt durch die reine Wortmarke «Basislager 4.0»
+> und ein schwarzes B-Icon), das dunkle Kopfband (ersetzt durch weissen Kopf
+> mit Wortmarke), Kartenrahmen und -schatten (Karten sind jetzt hellgraue
+> Flächen mit Radius 20 auf weissem Grund), der signalrote Suchknopf
+> (Primäraktionen sind schwarz; Signal-Rot meldet nur noch Zustände) und
+> die alten Radien-/Schattenwerte. Gültige Werte: `assets/tokens.css`.
+> Die Grundprinzipien — knapper Akzent, Hierarchie durch Weissraum,
+> 44-Pixel-Tippflächen, alles aus Tokens — gelten unverändert.
+
 # Basislager 4.0 — Corporate Design
 
 Umsetzungsauftrag für Claude Code. Diese Datei ist verbindlich: bei Widersprüchen zwischen bestehendem Code und diesem Dokument gilt dieses Dokument.

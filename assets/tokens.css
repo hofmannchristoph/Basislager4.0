@@ -1,95 +1,58 @@
-/* Basislager 4.0 — Design-Tokens
-   Einzige Quelle der Wahrheit für Farbe, Typografie, Radien, Schatten, Abstände.
-   Keine Farbe, kein Radius, kein Schatten darf im Bordbuch hartcodiert werden. */
+/* Basislager 4.0 — Design-Tokens, Fassung 2 «weich»
+   Einzige Quelle der Wahrheit für Farbe, Typografie, Radien, Schatten.
+   Richtung: weich und monochrom — Schwarz-Weiss trägt, Grau gliedert,
+   Farbe ist die Ausnahme. Signal-Rot meldet Zustände (Tank fast leer,
+   Alarm), nie Aktionen: Primäraktionen sind schwarz. */
 
 :root {
   /* ---------- Farbe: Akzent ---------- */
-  --bl-signal:            #E8503C;  /* Primäraktion, Suchknopf. Sparsam. */
+  --bl-signal:            #E8503C;  /* Zustandsmeldungen: Ampeln, Alarme */
   --bl-signal-hover:      #D0432F;
-  --bl-signal-bg:         #FDEDEA;  /* Fläche hinter Signal-Text */
-  --bl-signal-text:       #A8321F;  /* Signal-Text auf --bl-signal-bg */
+  --bl-signal-bg:         #FDEDEA;
+  --bl-signal-text:       #A8321F;
 
-  --bl-retro:             #007A78;  /* Badge «Nachgerüstet» */
-  --bl-retro-bg:          #E6F4F3;
-  --bl-retro-text:        #005E5C;
+  --bl-retro:             #0E6B5E;  /* Badge «Nachgerüstet», Haken */
+  --bl-retro-bg:          #E4F2EF;
+  --bl-retro-text:        #0E6B5E;
 
-  --bl-warn:              #B35309;  /* Achtung, Warnbox */
-  --bl-warn-bg:           #FFF8E6;
-  --bl-warn-text:         #7A3A06;
+  --bl-warn:              #B35309;  /* Warnboxen — amber, nie rot */
+  --bl-warn-bg:           #FFF4E0;
+  --bl-warn-text:         #7A4A08;
 
   /* ---------- Farbe: Neutral ---------- */
-  --bl-ink:               #222222;  /* Überschriften, Zahlen */
-  --bl-text:              #484848;  /* Lauftext */
-  --bl-muted:             #717171;  /* Label, Bildlegende, Meta */
-  --bl-border:            #DDDDDD;  /* Rahmen von Cards und Buttons */
-  --bl-hairline:          #EBEBEB;  /* Trennlinie innerhalb einer Card */
-  --bl-surface:           #FFFFFF;  /* Card */
-  --bl-canvas:            #F7F7F7;  /* Seitenhintergrund, Sektionsfläche */
+  --bl-ink:               #0B0B0B;  /* Überschriften, Zahlen, Primäraktionen */
+  --bl-text:              #4A4A4A;  /* Lauftext */
+  --bl-muted:             #8A8A8A;  /* Label, Legende, Meta */
+  --bl-border:            #E4E4E4;  /* seltene Rahmen (Eingabefelder) */
+  --bl-hairline:          #ECECEC;  /* Trennlinie innerhalb einer Fläche */
+  --bl-surface:           #FFFFFF;  /* Seitengrund */
+  --bl-canvas:            #F7F7F7;  /* Karten und Sektionsflächen */
+  --bl-chip:              #F3F3F3;  /* Suchfeld, Kacheln */
+  --bl-einlage:           #ECECEC;  /* Hinweisboxen innerhalb einer Karte */
 
   /* ---------- Typografie ---------- */
   --bl-font: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --bl-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
 
-  --bl-size-display:      2rem;      /* 32px — nur Seitentitel */
-  --bl-size-h1:           1.625rem;  /* 26px — Bereichstitel */
-  --bl-size-h2:           1.375rem;  /* 22px — Kapiteltitel */
-  --bl-size-h3:           1.125rem;  /* 18px — Abschnittstitel */
-  --bl-size-body:         1rem;      /* 16px — Lauftext */
-  --bl-size-small:        0.875rem;  /* 14px — Label, Legende */
-  --bl-size-caption:      0.8125rem; /* 13px — Meta, Pill, Badge */
+  --bl-size-display:      2rem;
+  --bl-size-h1:           1.625rem;
+  --bl-size-h2:           1.375rem;
+  --bl-size-h3:           1.125rem;
+  --bl-size-body:         1rem;
+  --bl-size-small:        0.875rem;
+  --bl-size-caption:      0.8125rem;
 
-  --bl-weight-regular:    400;
-  --bl-weight-medium:     500;
-  --bl-weight-semibold:   600;
-  --bl-weight-bold:       700;
-  --bl-weight-extrabold:  800;
+  /* ---------- Form ---------- */
+  --bl-radius-sm:         12px;     /* Knöpfe, Felder */
+  --bl-radius-md:         16px;     /* Kacheln, Boxen */
+  --bl-radius-lg:         20px;     /* Karten, Dialoge */
+  --bl-radius-pill:       999px;
 
-  --bl-leading-tight:     1.2;
-  --bl-leading-snug:      1.35;
-  --bl-leading-body:      1.6;
+  /* ---------- Schatten: fast keine ---------- */
+  --bl-shadow-sm:         none;
+  --bl-shadow-md:         none;
+  --bl-shadow-lg:         0 8px 30px rgba(0,0,0,.14);  /* nur Dialoge */
 
-  --bl-track-display:     -0.02em;   /* nur ab 26px aufwärts */
-  --bl-track-normal:      0;
-
-  /* ---------- Radien ---------- */
-  --bl-radius-sm:         8px;       /* Button, Eingabefeld, Copy-Feld */
-  --bl-radius-md:         12px;      /* Card, Bild, Hinweisbox */
-  --bl-radius-lg:         16px;      /* Sektionsfläche, Modal */
-  --bl-radius-pill:       999px;     /* Pill, Badge, Suchfeld */
-
-  /* ---------- Schatten ---------- */
-  --bl-shadow-sm:         0 1px 2px rgba(0, 0, 0, 0.08);
-  --bl-shadow-md:         0 2px 8px rgba(0, 0, 0, 0.10);
-  --bl-shadow-lg:         0 6px 20px rgba(0, 0, 0, 0.12);
-
-  /* ---------- Abstände (4er-Raster) ---------- */
-  --bl-space-1:  0.25rem;  /*  4px */
-  --bl-space-2:  0.5rem;   /*  8px */
-  --bl-space-3:  0.75rem;  /* 12px */
-  --bl-space-4:  1rem;     /* 16px */
-  --bl-space-6:  1.5rem;   /* 24px */
-  --bl-space-8:  2rem;     /* 32px */
-  --bl-space-12: 3rem;     /* 48px */
-  --bl-space-16: 4rem;     /* 64px */
-
-  /* ---------- Formsprache ---------- */
-  --bl-angle:             42deg;     /* Scheibenneigung des Arto. Jeder Schnitt nutzt ihn. */
-  --bl-cut:               33px;      /* waagrechter Versatz bei 30 px Höhe: h / tan(42) */
-  --bl-band-ratio:        0.9004;    /* tan(42) — Versatz = Höhe / diesen Wert */
-
-  /* ---------- Layout ---------- */
-  --bl-content-width:     760px;     /* Lesespalte */
-  --bl-touch-min:         44px;      /* kleinste Tap-Fläche */
-
-  /* ---------- Bewegung ---------- */
-  --bl-dur-fast:          120ms;
-  --bl-dur-base:          200ms;
-  --bl-ease:              cubic-bezier(0.2, 0, 0.2, 1);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :root {
-    --bl-dur-fast: 0ms;
-    --bl-dur-base: 0ms;
-  }
+  /* ---------- Breite ---------- */
+  --bl-content-width:     760px;
 }
