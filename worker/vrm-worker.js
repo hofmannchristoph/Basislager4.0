@@ -23,6 +23,7 @@
    Aufrufe:
      /anlagen   listet die Anlagen des Kontos mit ihrer Kennung
      /          liefert die aktuellen Messwerte der eingestellten Anlage
+     /statistik Solarertrag der letzten 14 Tage und Ladestand der letzten 48 h
      /frage     POST {frage, verlauf} — beantwortet eine Frage aus dem Bordbuch
    ================================================================= */
 
@@ -133,6 +134,26 @@ export default {
       const anlage = url.searchParams.get('anlage') || env.VRM_ANLAGE;
       if (!anlage) {
         return antwort({ fehler: 'Keine Anlage eingestellt. /anlagen aufrufen und VRM_ANLAGE setzen.' }, 400, basis, false);
+      }
+
+      /* Verlaufsdaten fuer die Statistik-Ansicht. Die Historie liegt im
+         VRM-Portal und ist auch abrufbar, wenn das Fahrzeug offline ist. */
+      if (url.pathname.replace(/\/+$/, '') === '/statistik') {
+        const jetzt = Math.floor(Date.now() / 1000);
+        const [solar, akku] = await Promise.all([
+          hole(VRM + '/installations/' + encodeURIComponent(anlage) +
+               '/stats?type=solar_yield&interval=days&start=' + (jetzt - 14 * 86400) + '&end=' + jetzt, kopf),
+          hole(VRM + '/installations/' + encodeURIComponent(anlage) +
+               '/stats?type=custom&attributeCodes%5B%5D=bs&interval=hours&start=' + (jetzt - 48 * 3600) + '&end=' + jetzt, kopf)
+        ]);
+        const reihe = (r, name) => (((r || {}).records || {})[name] || [])
+          .filter(x => Array.isArray(x) && x[1] != null)
+          .map(x => [Math.round(x[0] / 1000), Math.round(x[1] * 100) / 100]);
+        return antwort({
+          abgerufen: jetzt,
+          solar: reihe(solar, 'total_solar_yield'),
+          ladestand: reihe(akku, 'bs')
+        }, 200, basis, true);
       }
 
       const d = await hole(VRM + '/installations/' + encodeURIComponent(anlage) + '/diagnostics?count=200', kopf);

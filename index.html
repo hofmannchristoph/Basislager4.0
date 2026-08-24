@@ -139,6 +139,20 @@ img{max-width:100%;height:auto}
 
 .wortzeichen{margin:0 0 14px;font-size:1.0588rem;font-weight:800;letter-spacing:-.02em;color:var(--bl-muted)}
 .wortzeichen span{font-weight:600;color:var(--bl-muted)}
+/* ---------- Statistik ---------- */
+.ststand{flex:0 0 auto;font-size:0.7353rem;font-weight:600;color:var(--bl-muted);font-variant-numeric:tabular-nums}
+#stkoerper{padding:20px var(--gut) 30px}
+.stgross{display:flex;align-items:baseline;gap:10px;margin:0 0 2px}
+.stgross b{font-size:2rem;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stgross span{font-size:0.8235rem;color:var(--bl-muted);font-weight:500}
+.stuntertitel{margin:0 0 18px;font-size:0.8235rem;color:var(--bl-muted)}
+.stkarte{background:var(--bl-canvas);border-radius:var(--bl-radius-lg);padding:18px 16px 12px;margin:0 0 14px}
+.stkarte svg{display:block;width:100%;height:auto}
+.stmeta{display:flex;justify-content:space-between;gap:12px;margin:10px 2px 0;
+  font-size:0.7353rem;color:var(--bl-muted);font-variant-numeric:tabular-nums}
+.stfehler{background:var(--bl-einlage);border-radius:var(--bl-radius-md);padding:16px;
+  font-size:0.8824rem;line-height:1.55;color:var(--bl-text)}
+
 /* ---------- Frag das Bordbuch ---------- */
 
 /* Verlauf */
@@ -2183,7 +2197,7 @@ footer .vers{margin-top:14px;font-size:0.7059rem;color:var(--grey2)}
   <p><b>Basislager 4.0</b> · Persönliches Bordbuch für Familie Hofmann. Ergänzt die Original-Herstellerunterlagen, ersetzt sie nicht.</p>
   <p>Die Videos stammen von Niesmann+Bischoff und zeigen den Arto Modelljahr 2019, unser Fahrzeug ist von 2016. Der Aufbau ist im Wesentlichen gleich, einzelne Details können abweichen. Die Player laden erst beim Antippen und brauchen dafür Internet.</p>
   <p>Enthält Zugangsdaten. Vor dem Weitergeben an Dritte bedenken.</p>
-  <p class="vers">Bordbuch Version 36</p>
+  <p class="vers">Bordbuch Version 37</p>
 </footer>
 </div>
 
@@ -2218,6 +2232,17 @@ footer .vers{margin-top:14px;font-size:0.7059rem;color:var(--grey2)}
     <p class="ovltitle">Inhalt</p>
   </div>
   <div class="ovlbody" id="tocbody"></div>
+</div>
+
+<div class="ovl" id="stbl" role="dialog" aria-modal="true" aria-label="Statistik">
+  <div class="ovlbar">
+    <button class="xbtn" id="stx" type="button" aria-label="Schliessen">
+      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <p class="ovltitle" id="sttitel">Statistik</p>
+    <p class="ststand" id="ststand"></p>
+  </div>
+  <div class="ovlbody" id="stkoerper"></div>
 </div>
 
 <div class="ovl" id="fsheet" role="dialog" aria-modal="true" aria-label="Frag das Bordbuch">
@@ -2399,8 +2424,9 @@ function unlock(){
 }
 var fsheet=document.getElementById('fsheet');
 var fabfrage=document.getElementById('fragebtn');
+var stbl=document.getElementById('stbl');
 function anyOpen(){return toc.classList.contains('open')||sheet.classList.contains('open')||
-  (fsheet&&fsheet.classList.contains('open'));}
+  (fsheet&&fsheet.classList.contains('open'))||(stbl&&stbl.classList.contains('open'));}
 
 /* Inhaltsverzeichnis */
 tocBody.innerHTML=GROUPS.map(function(g){
@@ -2427,6 +2453,118 @@ tocBody.addEventListener('click',function(ev){
     if(el){ if(window.__aufklappen) window.__aufklappen(el); el.scrollIntoView({behavior:'smooth',block:'start'}); }
   },60);
 });
+
+/* ---------- Statistik: Solarertrag und Ladestand aus der Historie ----------
+   Ein Tipp auf die Batterie- oder Solar-Kachel oeffnet das Blatt. Die
+   Historie liegt im VRM-Portal und ist auch da, wenn das Fahrzeug
+   gerade offline in der Halle steht. */
+(function(){
+  var DIENST='https://basislager-vrm.ch-hofmann.workers.dev/statistik';
+  var SPEICHER='bordbuch-statistik';
+  var koerper=document.getElementById('stkoerper');
+  var titel=document.getElementById('sttitel');
+  var stand=document.getElementById('ststand');
+  if(!stbl||!koerper) return;
+
+  function schliessen(){
+    stbl.classList.remove('open'); stillegen(false); unlock(); fokusZurueck();
+  }
+  window.__statistikZu=schliessen;
+  document.getElementById('stx').addEventListener('click', schliessen);
+  document.addEventListener('keydown', function(e){
+    if(e.key==='Escape' && stbl.classList.contains('open')) schliessen();
+  });
+
+  function wt(ts){ return new Date(ts*1000).toLocaleDateString('de-CH',{weekday:'short'}).replace('.',''); }
+  function uhr(ts){ var d=new Date(ts*1000); return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2); }
+
+  /* Solarertrag: 14 Tage als weiche Balken, heute in Tinte. */
+  function solarBlatt(d){
+    var reihe=d.solar||[];
+    if(!reihe.length) return '<div class="stfehler">Noch keine Ertragsdaten im Portal.</div>';
+    var max=0.1; reihe.forEach(function(x){ if(x[1]>max) max=x[1]; });
+    var heute=reihe[reihe.length-1][1];
+    var summe=0; reihe.forEach(function(x){ summe+=x[1]; });
+    var B=340,H=150,unten=126,oben=14;
+    var schritt=B/reihe.length, breite=Math.min(18, schritt*0.62);
+    var st='';
+    reihe.forEach(function(x,i){
+      var h=Math.max(3,(x[1]/max)*(unten-oben));
+      var cx=i*schritt+schritt/2;
+      var letzte=(i===reihe.length-1);
+      st+='<rect x="'+(cx-breite/2).toFixed(1)+'" y="'+(unten-h).toFixed(1)+'" width="'+breite.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="5" fill="'+(letzte?'#0B0B0B':'#DDDDDD')+'"/>';
+      if(i%2===(reihe.length%2===0?1:0)) st+='<text x="'+cx.toFixed(1)+'" y="'+(unten+16)+'" text-anchor="middle" font-size="10" fill="#8A8A8A">'+wt(x[0])+'</text>';
+    });
+    return '<p class="stgross"><b>'+heute.toFixed(1).replace('.',',')+' kWh</b><span>heute bisher</span></p>'+
+      '<p class="stuntertitel">Letzte 14 Tage · zusammen '+summe.toFixed(1).replace('.',',')+' kWh · bester Tag '+max.toFixed(1).replace('.',',')+' kWh</p>'+
+      '<div class="stkarte"><svg viewBox="0 0 '+B+' '+H+'" role="img" aria-label="Solarertrag der letzten 14 Tage">'+st+'</svg></div>';
+  }
+
+  /* Ladestand: 48 Stunden als weiche Flaechenkurve. */
+  function batterieBlatt(d){
+    var reihe=d.ladestand||[];
+    if(reihe.length<2) return '<div class="stfehler">Noch keine Verlaufsdaten im Portal.</div>';
+    var B=340,H=150,unten=128,oben=12;
+    var min=100,max=0;
+    reihe.forEach(function(x){ if(x[1]<min)min=x[1]; if(x[1]>max)max=x[1]; });
+    var t0=reihe[0][0], t1=reihe[reihe.length-1][0];
+    function X(t){ return ((t-t0)/Math.max(1,(t1-t0)))*B; }
+    function Y(v){ return unten-(v/100)*(unten-oben); }
+    var pfad='', flaeche='M0 '+unten;
+    reihe.forEach(function(x,i){
+      var p=X(x[0]).toFixed(1)+' '+Y(x[1]).toFixed(1);
+      pfad+=(i?' L ':'M ')+p; flaeche+=' L '+p;
+    });
+    flaeche+=' L '+B+' '+unten+' Z';
+    var akt=reihe[reihe.length-1][1];
+    var tief=(min<20);
+    return '<p class="stgross"><b>'+Math.round(akt)+' %</b><span>Ladestand jetzt</span></p>'+
+      '<p class="stuntertitel">Letzte 48 Stunden · Tiefstand '+Math.round(min)+' % · Höchststand '+Math.round(max)+' %</p>'+
+      '<div class="stkarte"><svg viewBox="0 0 '+B+' '+H+'" role="img" aria-label="Ladestand der letzten 48 Stunden">'+
+      '<path d="'+flaeche+'" fill="#E9E9E9"/>'+
+      '<path d="'+pfad+'" fill="none" stroke="'+(tief?'#E8503C':'#0B0B0B')+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>'+
+      '<circle cx="'+X(t1).toFixed(1)+'" cy="'+Y(akt).toFixed(1)+'" r="4" fill="#0B0B0B"/>'+
+      '<text x="2" y="'+(unten+16)+'" font-size="10" fill="#8A8A8A">'+wt(t0)+' '+uhr(t0)+'</text>'+
+      '<text x="'+B+'" y="'+(unten+16)+'" text-anchor="end" font-size="10" fill="#8A8A8A">jetzt</text>'+
+      '</svg></div>';
+  }
+
+  function zeichnen(art, d){
+    stand.textContent='Stand '+uhr(d.abgerufen);
+    koerper.innerHTML = (art==='solar') ? solarBlatt(d) : batterieBlatt(d);
+  }
+
+  var daten=null, geholt=0;
+  function oeffnen(art){
+    merkeAusloeser(); lock(); stillegen(true);
+    stbl.classList.add('open');
+    titel.textContent = (art==='solar') ? 'Solarertrag' : 'Batterie';
+    stand.textContent='';
+    var alter=Math.floor(Date.now()/1000)-geholt;
+    if(daten && alter<300){ zeichnen(art,daten); return; }
+    koerper.innerHTML='<div class="stfehler">Verlauf wird geladen …</div>';
+    /* Zuletzt gesehener Stand als Rueckfall ohne Empfang */
+    var alt=null;
+    try{ alt=JSON.parse(localStorage.getItem(SPEICHER)||'null'); }catch(e){}
+    var abbruch=new AbortController();
+    var uhrzeit=setTimeout(function(){abbruch.abort();},9000);
+    fetch(DIENST,{signal:abbruch.signal,cache:'no-store'})
+      .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function(d){
+        if(d.fehler) throw new Error(d.fehler);
+        daten=d; geholt=Math.floor(Date.now()/1000);
+        try{ localStorage.setItem(SPEICHER, JSON.stringify(d)); }catch(e){}
+        if(stbl.classList.contains('open')) zeichnen(art,d);
+      })
+      .catch(function(){
+        if(!stbl.classList.contains('open')) return;
+        if(alt){ zeichnen(art,alt); stand.textContent='Stand '+uhr(alt.abgerufen)+' · ohne Empfang'; }
+        else koerper.innerHTML='<div class="stfehler">Kein Empfang — der Verlauf braucht Internet. Die Livewerte oben bleiben davon unberührt.</div>';
+      })
+      .then(function(){ clearTimeout(uhrzeit); });
+  }
+  window.__statistik=oeffnen;
+})();
 
 /* ---------- Frag das Bordbuch ----------
    Ein Zusatz, kein Ersatz. Die Stichwortsuche liegt im Geraet und
@@ -2794,7 +2932,7 @@ document.getElementById('sclose').addEventListener('click',closeSearch);
 document.getElementById('tocbtn').addEventListener('click',openToc);
 document.getElementById('tocclose').addEventListener('click',closeToc);
 document.getElementById('topbtn').addEventListener('click',function(){
-  if(anyOpen()){closeToc();closeSearch();if(window.__frageZu) window.__frageZu();}
+  if(anyOpen()){closeToc();closeSearch();if(window.__frageZu) window.__frageZu();if(window.__statistikZu) window.__statistikZu();}
   window.scrollTo({top:0,behavior:'smooth'});
 });
 input.addEventListener('input',function(){window.requestAnimationFrame(run);});
@@ -2899,8 +3037,7 @@ document.addEventListener('keydown',function(e){
 
   /* Was nicht in eine Kachel passt, steht in der Zeile darunter. */
   var NEBEN=[
-    {name:'batteriezustand', titel:'Batterie', karte:{charging:'lädt', discharging:'entlädt', idle:'ruht'}},
-    {name:'solar_gestern',   titel:'Solar gestern'}
+    {name:'batteriezustand', titel:'Batterie', karte:{charging:'lädt', discharging:'entlädt', idle:'ruht'}}
   ];
 
   /* Temperaturen als eigene Zeile im Kopfbereich. Ohne Feuchtewerte —
@@ -3062,10 +3199,12 @@ document.addEventListener('keydown',function(e){
     if(!SPRUNG[k.dataset.mess]) return;
     k.setAttribute('role','link'); k.setAttribute('tabindex','0');
     function los(){
-      /* Ohne Livedaten zeigt die zweite Kachel die Wechselrichterleistung,
-         mit Livedaten den Solarertrag — das Ziel folgt dem Inhalt. */
+      /* Batterie und Solar oeffnen die Statistik — die Historie liegt im
+         Portal und ist auch ohne Fahrzeugverbindung da. Die Tanks springen
+         weiter ins Kapitel. */
+      if(k.dataset.mess==='batterie'){ if(window.__statistik){window.__statistik('batterie');return;} }
+      if(k.dataset.mess==='ac'){ if(window.__statistik){window.__statistik('solar');return;} }
       var ziel=SPRUNG[k.dataset.mess];
-      if(k.dataset.mess==='ac' && !k.dataset.ruhe) ziel='wechselrichter';
       var el=document.getElementById(ziel); if(!el) return;
       if(window.__aufklappen) window.__aufklappen(el);
       el.scrollIntoView({behavior:'smooth',block:'start'});
