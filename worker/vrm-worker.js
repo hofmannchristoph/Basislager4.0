@@ -137,22 +137,78 @@ export default {
       }
 
       /* Verlaufsdaten fuer die Statistik-Ansicht. Die Historie liegt im
-         VRM-Portal und ist auch abrufbar, wenn das Fahrzeug offline ist. */
+         VRM-Portal und ist auch abrufbar, wenn das Fahrzeug offline ist.
+         Die Antwortform des Portals variiert je nach Anlage — darum wird
+         der passende Datenschluessel gesucht statt fest verdrahtet, und
+         bei leerem Ergebnis ein zweiter Abfragetyp probiert. */
       if (url.pathname.replace(/\/+$/, '') === '/statistik') {
         const jetzt = Math.floor(Date.now() / 1000);
-        const [solar, akku] = await Promise.all([
-          hole(VRM + '/installations/' + encodeURIComponent(anlage) +
-               '/stats?type=solar_yield&interval=days&start=' + (jetzt - 14 * 86400) + '&end=' + jetzt, kopf),
-          hole(VRM + '/installations/' + encodeURIComponent(anlage) +
-               '/stats?type=custom&attributeCodes%5B%5D=bs&interval=hours&start=' + (jetzt - 48 * 3600) + '&end=' + jetzt, kopf)
-        ]);
-        const reihe = (r, name) => (((r || {}).records || {})[name] || [])
-          .filter(x => Array.isArray(x) && x[1] != null)
-          .map(x => [Math.round(x[0] / 1000), Math.round(x[1] * 100) / 100]);
+        const statsUrl = (art, intervall, sekunden) =>
+          VRM + '/installations/' + encodeURIComponent(anlage) + '/stats?' + art +
+          '&interval=' + intervall + '&start=' + (jetzt - sekunden) + '&end=' + jetzt;
+
+        /* Zieht aus records die erste zum Muster passende Zahlenreihe —
+           auch wenn sie eine Ebene tiefer (je Instanz) liegt. */
+        const zieh = (r, muster) => {
+          const rec = (r || {}).records || {};
+          const kandidaten = [];
+          for (const k of Object.keys(rec)) {
+            const v = rec[k];
+            if (Array.isArray(v)) kandidaten.push([k, v]);
+            else if (v && typeof v === 'object') {
+              for (const k2 of Object.keys(v)) {
+                if (Array.isArray(v[k2])) kandidaten.push([k + '.' + k2, v[k2]]);
+              }
+            }
+          }
+          const treffer = kandidaten.find(([k, v]) => muster.test(k) && v.length) ||
+                          kandidaten.find(([k, v]) => v.length);
+          if (!treffer) return [];
+          return treffer[1]
+            .map(x => Array.isArray(x) ? x : [x.timestamp ?? x[0], x.value ?? x[1]])
+            .filter(x => x && x[0] != null && x[1] != null && isFinite(x[1]))
+            .map(x => [Math.round(x[0] > 1e11 ? x[0] / 1000 : x[0]), Math.round(x[1] * 100) / 100]);
+        };
+        const schluessel = (r) => {
+          const rec = (r || {}).records || {};
+          return Object.keys(rec).map(k => {
+            const v = rec[k];
+            if (Array.isArray(v)) return k + ' (' + v.length + ')';
+            if (v && typeof v === 'object') return k + ' {' + Object.keys(v).join(',') + '}';
+            return k;
+          });
+        };
+
+        let solar = await hole(statsUrl('type=solar_yield', 'days', 14 * 86400), kopf).catch(() => null);
+        let solarReihe = zieh(solar, /solar|yield|YT|Pb/i);
+        let solar2 = null;
+        if (!solarReihe.length) {
+          solar2 = await hole(statsUrl('type=venus', 'days', 14 * 86400), kopf).catch(() => null);
+          solarReihe = zieh(solar2, /solar|yield/i);
+        }
+
+        let akku = await hole(statsUrl('type=custom&attributeCodes%5B%5D=bs', 'hours', 48 * 3600), kopf).catch(() => null);
+        let ladeReihe = zieh(akku, /^bs|soc|charge/i);
+        let akku2 = null;
+        if (!ladeReihe.length) {
+          akku2 = await hole(statsUrl('type=custom&attributeCodes%5B%5D=SOC', 'hours', 48 * 3600), kopf).catch(() => null);
+          ladeReihe = zieh(akku2, /./);
+        }
+
+        /* Nachschau ohne Werte: /statistik?probe=1 zeigt nur, welche
+           Datenschluessel das Portal liefert — zur Fehlersuche. */
+        if (url.searchParams.get('probe')) {
+          return antwort({
+            solar_schluessel: schluessel(solar), solar_ersatz: schluessel(solar2),
+            akku_schluessel: schluessel(akku), akku_ersatz: schluessel(akku2),
+            solar_punkte: solarReihe.length, ladestand_punkte: ladeReihe.length
+          }, 200, basis, false);
+        }
+
         return antwort({
           abgerufen: jetzt,
-          solar: reihe(solar, 'total_solar_yield'),
-          ladestand: reihe(akku, 'bs')
+          solar: solarReihe,
+          ladestand: ladeReihe
         }, 200, basis, true);
       }
 
