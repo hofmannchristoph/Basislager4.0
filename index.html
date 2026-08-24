@@ -147,7 +147,7 @@ img{max-width:100%;height:auto}
 .stgross span{font-size:0.8235rem;color:var(--bl-muted);font-weight:500}
 .stuntertitel{margin:0 0 18px;font-size:0.8235rem;color:var(--bl-muted)}
 .stkarte{background:var(--bl-canvas);border-radius:var(--bl-radius-lg);padding:18px 16px 12px;margin:0 0 14px}
-.stkarte svg{display:block;width:100%;height:auto}
+.stkarte svg{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
 .stmeta{display:flex;justify-content:space-between;gap:12px;margin:10px 2px 0;
   font-size:0.7353rem;color:var(--bl-muted);font-variant-numeric:tabular-nums}
 .stfehler{background:var(--bl-einlage);border-radius:var(--bl-radius-md);padding:16px;
@@ -2197,7 +2197,7 @@ footer .vers{margin-top:14px;font-size:0.7059rem;color:var(--grey2)}
   <p><b>Basislager 4.0</b> · Persönliches Bordbuch für Familie Hofmann. Ergänzt die Original-Herstellerunterlagen, ersetzt sie nicht.</p>
   <p>Die Videos stammen von Niesmann+Bischoff und zeigen den Arto Modelljahr 2019, unser Fahrzeug ist von 2016. Der Aufbau ist im Wesentlichen gleich, einzelne Details können abweichen. Die Player laden erst beim Antippen und brauchen dafür Internet.</p>
   <p>Enthält Zugangsdaten. Vor dem Weitergeben an Dritte bedenken.</p>
-  <p class="vers">Bordbuch Version 37</p>
+  <p class="vers">Bordbuch Version 38</p>
 </footer>
 </div>
 
@@ -2478,7 +2478,27 @@ tocBody.addEventListener('click',function(ev){
   function wt(ts){ return new Date(ts*1000).toLocaleDateString('de-CH',{weekday:'short'}).replace('.',''); }
   function uhr(ts){ var d=new Date(ts*1000); return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2); }
 
-  /* Solarertrag: 14 Tage als weiche Balken, heute in Tinte. */
+  function datum(ts){ return new Date(ts*1000).toLocaleDateString('de-CH',{weekday:'short',day:'numeric',month:'short'}); }
+
+  /* Zeigefinger auf dem Diagramm: Tippen und Ziehen waehlt, am Rechner
+     reicht Darueberfahren. Der gewaehlte Punkt bleibt nach dem Loslassen
+     stehen, damit der Finger den Wert nicht verdeckt. */
+  function fingerAn(svgel, waehlen){
+    function stelle(ev){
+      var r=svgel.getBoundingClientRect();
+      return (ev.clientX-r.left)/Math.max(1,r.width)*340;
+    }
+    svgel.addEventListener('pointerdown', function(ev){
+      ev.preventDefault();
+      try{ svgel.setPointerCapture(ev.pointerId); }catch(e){}
+      waehlen(stelle(ev));
+    });
+    svgel.addEventListener('pointermove', function(ev){
+      if(ev.pointerType==='mouse' ? ev.buttons===0 || ev.buttons===1 : ev.buttons>0) waehlen(stelle(ev));
+    });
+  }
+
+  /* Solarertrag: 14 Tage als weiche Balken, der gewaehlte Tag in Tinte. */
   function solarBlatt(d){
     var reihe=d.solar||[];
     if(!reihe.length) return '<div class="stfehler">Noch keine Ertragsdaten im Portal.</div>';
@@ -2492,15 +2512,32 @@ tocBody.addEventListener('click',function(ev){
       var h=Math.max(3,(x[1]/max)*(unten-oben));
       var cx=i*schritt+schritt/2;
       var letzte=(i===reihe.length-1);
-      st+='<rect x="'+(cx-breite/2).toFixed(1)+'" y="'+(unten-h).toFixed(1)+'" width="'+breite.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="5" fill="'+(letzte?'#0B0B0B':'#DDDDDD')+'"/>';
+      st+='<rect class="stbalken" x="'+(cx-breite/2).toFixed(1)+'" y="'+(unten-h).toFixed(1)+'" width="'+breite.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="5" fill="'+(letzte?'#0B0B0B':'#DDDDDD')+'"/>';
       if(i%2===(reihe.length%2===0?1:0)) st+='<text x="'+cx.toFixed(1)+'" y="'+(unten+16)+'" text-anchor="middle" font-size="10" fill="#8A8A8A">'+wt(x[0])+'</text>';
     });
-    return '<p class="stgross"><b>'+heute.toFixed(1).replace('.',',')+' kWh</b><span>heute bisher</span></p>'+
+    return '<p class="stgross"><b class="stwert">'+heute.toFixed(1).replace('.',',')+' kWh</b><span class="stwas">heute bisher</span></p>'+
       '<p class="stuntertitel">Letzte 14 Tage · zusammen '+summe.toFixed(1).replace('.',',')+' kWh · bester Tag '+max.toFixed(1).replace('.',',')+' kWh</p>'+
-      '<div class="stkarte"><svg viewBox="0 0 '+B+' '+H+'" role="img" aria-label="Solarertrag der letzten 14 Tage">'+st+'</svg></div>';
+      '<div class="stkarte"><svg viewBox="0 0 '+B+' '+H+'" role="img" aria-label="Solarertrag der letzten 14 Tage, Tag antippen für Details">'+st+'</svg></div>';
   }
 
-  /* Ladestand: 48 Stunden als weiche Flaechenkurve. */
+  function solarVerdrahten(d){
+    var reihe=d.solar||[]; if(!reihe.length) return;
+    var svgel=koerper.querySelector('svg'); if(!svgel) return;
+    var balken=koerper.querySelectorAll('.stbalken');
+    var wert=koerper.querySelector('.stwert'), was=koerper.querySelector('.stwas');
+    function zeige(i){
+      for(var j=0;j<balken.length;j++) balken[j].setAttribute('fill', j===i?'#0B0B0B':'#DDDDDD');
+      wert.textContent=reihe[i][1].toFixed(1).replace('.',',')+' kWh';
+      was.textContent=(i===reihe.length-1)?'heute bisher':datum(reihe[i][0]);
+    }
+    fingerAn(svgel, function(x){
+      var i=Math.floor(x/(340/reihe.length));
+      if(i<0)i=0; if(i>=reihe.length)i=reihe.length-1;
+      zeige(i);
+    });
+  }
+
+  /* Ladestand: 48 Stunden als weiche Flaechenkurve mit Ableselinie. */
   function batterieBlatt(d){
     var reihe=d.ladestand||[];
     if(reihe.length<2) return '<div class="stfehler">Noch keine Verlaufsdaten im Portal.</div>';
@@ -2518,20 +2555,45 @@ tocBody.addEventListener('click',function(ev){
     flaeche+=' L '+B+' '+unten+' Z';
     var akt=reihe[reihe.length-1][1];
     var tief=(min<20);
-    return '<p class="stgross"><b>'+Math.round(akt)+' %</b><span>Ladestand jetzt</span></p>'+
+    return '<p class="stgross"><b class="stwert">'+Math.round(akt)+' %</b><span class="stwas">Ladestand jetzt</span></p>'+
       '<p class="stuntertitel">Letzte 48 Stunden · Tiefstand '+Math.round(min)+' % · Höchststand '+Math.round(max)+' %</p>'+
-      '<div class="stkarte"><svg viewBox="0 0 '+B+' '+H+'" role="img" aria-label="Ladestand der letzten 48 Stunden">'+
+      '<div class="stkarte"><svg viewBox="0 0 '+B+' '+H+'" role="img" aria-label="Ladestand der letzten 48 Stunden, mit dem Finger darüberfahren">'+
       '<path d="'+flaeche+'" fill="#E9E9E9"/>'+
       '<path d="'+pfad+'" fill="none" stroke="'+(tief?'#E8503C':'#0B0B0B')+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>'+
-      '<circle cx="'+X(t1).toFixed(1)+'" cy="'+Y(akt).toFixed(1)+'" r="4" fill="#0B0B0B"/>'+
+      '<line class="stlinie" x1="'+X(t1).toFixed(1)+'" y1="'+oben+'" x2="'+X(t1).toFixed(1)+'" y2="'+unten+'" stroke="#B5B5B5" stroke-width="1" stroke-dasharray="3 3"/>'+
+      '<circle class="stpunkt" cx="'+X(t1).toFixed(1)+'" cy="'+Y(akt).toFixed(1)+'" r="4.5" fill="#0B0B0B" stroke="#FFFFFF" stroke-width="1.5"/>'+
       '<text x="2" y="'+(unten+16)+'" font-size="10" fill="#8A8A8A">'+wt(t0)+' '+uhr(t0)+'</text>'+
       '<text x="'+B+'" y="'+(unten+16)+'" text-anchor="end" font-size="10" fill="#8A8A8A">jetzt</text>'+
       '</svg></div>';
   }
 
+  function batterieVerdrahten(d){
+    var reihe=d.ladestand||[]; if(reihe.length<2) return;
+    var svgel=koerper.querySelector('svg'); if(!svgel) return;
+    var linie=koerper.querySelector('.stlinie'), punkt=koerper.querySelector('.stpunkt');
+    var wert=koerper.querySelector('.stwert'), was=koerper.querySelector('.stwas');
+    var B=340,unten=128,oben=12;
+    var t0=reihe[0][0], t1=reihe[reihe.length-1][0];
+    fingerAn(svgel, function(x){
+      var t=t0+(x/B)*(t1-t0);
+      var i=0, best=Infinity;
+      for(var j=0;j<reihe.length;j++){
+        var abstand=Math.abs(reihe[j][0]-t);
+        if(abstand<best){ best=abstand; i=j; }
+      }
+      var px=((reihe[i][0]-t0)/Math.max(1,(t1-t0)))*B;
+      var py=unten-(reihe[i][1]/100)*(unten-oben);
+      linie.setAttribute('x1',px.toFixed(1)); linie.setAttribute('x2',px.toFixed(1));
+      punkt.setAttribute('cx',px.toFixed(1)); punkt.setAttribute('cy',py.toFixed(1));
+      wert.textContent=Math.round(reihe[i][1])+' %';
+      was.textContent=(i===reihe.length-1)?'Ladestand jetzt':datum(reihe[i][0])+' · '+uhr(reihe[i][0])+' Uhr';
+    });
+  }
+
   function zeichnen(art, d){
     stand.textContent='Stand '+uhr(d.abgerufen);
     koerper.innerHTML = (art==='solar') ? solarBlatt(d) : batterieBlatt(d);
+    if(art==='solar') solarVerdrahten(d); else batterieVerdrahten(d);
   }
 
   var daten=null, geholt=0;
