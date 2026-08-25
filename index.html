@@ -2203,7 +2203,7 @@ footer .vers{margin-top:14px;font-size:0.7059rem;color:var(--grey2)}
   <p><b>Basislager 4.0</b> · Persönliches Bordbuch für Familie Hofmann. Ergänzt die Original-Herstellerunterlagen, ersetzt sie nicht.</p>
   <p>Die Videos stammen von Niesmann+Bischoff und zeigen den Arto Modelljahr 2019, unser Fahrzeug ist von 2016. Der Aufbau ist im Wesentlichen gleich, einzelne Details können abweichen. Die Player laden erst beim Antippen und brauchen dafür Internet.</p>
   <p>Enthält Zugangsdaten. Vor dem Weitergeben an Dritte bedenken.</p>
-  <p class="vers">Bordbuch Version 2.40</p>
+  <p class="vers">Bordbuch Version 2.41</p>
 </footer>
 </div>
 
@@ -2514,15 +2514,18 @@ tocBody.addEventListener('click',function(ev){
     var schnitt=summe/reihe.length;
     var heute=reihe[reihe.length-1][1];
     var B=340,H=176,unten=142,oben=34;
-    var schritt=B/reihe.length, breite=Math.min(18, schritt*0.62);
+    /* Rechts bleibt eine Spalte fuer die Skala frei — die Balken
+       laufen sonst in die Beschriftung hinein */
+    var feld=B-32;
+    var schritt=feld/reihe.length, breite=Math.min(18, schritt*0.62);
     function Y(v){ return unten-(v/max)*(unten-oben); }
     var st='';
     /* Gitter mit kWh-Skala rechts, Grundlinie unten */
     [max/2,max].forEach(function(v){
-      st+='<line x1="0" y1="'+Y(v).toFixed(1)+'" x2="'+(B-26)+'" y2="'+Y(v).toFixed(1)+'" stroke="#E0E0E0" stroke-width="1"/>'+
+      st+='<line x1="0" y1="'+Y(v).toFixed(1)+'" x2="'+feld+'" y2="'+Y(v).toFixed(1)+'" stroke="#E0E0E0" stroke-width="1"/>'+
           '<text x="'+B+'" y="'+(Y(v)+3).toFixed(1)+'" text-anchor="end" font-size="9" fill="#ADADAD">'+v.toFixed(1).replace('.',',')+'</text>';
     });
-    st+='<line x1="0" y1="'+unten+'" x2="'+B+'" y2="'+unten+'" stroke="#DBDBDB" stroke-width="1"/>';
+    st+='<line x1="0" y1="'+unten+'" x2="'+feld+'" y2="'+unten+'" stroke="#DBDBDB" stroke-width="1"/>';
     reihe.forEach(function(x,i){
       var h=Math.max(3,(x[1]/max)*(unten-oben));
       var cx=i*schritt+schritt/2;
@@ -2535,11 +2538,12 @@ tocBody.addEventListener('click',function(ev){
        weicht der kWh-Skala aus. */
     var oy=Y(schnitt)+3;
     if(Math.abs(Y(schnitt)-Y(max/2))<11) oy=Y(schnitt)+(Y(schnitt)>Y(max/2)?11:-6);
-    st+='<line x1="0" y1="'+Y(schnitt).toFixed(1)+'" x2="'+(B-26)+'" y2="'+Y(schnitt).toFixed(1)+'" stroke="#5A5A5A" stroke-width="1.2" stroke-dasharray="5 4"/>'+
+    st+='<line x1="0" y1="'+Y(schnitt).toFixed(1)+'" x2="'+feld+'" y2="'+Y(schnitt).toFixed(1)+'" stroke="#5A5A5A" stroke-width="1.2" stroke-dasharray="5 4"/>'+
         '<text x="'+B+'" y="'+oy.toFixed(1)+'" text-anchor="end" font-size="9" font-weight="600" fill="#5A5A5A">Ø</text>';
-    /* Wertfahne ueber dem gewaehlten Balken */
-    var fx=Math.max(16,Math.min(B-16,(reihe.length-0.5)*schritt));
-    st+='<text class="stfahne" x="'+fx.toFixed(1)+'" y="'+Math.max(11,Y(heute)-9).toFixed(1)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#0B0B0B">'+heute.toFixed(1).replace('.',',')+'</text>';
+    /* Wertfahne ueber dem gewaehlten Balken — mit Freisteller in der
+       Kartenfarbe, damit sie ueber der Durchschnittslinie lesbar bleibt */
+    var fx=Math.max(16,Math.min(feld-10,(reihe.length-0.5)*schritt));
+    st+='<text class="stfahne" x="'+fx.toFixed(1)+'" y="'+Math.max(11,Y(heute)-9).toFixed(1)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#0B0B0B" stroke="#F7F7F7" stroke-width="4" paint-order="stroke" stroke-linejoin="round">'+heute.toFixed(1).replace('.',',')+'</text>';
     return '<p class="stgross"><b class="stwert">'+heute.toFixed(1).replace('.',',')+' kWh</b><span class="stwas">heute bisher</span></p>'+
       '<p class="stuntertitel">Letzte 14 Tage · zusammen '+summe.toFixed(1).replace('.',',')+' kWh · Ø '+schnitt.toFixed(1).replace('.',',')+' · Spitze '+max.toFixed(1).replace('.',',')+' kWh</p>'+
       '<div class="stkarte"><svg viewBox="0 0 '+B+' '+H+'" role="img" aria-label="Solarertrag der letzten 14 Tage, Tag antippen für Details">'+st+'</svg></div>';
@@ -2551,20 +2555,20 @@ tocBody.addEventListener('click',function(ev){
     var balken=koerper.querySelectorAll('.stbalken');
     var fahne=koerper.querySelector('.stfahne');
     var wert=koerper.querySelector('.stwert'), was=koerper.querySelector('.stwas');
-    var B=340,unten=142,oben=34;
+    var B=340,unten=142,oben=34,feld=B-32;
     var max=0.1; reihe.forEach(function(x){ if(x[1]>max) max=x[1]; });
-    var schritt=B/reihe.length;
+    var schritt=feld/reihe.length;
     function zeige(i){
       for(var j=0;j<balken.length;j++) balken[j].setAttribute('fill', j===i?'#0B0B0B':'#DDDDDD');
       var v=reihe[i][1];
-      fahne.setAttribute('x', Math.max(16,Math.min(B-16,(i+0.5)*schritt)).toFixed(1));
+      fahne.setAttribute('x', Math.max(16,Math.min(feld-10,(i+0.5)*schritt)).toFixed(1));
       fahne.setAttribute('y', Math.max(11, unten-(v/max)*(unten-oben)-9).toFixed(1));
       fahne.textContent=v.toFixed(1).replace('.',',');
       wert.textContent=v.toFixed(1).replace('.',',')+' kWh';
       was.textContent=(i===reihe.length-1)?'heute bisher':datum(reihe[i][0]);
     }
     fingerAn(svgel, function(x){
-      var i=Math.floor(x/(340/reihe.length));
+      var i=Math.floor(x/schritt);
       if(i<0)i=0; if(i>=reihe.length)i=reihe.length-1;
       zeige(i);
     });
@@ -2581,11 +2585,11 @@ tocBody.addEventListener('click',function(ev){
 
   function kurvenBlatt(reihe, o){
     if(reihe.length<2) return '<div class="stfehler">Noch keine Verlaufsdaten im Portal.</div>';
-    var B=340,H=176,unten=142,oben=26;
+    var B=340,H=176,unten=142,oben=26,feld=B-32;
     var min=100,max=0;
     reihe.forEach(function(x){ if(x[1]<min)min=x[1]; if(x[1]>max)max=x[1]; });
     var t0=reihe[0][0], t1=reihe[reihe.length-1][0];
-    function X(t){ return ((t-t0)/Math.max(1,(t1-t0)))*B; }
+    function X(t){ return ((t-t0)/Math.max(1,(t1-t0)))*feld; }
     function Y(v){ return unten-(v/100)*(unten-oben); }
     var st='', beschr='';
     /* Prozent-Gitter; die Grenzmarke (Batterie und Frischwasser: nicht
@@ -2595,7 +2599,7 @@ tocBody.addEventListener('click',function(ev){
     var stufen=(o.grenze===80)?[100,80,50]:[100,50,20];
     stufen.forEach(function(v){
       var marke=(v===o.grenze);
-      st+='<line x1="0" y1="'+Y(v).toFixed(1)+'" x2="'+(B-26)+'" y2="'+Y(v).toFixed(1)+'" stroke="'+(marke?'#EBC9C2':'#E0E0E0')+'" stroke-width="1"'+(marke?' stroke-dasharray="4 3"':'')+'/>';
+      st+='<line x1="0" y1="'+Y(v).toFixed(1)+'" x2="'+feld+'" y2="'+Y(v).toFixed(1)+'" stroke="'+(marke?'#EBC9C2':'#E0E0E0')+'" stroke-width="1"'+(marke?' stroke-dasharray="4 3"':'')+'/>';
       beschr+='<text x="'+B+'" y="'+(Y(v)+3).toFixed(1)+'" text-anchor="end" font-size="9" fill="'+(marke?'#C98A7E':'#9A9A9A')+'">'+v+'</text>';
     });
     /* Mitternachtsmarken als Tagesgrenzen; an den Raendern keine
@@ -2603,14 +2607,14 @@ tocBody.addEventListener('click',function(ev){
     var mitternacht=new Date(t0*1000); mitternacht.setHours(24,0,0,0);
     for(var tm=Math.floor(mitternacht.getTime()/1000); tm<t1; tm+=86400){
       st+='<line x1="'+X(tm).toFixed(1)+'" y1="'+oben+'" x2="'+X(tm).toFixed(1)+'" y2="'+unten+'" stroke="#ECECEC" stroke-width="1"/>';
-      if(X(tm)>16 && X(tm)<B-44) beschr+='<text x="'+X(tm).toFixed(1)+'" y="'+(unten+16)+'" text-anchor="middle" font-size="10" fill="#8A8A8A">'+wt(tm)+'</text>';
+      if(X(tm)>16 && X(tm)<feld-24) beschr+='<text x="'+X(tm).toFixed(1)+'" y="'+(unten+16)+'" text-anchor="middle" font-size="10" fill="#8A8A8A">'+wt(tm)+'</text>';
     }
     var pfad='', flaeche='M0 '+unten;
     reihe.forEach(function(x,i){
       var p=X(x[0]).toFixed(1)+' '+Y(x[1]).toFixed(1);
       pfad+=(i?' L ':'M ')+p; flaeche+=' L '+p;
     });
-    flaeche+=' L '+B+' '+unten+' Z';
+    flaeche+=' L '+feld+' '+unten+' Z';
     var akt=reihe[reihe.length-1][1];
     var heikel=(o.schlecht==='unter') ? (min<o.grenze) : (max>o.grenze);
     return '<p class="stgross"><b class="stwert">'+Math.round(akt)+' %</b><span class="stwas">'+o.jetzt+'</span></p>'+
@@ -2620,7 +2624,7 @@ tocBody.addEventListener('click',function(ev){
       '<path d="'+pfad+'" fill="none" stroke="'+(heikel?'#E8503C':'#0B0B0B')+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>'+
       '<line class="stlinie" x1="'+X(t1).toFixed(1)+'" y1="'+(oben-6)+'" x2="'+X(t1).toFixed(1)+'" y2="'+unten+'" stroke="#B5B5B5" stroke-width="1" stroke-dasharray="3 3"/>'+
       '<circle class="stpunkt" cx="'+X(t1).toFixed(1)+'" cy="'+Y(akt).toFixed(1)+'" r="4.5" fill="#0B0B0B" stroke="#FFFFFF" stroke-width="1.5"/>'+
-      '<text class="stzeit" x="'+Math.max(24,Math.min(B-24,X(t1))).toFixed(1)+'" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#0B0B0B">jetzt</text>'+
+      '<text class="stzeit" x="'+Math.max(24,Math.min(feld-4,X(t1))).toFixed(1)+'" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#0B0B0B">jetzt</text>'+
       beschr+
       '<text x="'+B+'" y="'+(unten+16)+'" text-anchor="end" font-size="10" fill="#8A8A8A">jetzt</text>'+
       '</svg></div>';
@@ -2632,21 +2636,22 @@ tocBody.addEventListener('click',function(ev){
     var linie=koerper.querySelector('.stlinie'), punkt=koerper.querySelector('.stpunkt');
     var zeit=koerper.querySelector('.stzeit');
     var wert=koerper.querySelector('.stwert'), was=koerper.querySelector('.stwas');
-    var B=340,unten=142,oben=26;
+    var B=340,unten=142,oben=26,feld=B-32;
     var t0=reihe[0][0], t1=reihe[reihe.length-1][0];
     fingerAn(svgel, function(x){
-      var t=t0+(x/B)*(t1-t0);
+      var t=t0+(x/feld)*(t1-t0);
+      if(t>t1) t=t1;
       var i=0, best=Infinity;
       for(var j=0;j<reihe.length;j++){
         var abstand=Math.abs(reihe[j][0]-t);
         if(abstand<best){ best=abstand; i=j; }
       }
-      var px=((reihe[i][0]-t0)/Math.max(1,(t1-t0)))*B;
+      var px=((reihe[i][0]-t0)/Math.max(1,(t1-t0)))*feld;
       var py=unten-(reihe[i][1]/100)*(unten-oben);
       var letzte=(i===reihe.length-1);
       linie.setAttribute('x1',px.toFixed(1)); linie.setAttribute('x2',px.toFixed(1));
       punkt.setAttribute('cx',px.toFixed(1)); punkt.setAttribute('cy',py.toFixed(1));
-      zeit.setAttribute('x',Math.max(24,Math.min(B-24,px)).toFixed(1));
+      zeit.setAttribute('x',Math.max(24,Math.min(feld-4,px)).toFixed(1));
       zeit.textContent=letzte?'jetzt':uhr(reihe[i][0]);
       wert.textContent=Math.round(reihe[i][1])+' %';
       was.textContent=letzte?o.jetzt:datum(reihe[i][0])+' · '+uhr(reihe[i][0])+' Uhr';

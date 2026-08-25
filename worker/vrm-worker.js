@@ -179,11 +179,19 @@ export default {
           });
         };
 
+        /* Die Tanks brauchen den Graph-Endpunkt: /stats ignoriert die
+           Instanz-Eingrenzung und liefert fuer beide Tanks dieselbe
+           Reihe, der Graph trennt sauber nach Instanz (25 Frischwasser,
+           24 Abwasser). */
+        const graphUrl = (instanz, sekunden) =>
+          VRM + '/installations/' + encodeURIComponent(anlage) +
+          '/widgets/Graph?attributeCodes%5B%5D=tl&instance=' + instanz +
+          '&start=' + (jetzt - sekunden) + '&end=' + jetzt;
         const [solar, akku, frisch, abwasser] = await Promise.all([
           hole(statsUrl('type=solar_yield', 'days', 14 * 86400), kopf).catch(() => null),
           hole(statsUrl('type=custom&attributeCodes%5B%5D=bs', 'hours', 48 * 3600), kopf).catch(() => null),
-          hole(statsUrl('type=custom&attributeCodes%5B%5D=tl&instance=25', 'hours', 7 * 86400), kopf).catch(() => null),
-          hole(statsUrl('type=custom&attributeCodes%5B%5D=tl&instance=24', 'hours', 7 * 86400), kopf).catch(() => null)
+          hole(graphUrl(25, 7 * 86400), kopf).catch(() => null),
+          hole(graphUrl(24, 7 * 86400), kopf).catch(() => null)
         ]);
 
         let solarReihe = zieh(solar, /solar|yield|YT|Pb/i);
@@ -200,12 +208,17 @@ export default {
           ladeReihe = zieh(akku2, /./);
         }
 
-        /* Tankfuellstaende: Instanz 25 ist Frischwasser, 24 Abwasser.
-           Greift die Instanz-Eingrenzung nicht, kaemen beide Reihen
-           identisch zurueck — dann lieber nichts zeigen als beiden
-           Tanks denselben Verlauf unterschieben. */
-        let frischReihe = zieh(frisch, /tl|tank|level/i);
-        let abwasserReihe = zieh(abwasser, /tl|tank|level/i);
+        /* Der Graph liefert Fuellstaende je nach Geraet als 0..1 oder
+           0..100 — fuer die Anzeige zaehlt Prozent. Kaemen beide Reihen
+           trotz Instanz-Trennung identisch zurueck, lieber nichts
+           zeigen als beiden Tanks denselben Verlauf unterschieben. */
+        const prozent = (reihe) => {
+          let m = 0;
+          for (const p of reihe) if (p[1] > m) m = p[1];
+          return (m > 0 && m <= 1.5) ? reihe.map(p => [p[0], Math.round(p[1] * 1000) / 10]) : reihe;
+        };
+        let frischReihe = prozent(zieh(frisch, /tl|tank|level|data/i));
+        let abwasserReihe = prozent(zieh(abwasser, /tl|tank|level|data/i));
         if (frischReihe.length && frischReihe.length === abwasserReihe.length &&
             JSON.stringify(frischReihe) === JSON.stringify(abwasserReihe)) {
           frischReihe = []; abwasserReihe = [];
