@@ -23,7 +23,7 @@
    Aufrufe:
      /anlagen   listet die Anlagen des Kontos mit ihrer Kennung
      /          liefert die aktuellen Messwerte der eingestellten Anlage
-     /statistik Solarertrag der letzten 14 Tage und Ladestand der letzten 48 h
+     /statistik Solarertrag 14 Tage, Ladestand 48 h, Tankfuellstaende 7 Tage
      /frage     POST {frage, verlauf} — beantwortet eine Frage aus dem Bordbuch
    ================================================================= */
 
@@ -179,7 +179,13 @@ export default {
           });
         };
 
-        let solar = await hole(statsUrl('type=solar_yield', 'days', 14 * 86400), kopf).catch(() => null);
+        const [solar, akku, frisch, abwasser] = await Promise.all([
+          hole(statsUrl('type=solar_yield', 'days', 14 * 86400), kopf).catch(() => null),
+          hole(statsUrl('type=custom&attributeCodes%5B%5D=bs', 'hours', 48 * 3600), kopf).catch(() => null),
+          hole(statsUrl('type=custom&attributeCodes%5B%5D=tl&instance=25', 'hours', 7 * 86400), kopf).catch(() => null),
+          hole(statsUrl('type=custom&attributeCodes%5B%5D=tl&instance=24', 'hours', 7 * 86400), kopf).catch(() => null)
+        ]);
+
         let solarReihe = zieh(solar, /solar|yield|YT|Pb/i);
         let solar2 = null;
         if (!solarReihe.length) {
@@ -187,12 +193,22 @@ export default {
           solarReihe = zieh(solar2, /solar|yield/i);
         }
 
-        let akku = await hole(statsUrl('type=custom&attributeCodes%5B%5D=bs', 'hours', 48 * 3600), kopf).catch(() => null);
         let ladeReihe = zieh(akku, /^bs|soc|charge/i);
         let akku2 = null;
         if (!ladeReihe.length) {
           akku2 = await hole(statsUrl('type=custom&attributeCodes%5B%5D=SOC', 'hours', 48 * 3600), kopf).catch(() => null);
           ladeReihe = zieh(akku2, /./);
+        }
+
+        /* Tankfuellstaende: Instanz 25 ist Frischwasser, 24 Abwasser.
+           Greift die Instanz-Eingrenzung nicht, kaemen beide Reihen
+           identisch zurueck — dann lieber nichts zeigen als beiden
+           Tanks denselben Verlauf unterschieben. */
+        let frischReihe = zieh(frisch, /tl|tank|level/i);
+        let abwasserReihe = zieh(abwasser, /tl|tank|level/i);
+        if (frischReihe.length && frischReihe.length === abwasserReihe.length &&
+            JSON.stringify(frischReihe) === JSON.stringify(abwasserReihe)) {
+          frischReihe = []; abwasserReihe = [];
         }
 
         /* Nachschau ohne Werte: /statistik?probe=1 zeigt nur, welche
@@ -201,14 +217,18 @@ export default {
           return antwort({
             solar_schluessel: schluessel(solar), solar_ersatz: schluessel(solar2),
             akku_schluessel: schluessel(akku), akku_ersatz: schluessel(akku2),
-            solar_punkte: solarReihe.length, ladestand_punkte: ladeReihe.length
+            frisch_schluessel: schluessel(frisch), abwasser_schluessel: schluessel(abwasser),
+            solar_punkte: solarReihe.length, ladestand_punkte: ladeReihe.length,
+            frisch_punkte: frischReihe.length, abwasser_punkte: abwasserReihe.length
           }, 200, basis, false);
         }
 
         return antwort({
           abgerufen: jetzt,
           solar: solarReihe,
-          ladestand: ladeReihe
+          ladestand: ladeReihe,
+          frischwasser: frischReihe,
+          abwasser: abwasserReihe
         }, 200, basis, true);
       }
 
